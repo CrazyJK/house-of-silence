@@ -40,21 +40,20 @@
 	} else if (view.equalsIgnoreCase("actress")) {
 %>
 <c:forEach items="${video.actressList}" var="actress" varStatus="status">
-<span class="${cssClass}" onclick="fnSearch('${actress.name}')" title="${actress}">${actress.name}</span>
-<img src="<c:url value="/res/img/magnify${status.count%2}.png"/>" onclick="fnViewActressDetail('${actress.name}')" width="12px">
+<span class="${cssClass}" onclick="fnViewActressDetail('${actress.name}')" title="${actress}">${actress.name}</span>
+<img src="<c:url value="/res/img/magnify${status.count%2}.png"/>" width="12px" title="<s:message code="video.find-info.actress"/>"
+			onclick="popup('<s:eval expression="@prop['actress.info.url']"/>${actress.reverseName}', 'info_${actress.name}', 800, 600)"/>
 </c:forEach>
 <%
 	} else if (view.equalsIgnoreCase("opus")) {
 %>
 <span class="${cssClass}">${video.opus}</span>
-<c:if test="${mode eq 'l' && !video.existVideoFileList}">
-<%-- <span class="${cssClass}"><a href="<s:eval expression="@prop['video.torrent.url']"/>${video.opus}" target="_blank" class="link">Get !t</a></span> --%>
-</c:if>
+<img src="<c:url value="/res/img/magnify${status.count%2}.png"/>" width="12px" title="<s:message code="video.find-info.opus"/>"
+	onclick="popup('<s:eval expression="@prop['video.info.url']"/>${video.opus}', 'info_${video.opus}', 800, 600)"/>
 <%
 	} else if (view.equalsIgnoreCase("studio")) {
 %>
-<span class="${cssClass}" onclick="fnSearch('${video.studio.name}')" title="${video.studio}">${video.studio.name}</span>
-<img src="<c:url value="/res/img/link.png"/>" onclick="fnViewStudioDetail('${video.studio.name}')">
+<span class="${cssClass}" onclick="fnViewStudioDetail('${video.studio.name}')" title="${video.studio}">${video.studio.name}</span>
 <%
 	} else if (view.equalsIgnoreCase("title")) {
 %>

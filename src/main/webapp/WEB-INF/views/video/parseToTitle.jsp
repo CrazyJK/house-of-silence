@@ -1,9 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ taglib prefix="c"      uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib prefix="fn"     uri="http://java.sun.com/jsp/jstl/functions" %>
-<%@ taglib prefix="s" uri="http://www.springframework.org/tags" %>
-<%@ taglib prefix='form'   uri='http://www.springframework.org/tags/form'%>
-<c:set var="arzon" value="http://www.arzon.jp/itemlist.html?t=&m=all&s=&q="/>
+<%@ taglib prefix="c"    uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fn"   uri="http://java.sun.com/jsp/jstl/functions" %>
+<%@ taglib prefix="s" 	 uri="http://www.springframework.org/tags" %>
+<%@ taglib prefix="form" uri='http://www.springframework.org/tags/form'%>
 
 <!DOCTYPE html>
 <html>
@@ -46,7 +45,9 @@ function fnMarkChoice(opus) {
 			<td>
 				<span class="label">
 					<input class="text" style="width:600px;" value="${title}"/>
-					<a onclick="fnMarkChoice('${title.opus}')" href="${arzon}${title.opus}" target="_blank" class="link">Get Info</a>
+					<a onclick="fnMarkChoice('${title.opus}')" 
+						href="<s:eval expression="@prop['video.info.url']"/>${title.opus}" 
+						target="_blank" class="link">Get Info</a>
 				</span>
 				<c:if test="${title.check}"><span>${title.checkDesc}</span></c:if>
 			</td>
