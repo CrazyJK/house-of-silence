@@ -36,7 +36,7 @@ public class HistoryDaoFile implements HistoryDao {
 	private static boolean isHistoryChanged = true;
 
 	/** base video path in properties */
-	@Value("#{prop['video.basePath']}") 		private String[] basePath;
+	@Value("#{local['path.video.storage']}") 		private String[] basePath;
 
 	@Autowired VideoDao videoDao;
 	

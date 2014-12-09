@@ -33,7 +33,7 @@ public class Studio implements Serializable, Comparable<Studio> {
 
 	private static final long serialVersionUID = VIDEO.SERIAL_VERSION_UID;
 
-	@Value("#{prop['video.basePath']}") 		private String[] basePath;
+	@Value("#{local['path.video.storage']}") 		private String[] basePath;
 
 	private String name;
 	private URL    homepage;

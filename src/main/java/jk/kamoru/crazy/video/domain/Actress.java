@@ -17,14 +17,12 @@ import jk.kamoru.crazy.video.util.VideoUtils;
 import jk.kamoru.util.FileUtils;
 import jk.kamoru.util.StringUtils;
 import lombok.Data;
-import lombok.extern.slf4j.Slf4j;
 
 import org.codehaus.jackson.annotate.JsonIgnore;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-@Slf4j
 @Component
 @Scope("prototype")
 @Data
@@ -34,7 +32,7 @@ public class Actress implements Serializable, Comparable<Actress> {
 
 	private static final long serialVersionUID = VIDEO.SERIAL_VERSION_UID;
 
-	@Value("#{prop['video.basePath']}") 		private String[] basePath;
+	@Value("#{local['path.video.storage']}") 		private String[] basePath;
 
 	private String name;
 	private String localName;

@@ -10,6 +10,7 @@ import java.util.Map;
 import javax.inject.Inject;
 import javax.inject.Provider;
 
+import jk.kamoru.crazy.CRAZY;
 import jk.kamoru.crazy.video.ActressNotFoundException;
 import jk.kamoru.crazy.video.StudioNotFoundException;
 import jk.kamoru.crazy.video.VIDEO;
@@ -24,17 +25,17 @@ import jk.kamoru.util.StringUtils;
 import org.apache.commons.lang3.ArrayUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.util.Assert;
-
+	
 
 public class FileBaseVideoSource implements VideoSource {
 	
 	protected static final Logger logger = LoggerFactory.getLogger(FileBaseVideoSource.class);
 
+	public static final String unclassifiedActress = "Amateur";
+
 	private final String UNKNOWN 			 = "_Unknown";
 	private final String unclassifiedStudio  = UNKNOWN;
 	private final String unclassifiedOpus 	 = UNKNOWN;
-	public static final String unclassifiedActress = "Amateur";
 
 	// data source
 	private Map<String, Video>     videoMap	= new HashMap<String, Video>();
@@ -48,36 +49,20 @@ public class FileBaseVideoSource implements VideoSource {
 
 	// property
 	private String[] paths;
-	private String 	     video_extensions;
-	private String 	     cover_extensions;
-	private String 	 subtitles_extensions;
 
 	// logic variables
 	private boolean loaded = false;
 	
 	// property setter
-	public void setPaths(String[] paths) {
-		Assert.notNull(paths, "base paths must not be null");
+	public void setPaths(String...paths) {
 		this.paths = paths;
-	}
-	public void setVideo_extensions(String video_extensions) {
-		Assert.notNull(video_extensions, "video ext must not be null");
-		this.video_extensions = video_extensions;
-	}
-	public void setCover_extensions(String cover_extensions) {
-		Assert.notNull(cover_extensions, "cover ext must not be null");
-		this.cover_extensions = cover_extensions;
-	}
-	public void setSubtitles_extensions(String subtitles_extensions) {
-		Assert.notNull(subtitles_extensions, "subtitles ext must not be null");
-		this.subtitles_extensions = subtitles_extensions;
 	}
 	
 	/**
 	 * 기존에 만든적이 없으면, video source를 로드를 호출한다.
 	 */
 	private final void createVideoSource() {
-//		logger.trace("createVideoSource");
+		logger.trace("createVideoSource");
 		if (!loaded)
 			load();
 	}
@@ -87,16 +72,12 @@ public class FileBaseVideoSource implements VideoSource {
 	 */
 	private synchronized void load() {
 		logger.trace("load");
-
-		// 1. data source initialize
-//		videoMap = new HashMap<String, Video>();
-//		studioMap = new HashMap<String, Studio>();
-//		actressMap = new HashMap<String, Actress>();
+		
 		videoMap.clear();
 		studioMap.clear();
 		actressMap.clear();
-		
-		// 2. file find
+
+		// find files
 		Collection<File> files = new ArrayList<File>();
 		for (String path : paths) {
 			File directory = new File(path);
@@ -181,17 +162,14 @@ public class FileBaseVideoSource implements VideoSource {
 					logger.trace("add video - {}", video);
 				}
 				// set video File
-				if (video_extensions.toLowerCase().contains(ext))
+				if (CRAZY.SUFFIX_VIDEO.contains(ext))
 					video.addVideoFile(file);
-				else if (cover_extensions.toLowerCase().contains(ext)) {
+				else if (CRAZY.SUFFIX_IMAGE.contains(ext))
 					video.setCoverFile(file);
-				}
-				else if (subtitles_extensions.toLowerCase().contains(ext))
+				else if (CRAZY.SUFFIX_SUBTITLES.contains(ext))
 					video.addSubtitlesFile(file);
 				else if (VIDEO.EXT_INFO.equalsIgnoreCase(ext))
 					video.setInfoFile(file);
-				else if (VIDEO.EXT_WEBP.equalsIgnoreCase(ext))
-					video.setCoverWebpFile(file);
 				else
 					video.addEtcFile(file);
 				
@@ -213,7 +191,6 @@ public class FileBaseVideoSource implements VideoSource {
 					if (actress == null) {
 						actress = actressProvider.get();
 						actress.setName(actressName.trim());
-						
 						actressMap.put(forwardActressName, actress);
 						logger.trace("add actress - {}", actress);
 					}
@@ -226,12 +203,13 @@ public class FileBaseVideoSource implements VideoSource {
 				}
 			}
 			catch (NullPointerException e) {
-				logger.error("", e);
+				logger.error("{}", e);
 			}
 			catch (Exception e) {
 				logger.error("Error : {} - {}", file.getAbsolutePath(), e);
 			}
 		}
+		
 		loaded = true;
 		logger.info("Total loaded video size : {}", videoMap.size());
 	}

@@ -16,9 +16,9 @@ public class VideoBatch {
 
 	@Autowired VideoService videoService;
 
-	@Value("#{prop['watched.moveVideo']}") 			private boolean MOVE_WATCHED_VIDEO;
-	@Value("#{prop['rank.deleteVideo']}") 			private boolean DELETE_LOWER_RANK_VIDEO;
-	@Value("#{prop['score.deleteVideo']}") 			private boolean DELETE_LOWER_SCORE_VIDEO;
+	@Value("#{prop['batch.watched.moveVideo']}")	private boolean MOVE_WATCHED_VIDEO;
+	@Value("#{prop['batch.rank.deleteVideo']}") 	private boolean DELETE_LOWER_RANK_VIDEO;
+	@Value("#{prop['batch.score.deleteVideo']}") 	private boolean DELETE_LOWER_SCORE_VIDEO;
 
 	@Scheduled(cron="0 */5 * * * *")
 	public void batchVideoSource() {

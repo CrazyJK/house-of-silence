@@ -62,11 +62,6 @@ public interface VideoService {
 	 */
 	List<Actress> getActressListInVideoList(List<Video> videoList);
 
-	/** get default cover file byte array
-	 * @return image byte array
-	 */
-	byte[] getDefaultCoverFileByteArray();
-
 	/**get studio by name
 	 * @param studioName
 	 * @return studio
@@ -92,17 +87,15 @@ public interface VideoService {
 
 	/**get video cover byte array
 	 * @param opus
-	 * @param isChrome Whether or not request's client is chrome
 	 * @return cover byte array
 	 */
-	byte[] getVideoCoverByteArray(String opus, boolean isChrome);
+	byte[] getVideoCoverByteArray(String opus);
 
 	/**get video cover file
 	 * @param opus
-	 * @param isChrome Whether or not request's client is chrome
 	 * @return cover file
 	 */
-	File getVideoCoverFile(String opus, boolean isChrome);
+	File getVideoCoverFile(String opus);
 
 	/**get all video list
 	 * @return video list

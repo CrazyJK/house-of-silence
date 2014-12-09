@@ -23,7 +23,7 @@ public class LocalImageSource implements ImageSource {
 
 	private List<Image> imageList;
 
-	@Value("#{prop['image.basePath']}")	private String[] backgroundImagePoolPath;
+	@Value("#{local['path.image.storage']}")	private String[] backgroundImagePoolPath;
 
 	private void listImages() {
 		List<File> imageFileList = new ArrayList<File>();

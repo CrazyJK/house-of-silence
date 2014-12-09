@@ -76,15 +76,15 @@ public class Video implements Comparable<Video>, Serializable {
 	@XmlTransient
 	@JsonIgnore
 	private List<Actress> actressList;
-//	private List<History> historyList; // history list
 	private Integer playCount;
-	private int rank; // ranking score
+	private int rank;
 
-	@Value("#{prop['score.ratio.rank']}")		private int      rankRatio;
 	@Value("#{prop['score.ratio.play']}")		private int      playRatio;
+	@Value("#{prop['score.ratio.rank']}")		private int      rankRatio;
 	@Value("#{prop['score.ratio.actress']}")	private int   actressRatio;
 	@Value("#{prop['score.ratio.subtitles']}")	private int subtitlesRatio;
-//	@Value("#{prop['score.ratio.unseen']}")		private int    unseenRatio;
+	
+	@Value("#{local['path.video.archive']}")	private String archivePath;
 
 
 	public Video() {
@@ -308,7 +308,17 @@ public class Video implements Comparable<Video>, Serializable {
 		list.add(this.infoFile);
 		return list;
 	}
-	
+
+	public List<File> getFileWithoutVideo() {
+		List<File> list = new ArrayList<File>();
+		list.addAll(getSubtitlesFileList());
+		list.addAll(getEtcFileList());
+		list.add(this.coverFile);
+		list.add(this.coverWebpFile);
+		list.add(this.infoFile);
+		return list;
+	}
+
 	/**
 	 * info 파일 반환. 없으면 대표경로에 만듬.
 	 * @return info
@@ -572,18 +582,28 @@ public class Video implements Comparable<Video>, Serializable {
 			this.actressList.add(actress);
 	}
 
-	/**
-	 * 모든 파일을 지운다.
+	/**  
+	 * 삭제 처리. 비디오 파일은 지우고 나머지는 archive로 이동
 	 */
 	public void removeVideo() {
-		for(File file : getFileAll())
-			if(file != null && file.exists()) 
+		// video delete
+		if (videoFileList != null)
+			for (File file : videoFileList)
 				if(FileUtils.deleteQuietly(file))
 					logger.debug(file.getAbsolutePath());
 				else
 					logger.error("delete fail : {}", file.getAbsolutePath());
+		// the others move
+		File archiveDir = new File(archivePath);
+		for (File file : getFileWithoutVideo())
+			if (file != null)
+				try {
+					FileUtils.moveFileToDirectory(file, archiveDir, false);
+				} catch (IOException e) {
+					logger.error("move fail : {}", e);
+				}
 	}
-
+	
 	/**
 	 * info 내용 저장
 	 */

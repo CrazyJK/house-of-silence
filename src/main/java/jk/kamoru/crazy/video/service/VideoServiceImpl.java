@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
+import jk.kamoru.crazy.CRAZY;
 import jk.kamoru.crazy.video.VIDEO;
 import jk.kamoru.crazy.video.VideoException;
 import jk.kamoru.crazy.video.dao.VideoDao;
@@ -45,28 +46,15 @@ import org.springframework.stereotype.Service;
 @Service
 @Slf4j
 public class VideoServiceImpl implements VideoService {
-	// become disabled by using lombok @Slf4j
-//	protected static final Logger logger = LoggerFactory.getLogger(VideoServiceImpl.class);
 
-	@Autowired HistoryService historyService;
-	
-	/** default cover file byte array */
-	private byte[] defaultCoverFileBytes;
-	
 	/** base video path in properties */
-	@Value("#{prop['video.basePath']}") 		private String[] basePath;
-	/** video player command path in properties */
-	@Value("#{prop['video.player']}") 			private String   player;
-	/** subtitles editor command path in properties */
-	@Value("#{prop['video.subtitles.editor']}") private String   editor;
-	/** whether or not using video cover webp mode in properties */
-	@Value("#{prop['video.cover.webp.mode']}") 	private boolean  webpMode;
-	/** default video cover path in properties */
-	@Value("#{prop['video.cover.default']}") 	private String   defaultCover;
+	@Value("#{local['path.video.storage']}") 		private String[] basePath;
 	/** torrent completed file directory in properties */
-	@Value("#{prop['video.torrent.path']}") 	private String   torrentPath;
-	/** video extensions in properties */
-	@Value("#{prop['video.extension']}") 		private String[] videoExtensions;
+	@Value("#{local['path.video.downloaded']}") 	private String   torrentPath;
+	/** video player command path in properties */
+	@Value("#{local['app.video-player']}") 			private String   player;
+	/** subtitles editor command path in properties */
+	@Value("#{local['app.subtitles-editor']}") 		private String   editor;
 	
 	/** minimum rank in properties */
 	@Value("#{prop['rank.minimum']}") 			private Integer  minRank;
@@ -74,9 +62,8 @@ public class VideoServiceImpl implements VideoService {
 	@Value("#{prop['rank.maximum']}") 			private Integer  maxRank;
 	/** baseline rank in properties */
 	@Value("#{prop['rank.baseline']}")  		private int 	 lowerRankVideoBaselineScore;
-	
 	/** baseline score in properties */
-	@Value("#{prop['score.baseline']}")  		private int 	 maximumGBSizeOfEntireVideo;
+	@Value("#{prop['size.video.storage']}")  	private int 	 maximumGBSizeOfEntireVideo;
 
 	/** minimum free space of disk */
 	private final long MIN_FREE_SPAC = 10 * FileUtils.ONE_GB;
@@ -84,7 +71,8 @@ public class VideoServiceImpl implements VideoService {
 	private final long SLEEP_TIME = 10 * 1000;
 	
 	/** video dao */
-	@Autowired private VideoDao videoDao;
+	@Autowired VideoDao videoDao;
+	@Autowired HistoryService historyService;
 
 	@Override
 	public void deleteVideo(String opus) {
@@ -292,17 +280,17 @@ public class VideoServiceImpl implements VideoService {
 		return list;
 	}
 
-	@Override
-	public byte[] getDefaultCoverFileByteArray() {
-		log.trace("getDefaultCoverFileByteArray");
-		if(defaultCoverFileBytes == null)
-			try {
-				defaultCoverFileBytes = FileUtils.readFileToByteArray(new File(defaultCover));
-			} catch (IOException e) {
-				log.error("cover file byte array read fail", e);
-			}
-		return defaultCoverFileBytes;
-	}
+//	@Override
+//	public byte[] getDefaultCoverFileByteArray() {
+//		log.trace("getDefaultCoverFileByteArray");
+//		if(defaultCoverFileBytes == null)
+//			try {
+//				defaultCoverFileBytes = FileUtils.readFileToByteArray(new File(defaultCover));
+//			} catch (IOException e) {
+//				log.error("cover file byte array read fail", e);
+//			}
+//		return defaultCoverFileBytes;
+//	}
 	
 	@Override
 	public Studio getStudio(String studioName) {
@@ -347,21 +335,15 @@ public class VideoServiceImpl implements VideoService {
 	}
 
 	@Override
-	public byte[] getVideoCoverByteArray(String opus, boolean isChrome) {
+	public byte[] getVideoCoverByteArray(String opus) {
 		log.trace(opus);
-		if(webpMode && isChrome)
-			return videoDao.getVideo(opus).getCoverWebpByteArray();
-		else 
-			return videoDao.getVideo(opus).getCoverByteArray();
+		return videoDao.getVideo(opus).getCoverByteArray();
 	}
 
 	@Override
-	public File getVideoCoverFile(String opus, boolean isChrome) {
+	public File getVideoCoverFile(String opus) {
 		log.trace(opus);
-		if(webpMode && isChrome)
-			return videoDao.getVideo(opus).getCoverWebpFile();
-		else
-			return videoDao.getVideo(opus).getCoverFile();
+		return videoDao.getVideo(opus).getCoverFile();
 	}
 
 	@Override
@@ -843,12 +825,16 @@ public class VideoServiceImpl implements VideoService {
 		File torrentDirectory = new File(torrentPath);
 		FileUtils.validateDirectory(torrentDirectory, "invalid torrent path");
 
-		String[] extensions = new String[videoExtensions.length * 2];
-		int index = 0;
-		for (String ext : videoExtensions) {
-			extensions[index++] = ext.toUpperCase();
-			extensions[index++] = ext.toLowerCase();
-		}
+		
+//		String[] videoExtensions = CRAZY.SUFFIX_VIDEO.split(",");
+//		String[] extensions = new String[videoExtensions.length * 2];
+//		int index = 0;
+//		for (String ext : videoExtensions) {
+//			extensions[index++] = ext.toUpperCase();
+//			extensions[index++] = ext.toLowerCase();
+//		}
+		
+		String[] extensions = String.format("%s,%s", CRAZY.SUFFIX_VIDEO.toUpperCase(), CRAZY.SUFFIX_VIDEO.toLowerCase()).split(",");
 		log.trace("extensions - {}", Arrays.toString(extensions));
 		
 		Collection<File> torrents = FileUtils.listFiles(torrentDirectory, extensions, true);

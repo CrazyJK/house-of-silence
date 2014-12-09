@@ -13,8 +13,6 @@
 
         <!-- Root Context: defines shared resources visible to all other web components -->
 
-		<util:properties id="prop" location="/WEB-INF/spring/conf/kamoru.#{T(java.net.InetAddress).getLocalHost().getHostName()}.properties" />
-	
 		<!-- @Scheduled, @Async -->
 		<task:annotation-driven scheduler="scheduler" executor="executor"/>
 		<task:scheduler id="scheduler" pool-size="5"/>
