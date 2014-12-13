@@ -66,11 +66,17 @@ public class VideoDaoFile implements VideoDao {
 
 	@Override
 //	@CacheEvict(value = { "videoCache" }, allEntries=true)
-	public void deleteVideo(String opus) {
+	public void removeVideo(String opus) {
 		logger.trace(opus);
 		instanceVideoSource.removeVideo(opus);
 	}
-	
+
+	@Override
+	public void deleteVideo(String opus) {
+		logger.trace(opus);
+		instanceVideoSource.deleteVideo(opus);
+	}
+
 	@Override
 //	@CacheEvict(value = { "videoCache" }, allEntries=true)
 	public void moveVideo(String opus, String destPath) {

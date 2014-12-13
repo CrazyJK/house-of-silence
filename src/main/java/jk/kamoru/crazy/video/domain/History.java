@@ -41,7 +41,7 @@ public class History implements Serializable {
 			case OVERVIEW :
 			case COVER :
 			case SUBTITLES :
-			case DELETE :
+			case REMOVE :
 				desc = video.getFullname();
 				break;
 			case RANK :

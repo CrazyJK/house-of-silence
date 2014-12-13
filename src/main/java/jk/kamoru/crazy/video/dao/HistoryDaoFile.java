@@ -62,7 +62,7 @@ public class HistoryDaoFile implements HistoryDao {
 				History history = new History();
 				try {
 					if (parts.length > 0)
-						history.setDate(new SimpleDateFormat(VIDEO.VIDEO_DATE_PATTERN).parse(parts[0].trim()));
+						history.setDate(new SimpleDateFormat(VIDEO.DATE_TIME_PATTERN).parse(parts[0].trim()));
 					if (parts.length > 1)
 						history.setOpus(parts[1].trim());
 					if (parts.length > 2)

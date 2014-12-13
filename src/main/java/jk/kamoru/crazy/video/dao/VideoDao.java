@@ -49,6 +49,12 @@ public interface VideoDao {
 	Actress getActress(String name);
 
 	/**
+	 * remove video
+	 * @param opus
+	 */
+	void removeVideo(String opus);
+
+	/**
 	 * delete video
 	 * @param opus
 	 */

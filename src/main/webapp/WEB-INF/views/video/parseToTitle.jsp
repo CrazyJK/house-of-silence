@@ -46,7 +46,7 @@ function fnMarkChoice(opus) {
 				<span class="label">
 					<input class="text" style="width:600px;" value="${title}"/>
 					<a onclick="fnMarkChoice('${title.opus}')" 
-						href="<s:eval expression="@prop['video.info.url']"/>${title.opus}" 
+						href="<s:eval expression="@prop['url.search.video']"/>${title.opus}" 
 						target="_blank" class="link">Get Info</a>
 				</span>
 				<c:if test="${title.check}"><span>${title.checkDesc}</span></c:if>

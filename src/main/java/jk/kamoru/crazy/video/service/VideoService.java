@@ -23,10 +23,10 @@ import jk.kamoru.crazy.video.domain.VideoSearch;
  */
 public interface VideoService {
 
-	/**Delete video
+	/**Remove video
 	 * @param opus
 	 */
-	void deleteVideo(String opus);
+	void removeVideo(String opus);
 
 	/**Call subtitles editor
 	 * @param opus

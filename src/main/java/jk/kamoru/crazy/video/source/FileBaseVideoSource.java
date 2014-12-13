@@ -247,6 +247,13 @@ public class FileBaseVideoSource implements VideoSource {
 		videoMap.remove(opus.toLowerCase());
 	}
 	@Override
+	public void deleteVideo(String opus) {
+		logger.trace("delete {}" + opus);
+		createVideoSource();
+		videoMap.get(opus.toLowerCase()).deleteVideo();
+		videoMap.remove(opus.toLowerCase());
+	}
+	@Override
 	public Video getVideo(String opus) {
 		logger.trace(opus);
 		createVideoSource();

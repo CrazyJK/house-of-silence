@@ -14,9 +14,9 @@
 	<bean id="instanceVideoSource" class="jk.kamoru.crazy.video.source.FileBaseVideoSource">
 		<property name="paths" value="#{local['path.video.storage']}" />
 	</bean>
-	<!-- <bean id="archiveVideoSource" class="jk.kamoru.crazy.video.source.FileBaseVideoSource">
+	<bean id="archiveVideoSource" class="jk.kamoru.crazy.video.source.FileBaseVideoSource">
 		<property name="paths" value="#{local['path.video.archive']}" />
-	</bean> -->
+	</bean>
 	
 	<!-- AOP : VideoSource.load() -->	
 	<aop:config>

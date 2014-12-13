@@ -75,10 +75,10 @@ public class VideoServiceImpl implements VideoService {
 	@Autowired HistoryService historyService;
 
 	@Override
-	public void deleteVideo(String opus) {
+	public void removeVideo(String opus) {
 		log.trace(opus);
-		videoDao.deleteVideo(opus);
-		saveHistory(getVideo(opus), Action.DELETE);
+		videoDao.removeVideo(opus);
+		saveHistory(getVideo(opus), Action.REMOVE);
 	}
 
 	@Override
@@ -126,7 +126,7 @@ public class VideoServiceImpl implements VideoService {
 			list = historyService.findByQuery(query);
 		for (History history : list) {
 			Map<String, String> map = new HashMap<String, String>();
-			map.put("date", new SimpleDateFormat(VIDEO.VIDEO_DATE_PATTERN).format(history.getDate()));
+			map.put("date", new SimpleDateFormat(VIDEO.DATE_TIME_PATTERN).format(history.getDate()));
 			map.put("opus", history.getOpus());
 			map.put("act",  history.getAction().toString());
 			map.put("desc", history.getVideo() == null ? history.getDesc() : history.getVideo().getFullname());
@@ -648,7 +648,8 @@ public class VideoServiceImpl implements VideoService {
 		for (Video video : videoDao.getVideoList()) {
 			if (video.getRank() < lowerRankVideoBaselineScore) {
 				log.info("remove lower rank video {} : {} : {}", video.getOpus(), video.getRank(), video.getTitle());
-				videoDao.deleteVideo(video.getOpus());
+				saveHistory(video, Action.REMOVE);
+				videoDao.removeVideo(video.getOpus());
 			}
 		}
 	}
@@ -691,8 +692,8 @@ public class VideoServiceImpl implements VideoService {
 						score, 
 						video.getFullname(),
 						video.getScoreDesc());
-
-				videoDao.deleteVideo(video.getOpus());
+				saveHistory(video, Action.REMOVE);
+				videoDao.removeVideo(video.getOpus());
 			}
 			else {
 				minAliveScore = score;

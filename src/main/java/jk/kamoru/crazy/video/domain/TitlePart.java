@@ -63,6 +63,11 @@ public class TitlePart implements Comparable<TitlePart> {
 	 */
 	public void setStudio(String studio) {
 		this.studio = studio;
+		// 값이 없으면
+		if (StringUtils.isBlank(studio)) {
+			this.check = true;
+			this.checkDesc += "Studio ";
+		}
 	}
 
 	/**

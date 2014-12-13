@@ -586,6 +586,7 @@ public class Video implements Comparable<Video>, Serializable {
 	 * 삭제 처리. 비디오 파일은 지우고 나머지는 archive로 이동
 	 */
 	public void removeVideo() {
+		saveInfo();
 		// video delete
 		if (videoFileList != null)
 			for (File file : videoFileList)
@@ -604,6 +605,15 @@ public class Video implements Comparable<Video>, Serializable {
 				}
 	}
 	
+	public void deleteVideo() {
+		for (File file : getFileAll())
+			if (file != null)
+				if(FileUtils.deleteQuietly(file))
+					logger.debug(file.getAbsolutePath());
+				else
+					logger.error("delete fail : {}", file.getAbsolutePath());
+	}
+	
 	/**
 	 * info 내용 저장
 	 */
@@ -611,10 +621,11 @@ public class Video implements Comparable<Video>, Serializable {
 		JSONObject root = new JSONObject();
 		JSONObject info = new JSONObject();
 
-		info.put("opus", this.opus);
-		info.put("rank", this.rank);
-		info.put("playCount", this.playCount);
-		info.put("overview", this.overview);
+		info.put("opus", opus);
+		info.put("rank", rank);
+		info.put("playCount", playCount);
+		info.put("overview", overview);
+		info.put("lastAccess", DateFormatUtils.format(System.currentTimeMillis(), VIDEO.DATE_PATTERN));
 		root.put("info", info);
 
 		try {

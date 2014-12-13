@@ -31,11 +31,13 @@
 <script type="text/javascript">
 bgContinue = false;
 $(document).ready(function(){
+	popup('<c:url value="/video/${video.opus}/cover"/>', 'SearchTorrentCover');
+	location.href = '<s:eval expression="@prop['url.search.torrent']"/>${video.opus}';
 });
 </script>
 </head>
 <body>
-
+<%-- 
 <div id="header_div" class="div-box">
 	<span style="font-size:12px;">${video.fullname}</span>
 	<span class="button" onclick='$("#coverDiv").toggle();' style="float:right;">Cover</span>
@@ -44,8 +46,8 @@ $(document).ready(function(){
 <div id="coverDiv" class="div-box"></div>
 
 <div id="content_div" class="div-box" style="overflow:hidden;">
-	<iframe id="torrentFrame" src="<s:eval expression="@prop['video.torrent.url']"/>${video.opus}"></iframe>
+	<iframe id="torrentFrame" src="<s:eval expression="@prop['url.search.torrent']"/>${video.opus}"></iframe>
 </div>
-
+ --%>
 </body>
 </html>

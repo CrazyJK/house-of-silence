@@ -21,6 +21,10 @@ public enum Action {
 	 */
 	SUBTITLES("Subtitles"), 
 	/**
+	 * remove video
+	 */
+	REMOVE("Remove"),
+	/**
 	 * delete video
 	 */
 	DELETE("Delete"),

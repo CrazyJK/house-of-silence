@@ -42,14 +42,14 @@
 <c:forEach items="${video.actressList}" var="actress" varStatus="status">
 <span class="${cssClass}" onclick="fnViewActressDetail('${actress.name}')" title="${actress}">${actress.name}</span>
 <img src="<c:url value="/res/img/magnify${status.count%2}.png"/>" width="12px" title="<s:message code="video.find-info.actress"/>"
-			onclick="popup('<s:eval expression="@prop['actress.info.url']"/>${actress.reverseName}', 'info_${actress.name}', 800, 600)"/>
+			onclick="popup('<s:eval expression="@prop['url.search.actress']"/>${actress.reverseName}', 'info_${actress.name}', 800, 600)"/>
 </c:forEach>
 <%
 	} else if (view.equalsIgnoreCase("opus")) {
 %>
 <span class="${cssClass}">${video.opus}</span>
 <img src="<c:url value="/res/img/magnify${status.count%2}.png"/>" width="12px" title="<s:message code="video.find-info.opus"/>"
-	onclick="popup('<s:eval expression="@prop['video.info.url']"/>${video.opus}', 'info_${video.opus}', 800, 600)"/>
+	onclick="popup('<s:eval expression="@prop['url.search.video']"/>${video.opus}', 'info_${video.opus}', 800, 600)"/>
 <%
 	} else if (view.equalsIgnoreCase("studio")) {
 %>

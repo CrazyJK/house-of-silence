@@ -307,15 +307,15 @@ public class VideoController extends AbstractController {
 		videoService.editVideoSubtitles(opus);
 	}
 
-	/**delete video
+	/**remove video
 	 * @param model
 	 * @param opus
 	 */
 	@RequestMapping(value="/{opus}", method=RequestMethod.DELETE)
 	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void deleteVideo(Model model, @PathVariable("opus") String opus) {
+	public void removeVideo(Model model, @PathVariable("opus") String opus) {
 		logger.trace(opus);
-		videoService.deleteVideo(opus);
+		videoService.removeVideo(opus);
 	}
 
 	/**display video detail view
@@ -417,6 +417,7 @@ public class VideoController extends AbstractController {
 		synchronized (java.lang.Object.class) {
 			logger.trace("move watched video");
 			videoService.moveWatchedVideo();
+			videoService.reload();
 		}
 	}
 	

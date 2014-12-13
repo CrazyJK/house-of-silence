@@ -34,6 +34,7 @@ function fnMarkChoice(opus) {
 }
 function fnGoSearch(opus) {
 	fnMarkChoice(opus);
+	//popup('<c:url value="/video/"/>' + opus, "torrentVideoCover", 400, 300);
 	popup('<c:url value="/video/torrent/search/"/>' + opus, 'torrentSearch', 900, 950);
 }
 </script>

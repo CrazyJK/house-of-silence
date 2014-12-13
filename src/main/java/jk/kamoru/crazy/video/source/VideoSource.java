@@ -49,10 +49,17 @@ public interface VideoSource {
 	void reload();
 	
 	/**
-	 * 비디오 삭제
+	 * remove video to archive
+	 * @param opus
 	 */
 	void removeVideo(String opus);
-	
+
+	/**
+	 * delete video
+	 * @param opus
+	 */
+	void deleteVideo(String opus);
+
 	Video getVideo(String opus);
 	
 	Studio getStudio(String name);
