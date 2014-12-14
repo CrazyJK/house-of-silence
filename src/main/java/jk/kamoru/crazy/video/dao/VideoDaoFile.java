@@ -3,6 +3,7 @@ package jk.kamoru.crazy.video.dao;
 import java.util.List;
 
 import jk.kamoru.crazy.video.VideoException;
+import jk.kamoru.crazy.video.VideoNotFoundException;
 import jk.kamoru.crazy.video.domain.Actress;
 import jk.kamoru.crazy.video.domain.Studio;
 import jk.kamoru.crazy.video.domain.Video;
@@ -19,8 +20,8 @@ public class VideoDaoFile implements VideoDao {
 	
 	protected static final Logger logger = LoggerFactory.getLogger(VideoDaoFile.class);
 
-	@Autowired
-	private VideoSource instanceVideoSource;
+	@Autowired private VideoSource instanceVideoSource;
+	@Autowired private VideoSource archiveVideoSource;
 
 	@Override
 //	@Cacheable(value="videoCache")
@@ -47,7 +48,11 @@ public class VideoDaoFile implements VideoDao {
 //	@Cacheable(value="videoCache")
 	public Video getVideo(String opus) {
 		logger.trace(opus);
-		return instanceVideoSource.getVideo(opus);
+		try {
+			return instanceVideoSource.getVideo(opus);
+		} catch (VideoNotFoundException e) {
+			return archiveVideoSource.getVideo(opus).setArchive(true);
+		}
 	}
 
 	@Override

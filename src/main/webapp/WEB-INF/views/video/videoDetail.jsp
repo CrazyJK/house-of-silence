@@ -16,6 +16,9 @@ $(document).ready(function() {
 function fnToggleRenameForm() {
 	$("#renameForm").toggle();
 }
+function fnToggleFileinfo() {
+	$("#fileinfoDiv").toggle();
+}
 </script>
 </head>
 <body>
@@ -39,23 +42,27 @@ function fnToggleRenameForm() {
 	
 	<dd><span class="label" onclick="fnToggleRenameForm()">Rename</span>
 		<form id="renameForm" method="post" action="<s:url value="/video/${video.opus}/rename"/>" target="ifrm">
-			<input type="text" name="newname" value="${video.fullname}" style="width:600px; background-color:rgba(255,255,255,.5);"/>
-			<input type="submit" value="rename"/>
+			<input type="text" name="newname" value="${video.fullname}" style="width:600px; background-color:rgba(255,255,255);" class="text"/>
+			<input type="submit" value="rename" class="text"/>
 		</form>
 	</dd>
 	
-	<dd><span class="label" onclick="opener.fnPlay('${video.opus}')">VIDEO : ${video.videoFileListPath}</span></dd>
-	<dd><span class="label">COVER : ${video.coverFilePath}</span></dd>
-	<c:if test="${video.coverWebpFilePath ne ''}">	
-	<dd><span class="label">WEBP : ${video.coverWebpFilePath}</span></dd>
-	</c:if>
-	<c:if test="${video.subtitlesFileListPath ne ''}">
-	<dd><span class="label" onclick="opener.fnEditSubtitles('${video.opus}')">SMI : ${video.subtitlesFileListPath}</span></dd>
-	</c:if>
-	<dd><span class="label">INFO : ${video.infoFilePath}</span></dd>
-	<c:if test="${video.etcFileListPath ne ''}">
-	<dd><div  class="label-large">ETC : ${video.etcFileListPath}</div></dd>
-	</c:if>
+	<dd><span class="label" onclick="fnToggleFileinfo()">Fileinfo</span>
+		<div id="fileinfoDiv" style="display:none;">
+			<span class="label" onclick="opener.fnPlay('${video.opus}')">VIDEO : ${video.videoFileListPath}</span>
+			<span class="label">COVER : ${video.coverFilePath}</span>
+			<span class="label">INFO : ${video.infoFilePath}</span>
+			
+			<c:if test="${video.subtitlesFileListPath ne ''}">
+			<span class="label" onclick="opener.fnEditSubtitles('${video.opus}')">SMI : ${video.subtitlesFileListPath}</span>
+			</c:if>
+
+			<c:if test="${video.etcFileListPath ne ''}">
+			<div  class="label-large">ETC : ${video.etcFileListPath}</div>
+			</c:if>
+		</div>
+	</dd>
+	
 	<c:if test="${video.overviewText ne ''}">
 	<dd><pre  class="label-large" onclick="opener.fnEditOverview('${video.opus}')" >${video.overviewText}</pre></dd>
 	</c:if>

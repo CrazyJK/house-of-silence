@@ -150,61 +150,6 @@ public class VideoServiceImpl implements VideoService {
 			});
 		}
 		return foundMapList;
-		
-		
-		/*
-		List<Map<String, String>> foundMapList = new ArrayList<Map<String, String>>();
-
-		if(query == null || query.trim().length() == 0)
-			return foundMapList;
-		
-		try {
-			if(isHistoryChanged || historyFile == null) {
-				historyList = FileUtils.readLines(getHistoryFile(), VideoCore.FILE_ENCODING);
-				isHistoryChanged = false;
-				log.debug("read history.log size={}", historyList.size());
-			}
-			if(query == null || query.trim().length() == 0)
-				return foundMapList;
-
-			for (String history : historyList) {
-				if (StringUtils.indexOfIgnoreCase(history, query) > -1) {
-					String[] hisStrings = StringUtils.split(history, ",", 4);
-					int length = hisStrings.length;
-					if (length > 0) {
-						Map<String, String> map = new HashMap<String, String>();
-						map.put("date", hisStrings[0].trim());
-						if (length > 1)
-							map.put("opus", hisStrings[1].trim());
-						if (length > 2)
-							map.put("act", hisStrings[2].trim());
-						if (length > 3)
-							map.put("desc", hisStrings[3].trim());
-						foundMapList.add(map);
-					}
-				}
-			}
-			log.debug("q={} foundLength={}", query, foundMapList.size());
-			Collections.sort(foundMapList, new Comparator<Map<String, String>>(){
-
-				@Override
-				public int compare(Map<String, String> o1, Map<String, String> o2) {
-					String thisStr = o1.get("date");
-					String compStr = o2.get("date");
-
-					String[] s = {thisStr, compStr};
-					Arrays.sort(s);
-					return s[0].equals(thisStr) ? 1 : -1;
-				}
-				
-			});
-			return foundMapList;
-		} 
-		catch (IOException e) {
-			log.error("history file read error", e);
-			throw new VideoException("history file read error", e);
-		}
-		*/
 	}
 
 	@Override
@@ -267,8 +212,6 @@ public class VideoServiceImpl implements VideoService {
 				if (actressInMap == null) {
 					actressInMap = videoDao.getActress(actress.getName());
 					actressInMap.emptyVideo();
-//					actressInMap = new Actress(actress.getName());
-//					actressInMap.setMainBasePath(mainBasePath);
 				}
 				actressInMap.addVideo(video);
 				actressMap.put(actress.getName(), actressInMap);
@@ -280,18 +223,6 @@ public class VideoServiceImpl implements VideoService {
 		return list;
 	}
 
-//	@Override
-//	public byte[] getDefaultCoverFileByteArray() {
-//		log.trace("getDefaultCoverFileByteArray");
-//		if(defaultCoverFileBytes == null)
-//			try {
-//				defaultCoverFileBytes = FileUtils.readFileToByteArray(new File(defaultCover));
-//			} catch (IOException e) {
-//				log.error("cover file byte array read fail", e);
-//			}
-//		return defaultCoverFileBytes;
-//	}
-	
 	@Override
 	public Studio getStudio(String studioName) {
 		log.trace(studioName);
@@ -316,8 +247,6 @@ public class VideoServiceImpl implements VideoService {
 			if (studio == null) {
 				studio = videoDao.getStudio(studioName);
 				studio.emptyVideo();
-//				studio = new Studio(studioName);
-//				studio.setMainBasePath(mainBasePath);
 			}
 			studio.addVideo(video);
 			studioMap.put(studioName, studio);
@@ -380,16 +309,7 @@ public class VideoServiceImpl implements VideoService {
 
 		History history = new History(video, action);
 		log.debug("save history - {}", history);
-
 		historyService.persist(history);
-/*		
-		try {
-			FileUtils.writeStringToFile(getHistoryFile(), history.toFileSaveString(), VideoCore.FILE_ENCODING, true);
-			isHistoryChanged = true;
-		} catch (IOException e) {
-			log.error("Fail to save history", e);
-		}
-*/	
 	}
 
 	@Override
@@ -401,10 +321,6 @@ public class VideoServiceImpl implements VideoService {
 	@Override
 	public List<Video> searchVideo(VideoSearch search) {
 		log.trace("{}", search);
-//		if (search.isOldVideo()) {
-//			search.setSortMethod(Sort.M);
-//			search.setSortReverse(false);
-//		}
 		if (search.getRankRange() == null)
 			search.setRankRange(getRankRange());
 		
@@ -414,15 +330,12 @@ public class VideoServiceImpl implements VideoService {
 					|| VideoUtils.equals(video.getOpus(), search.getSearchText()) 
 					|| VideoUtils.containsName(video.getTitle(), search.getSearchText()) 
 					|| VideoUtils.containsActress(video, search.getSearchText())) 
-//				&& (search.isNeverPlay() ? video.getPlayCount() == 0 : true)
-//				&& (search.isZeroRank()  ? video.getRank() == 0 : true)
 				&& (search.isAddCond()   
 						? ((search.isExistVideo() ? video.isExistVideoFileList() : !video.isExistVideoFileList())
 							&& (search.isExistSubtitles() ? video.isExistSubtitlesFileList() : !video.isExistSubtitlesFileList())) 
 						: true)
 				&& (search.getSelectedStudio() == null ? true : search.getSelectedStudio().contains(video.getStudio().getName()))
 				&& (search.getSelectedActress() == null ? true : VideoUtils.containsActress(video, search.getSelectedActress()))
-//				&& (rankCompare(video.getRank(), search.getRankSign(), search.getRank()))
 				&& (rankMatch(video.getRank(), search.getRankRange()))
 				&& (playCountMatch(video.getPlayCount(), search.getPlayCount()))
 				) 
@@ -437,13 +350,7 @@ public class VideoServiceImpl implements VideoService {
 			Collections.sort(foundList);
 
 		log.debug("found video list size {}", foundList.size());
-
-//		if (search.isOldVideo() && foundList.size() > 9) {
-//			return foundList.subList(0, 10);
-//		}
-//		else {
-			return foundList;
-//		}
+		return foundList;
 	}
 	
 	/**compare play count. {@code true} if playCount2 is {@code null} or {@code -1}
@@ -723,7 +630,7 @@ public class VideoServiceImpl implements VideoService {
 		for (Video video : videoDao.getVideoList()) {
 			if (!video.isExistVideoFileList() 
 					&& !video.isExistCoverFile()
-					&& !video.isExistCoverWebpFile() 
+//					&& !video.isExistCoverWebpFile() 
 					&& !video.isExistSubtitlesFileList()) {
 				log.info("    delete garbage file - {}", video);
 				videoDao.deleteVideo(video.getOpus());
@@ -825,16 +732,7 @@ public class VideoServiceImpl implements VideoService {
 		// get downloaded torrent file
 		File torrentDirectory = new File(torrentPath);
 		FileUtils.validateDirectory(torrentDirectory, "invalid torrent path");
-
-		
-//		String[] videoExtensions = CRAZY.SUFFIX_VIDEO.split(",");
-//		String[] extensions = new String[videoExtensions.length * 2];
-//		int index = 0;
-//		for (String ext : videoExtensions) {
-//			extensions[index++] = ext.toUpperCase();
-//			extensions[index++] = ext.toLowerCase();
-//		}
-		
+	
 		String[] extensions = String.format("%s,%s", CRAZY.SUFFIX_VIDEO.toUpperCase(), CRAZY.SUFFIX_VIDEO.toLowerCase()).split(",");
 		log.trace("extensions - {}", Arrays.toString(extensions));
 		
@@ -918,43 +816,12 @@ public class VideoServiceImpl implements VideoService {
 			video.renameOfStudio(newName);
 		videoDao.reload();
 	}
-/*
-	@Override
-	public List<TitlePart> parseToTitleData(String titleData) {
-		List<TitlePart> titlePartList = new ArrayList<TitlePart>();
 
-		if (!StringUtils.isEmpty(titleData)) {
-			String[] titles = StringUtils.split(titleData, System.getProperty("line.separator"));
-			log.info("title size {}", titles.length);
-			for (String title : titles) {
-				TitlePart titlePart = new TitlePart(title);
-				
-				if (videoDao.contains(titlePart.getOpus())) {
-					log.info("{} exist", titlePart.getOpus());
-					continue;
-				}
-				
-				List<Map<String, String>> histories = findHistory(StringUtils.substringBefore(titlePart.getOpus(), "-") + "-");
-				if (histories.size() > 0) {
-					Map<String, String> data = histories.get(0);
-					String desc = data.get("desc");
-					
-					titlePart.setStudio(StringUtils.substringBefore(StringUtils.substringAfter(desc, "["), "]"));
-				}
-				
-				titlePartList.add(titlePart);
-			}
-			Collections.sort(titlePartList);
-		}
-		return titlePartList;
-	}
-*/
 	@Override
 	public List<TitlePart> parseToTitleData(String titleData) {
 		List<TitlePart> titlePartList = new ArrayList<TitlePart>();
 		
 		if (!StringUtils.isEmpty(titleData)) {
-//			String[] titles = StringUtils.split(titleData, System.getProperty("line.separator"));
 			String[] titles = titleData.split(System.getProperty("line.separator"));
 
 			try {
@@ -966,7 +833,6 @@ public class VideoServiceImpl implements VideoService {
 						titlePart.setActress(titles[i++].trim());
 						titlePart.setReleaseDate(titles[i++].trim());
 						titlePart.setTitle(titles[i].trim());
-//						log.info("{}", titlePart);
 						if (videoDao.contains(titlePart.getOpus())) {
 							log.info("{} exist", titlePart.getOpus());
 							continue;
@@ -991,9 +857,6 @@ public class VideoServiceImpl implements VideoService {
 						
 						// add TitlePart
 						titlePartList.add(titlePart);
-					}
-					else {
-//						log.info("blank line");
 					}
 				}
 			} catch(ArrayIndexOutOfBoundsException e) {

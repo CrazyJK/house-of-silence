@@ -5,16 +5,12 @@ public class StudioNotFoundException extends VideoException {
 
 	private static final long serialVersionUID = VIDEO.SERIAL_VERSION_UID;
 
-	public StudioNotFoundException(String message, Throwable cause) {
-		super(message, cause);
+	public StudioNotFoundException(String studioName, Throwable cause) {
+		super("Studio not found : " + studioName, cause);
 	}
 
-	public StudioNotFoundException(String message) {
-		super(message);
-	}
-
-	public StudioNotFoundException(Throwable cause) {
-		super(cause);
+	public StudioNotFoundException(String studioName) {
+		super("Studio not found : " + studioName);
 	}
 
 }

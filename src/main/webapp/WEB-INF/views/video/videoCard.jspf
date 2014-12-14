@@ -3,7 +3,7 @@
 <%@ taglib prefix="jk" tagdir="/WEB-INF/tags"%>
 
 <li id="opus-${video.opus}" class="li-box">
-	<div class="video-card" style="width:220px;">
+	<div class="video-card" style="width:195px;">
 		<table style="width:100%;">
 			<tr>
 				<td colspan="2" style="text-align:center;"><div style="height:17px; text-align:center;" class="label" onclick="fnVideoDetail('${video.opus}')" title="${video.title}">${video.title}</div></td>

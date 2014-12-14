@@ -26,16 +26,19 @@ function searchInput(keyword) {
 		}
 	});
 }
+function fnGoSearch(opus) {
+	fnMarkChoice(opus);
+	popup('<c:url value="/video/torrent/search/"/>' + opus, 'torrentSearch', 900, 950);
+}
+function fnSelectVideo(opus) {
+	fnMarkChoice(opus);
+	$("#totalCandidatedVideo").html(--totalCandidatedVideo);
+}
 /**
  * 비디오 확인을 기억하기 위해 css class를 변경한다.
  */
 function fnMarkChoice(opus) {
 	$("#check-" + opus).addClass("mark");
-}
-function fnGoSearch(opus) {
-	fnMarkChoice(opus);
-	//popup('<c:url value="/video/"/>' + opus, "torrentVideoCover", 400, 300);
-	popup('<c:url value="/video/torrent/search/"/>' + opus, 'torrentSearch', 900, 950);
 }
 </script>
 </head>
@@ -57,7 +60,7 @@ function fnGoSearch(opus) {
 				${status.count}
 			</td>
 			<td>
-				<span class="label"><a onclick="fnGoSearch('${video.opus}');">Torrent ${video.opus}</a></span>
+				<span class="label"><a onclick="fnGoSearch('${video.opus}');">Torrent 【${video.opus}】</a></span>
 			</td>
 			<td>
 				<input value="${video.fullname}" class="text" style="width:600px;" onclick="fnViewVideoDetail('${video.opus}')" />
@@ -65,7 +68,7 @@ function fnGoSearch(opus) {
 			<td style="width:100%;">
 				<c:forEach items="${video.videoCandidates}" var="candidate">
 				<form method="post" target="ifrm" action="<c:url value="/video/${video.opus}/confirmCandidate"/>">
-					<input type="submit" value="${candidate.name}" onclick="fnMarkChoice('${video.opus}')"/>
+					<input type="submit" value="${candidate.name}" onclick="fnSelectVideo('${video.opus}')"/>
 					<input type="hidden" name="path" value="${candidate.absolutePath}"/>
 				</form>
 				<script type="text/javascript">

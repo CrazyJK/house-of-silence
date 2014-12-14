@@ -59,7 +59,7 @@ public class Video implements Comparable<Video>, Serializable {
 	private List<File> videoFileList;
 	private List<File> subtitlesFileList;
 	private File coverFile;
-	private File coverWebpFile;
+//	private File coverWebpFile;
 	private File infoFile; // json file
 	private List<File> etcFileList;
 	private List<File> videoCandidates;
@@ -78,6 +78,8 @@ public class Video implements Comparable<Video>, Serializable {
 	private List<Actress> actressList;
 	private Integer playCount;
 	private int rank;
+	
+	private boolean isArchive;
 
 	@Value("#{prop['score.ratio.play']}")		private int      playRatio;
 	@Value("#{prop['score.ratio.rank']}")		private int      rankRatio;
@@ -197,32 +199,32 @@ public class Video implements Comparable<Video>, Serializable {
 		return "";
 	}
 	
-	/**
-	 * webp형식의 cover file의 byte[] 반환
-	 * @return 없거나 에러이면 null 반환
-	 */
-	@JsonIgnore
-	public byte[] getCoverWebpByteArray() {
-		return VideoUtils.readFileToByteArray(coverWebpFile);
-	}
+//	/**
+//	 * webp형식의 cover file의 byte[] 반환
+//	 * @return 없거나 에러이면 null 반환
+//	 */
+//	@JsonIgnore
+//	public byte[] getCoverWebpByteArray() {
+//		return VideoUtils.readFileToByteArray(coverWebpFile);
+//	}
 
-	/**
-	 * WebP cover 파일 반환
-	 * @return 커버 파일 WebP
-	 */
-	public File getCoverWebpFile() {
-		return coverWebpFile;
-	}
+//	/**
+//	 * WebP cover 파일 반환
+//	 * @return 커버 파일 WebP
+//	 */
+//	public File getCoverWebpFile() {
+//		return coverWebpFile;
+//	}
 	
-	/**
-	 * WebP cover 파일 절대 경로
-	 * @return 없으면 공백
-	 */
-	public String getCoverWebpFilePath() {
-		if (this.isExistCoverWebpFile())
-			return this.getCoverWebpFile().getAbsolutePath();
-		return "";
-	}
+//	/**
+//	 * WebP cover 파일 절대 경로
+//	 * @return 없으면 공백
+//	 */
+//	public String getCoverWebpFilePath() {
+//		if (this.isExistCoverWebpFile())
+//			return this.getCoverWebpFile().getAbsolutePath();
+//		return "";
+//	}
 	
 	/**
 	 * video 대표 파일
@@ -239,8 +241,8 @@ public class Video implements Comparable<Video>, Serializable {
 			return this.getEtcFileList().get(0);
 		else if (this.infoFile != null) 
 			return this.infoFile;
-		else if (this.coverWebpFile != null)
-			return this.coverWebpFile;
+//		else if (this.coverWebpFile != null)
+//			return this.coverWebpFile;
 		else 
 			throw new VideoException(this, "No delegate video file : " + this.opus + " " + this.toString());
 	}
@@ -304,7 +306,7 @@ public class Video implements Comparable<Video>, Serializable {
 		list.addAll(getSubtitlesFileList());
 		list.addAll(getEtcFileList());
 		list.add(this.coverFile);
-		list.add(this.coverWebpFile);
+//		list.add(this.coverWebpFile);
 		list.add(this.infoFile);
 		return list;
 	}
@@ -314,7 +316,7 @@ public class Video implements Comparable<Video>, Serializable {
 		list.addAll(getSubtitlesFileList());
 		list.addAll(getEtcFileList());
 		list.add(this.coverFile);
-		list.add(this.coverWebpFile);
+//		list.add(this.coverWebpFile);
 		list.add(this.infoFile);
 		return list;
 	}
@@ -498,13 +500,13 @@ public class Video implements Comparable<Video>, Serializable {
 		return this.coverFile != null;
 	}
 
-	/**
-	 * WebP 커버 파일이 존재하는지
-	 * @return {@code true} if exist
-	 */
-	public boolean isExistCoverWebpFile() {
-		return this.coverWebpFile != null;
-	}
+//	/**
+//	 * WebP 커버 파일이 존재하는지
+//	 * @return {@code true} if exist
+//	 */
+//	public boolean isExistCoverWebpFile() {
+//		return this.coverWebpFile != null;
+//	}
 
 	/**
 	 * 기타 파일이 존재하는지
@@ -662,13 +664,13 @@ public class Video implements Comparable<Video>, Serializable {
 		this.coverFile = coverFile;
 	}
 
-	/**
-	 * webp cover file
-	 * @param coverWebpFile
-	 */
-	public void setCoverWebpFile(File coverWebpFile) {
-		this.coverWebpFile = coverWebpFile;
-	}
+//	/**
+//	 * webp cover file
+//	 * @param coverWebpFile
+//	 */
+//	public void setCoverWebpFile(File coverWebpFile) {
+//		this.coverWebpFile = coverWebpFile;
+//	}
 
 	/**
 	 * etc file
@@ -830,16 +832,6 @@ public class Video implements Comparable<Video>, Serializable {
 		this.releaseDate = releaseDate;
 	}
 
-	@Override
-	public String toString() {
-		return String
-				.format("Video [opus=%s, actressList=%s, coverFile=%s, coverWebpFile=%s, etcFileList=%s, etcInfo=%s, infoFile=%s, overview=%s, playCount=%s, rank=%s, studio=%s, subtitlesFileList=%s, title=%s, videoFileList=%s, releaseDate=%s]",
-						opus, actressList, coverFile, coverWebpFile, etcFileList,
-						etcInfo, infoFile, overview,
-						playCount, rank, studio, subtitlesFileList, title,
-						videoFileList, releaseDate);
-	}
-
 	/**
 	 * video의 모든 파일 크기
 	 * @return entire length of video
@@ -977,7 +969,7 @@ public class Video implements Comparable<Video>, Serializable {
 		}
 		// cover
 		FileUtils.rename(coverFile, newName);
-		FileUtils.rename(coverWebpFile, newName);
+//		FileUtils.rename(coverWebpFile, newName);
 		// subtitles, if exist
 		count = 1;
 		for (File file : VideoUtils.sortFile(getSubtitlesFileList())) {
@@ -1011,4 +1003,31 @@ public class Video implements Comparable<Video>, Serializable {
 	public String getExt() {
 		return FileUtils.getExtension(getDelegateFile());
 	}
+
+	@Override
+	public String toString() {
+		return String
+				.format("Video [videoFileList=%s, subtitlesFileList=%s, coverFile=%s, infoFile=%s, etcFileList=%s, studio=%s, opus=%s, title=%s, overview=%s, etcInfo=%s, releaseDate=%s, actressList=%s, playCount=%s, rank=%s]",
+						videoFileList, subtitlesFileList, coverFile, infoFile,
+						etcFileList, studio.getName(), opus, title, overview, etcInfo,
+						releaseDate, getActressName(), playCount, rank);
+	}
+
+	/**
+	 * @return the isArchive
+	 */
+	public boolean isArchive() {
+		return isArchive;
+	}
+
+	/**
+	 * @param isArchive the isArchive to set
+	 * @return this video
+	 */
+	public Video setArchive(boolean isArchive) {
+		this.isArchive = isArchive;
+		return this;
+	}
+
+	
 }

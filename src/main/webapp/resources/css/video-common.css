@@ -42,6 +42,10 @@ ol.items li {
 	background-size: 30px 25px;
 	background-repeat: no-repeat; */
 }
+.mark td {
+	border-left: 1px solid red;
+	border-right: 1px solid red;
+}
 .text {
 	font-size: 11px; 
 	border: 0; 

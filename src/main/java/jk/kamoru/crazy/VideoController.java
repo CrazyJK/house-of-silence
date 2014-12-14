@@ -6,8 +6,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-import javax.servlet.http.HttpServletResponse;
-
 import jk.kamoru.crazy.image.service.ImageService;
 import jk.kamoru.crazy.video.VIDEO;
 import jk.kamoru.crazy.video.domain.Action;
@@ -227,25 +225,17 @@ public class VideoController extends AbstractController {
 	}
 
 	/**send video cover image<br>
-	 * send redirect '/no/cover' if image not found<br>
-	 * test {@code User-Agent} contails {@code Chrome}, then send webp image
+	 * send redirect '/no/cover' if image not found
 	 * @param opus
-	 * @param response
-	 * @param agent
 	 * @return image entity
 	 * @throws IOException
 	 */
 	@RequestMapping(value="/{opus}/cover", method=RequestMethod.GET)
-	public HttpEntity<byte[]> videoCover(HttpServletResponse response, @PathVariable String opus
-//			, @RequestHeader("User-Agent") String agent
-			) throws IOException {
+	public HttpEntity<byte[]> videoCover(@PathVariable String opus) throws IOException {
 		logger.trace("{}", opus);
-//		boolean isChrome = agent.indexOf("Chrome") > -1;
 		File imageFile = videoService.getVideoCoverFile(opus);
-		if(imageFile == null) {
-			response.sendRedirect("/res/img/subterraneans_by_joe_maccer-d6bnuip-reverse.jpg");
+		if(imageFile == null)
 			return null;
-		}
 		return httpEntity(videoService.getVideoCoverByteArray(opus), FileUtils.getExtension(imageFile));
 	}
 	
@@ -326,8 +316,12 @@ public class VideoController extends AbstractController {
 	@RequestMapping(value="/{opus}", method=RequestMethod.GET)
 	public String videoDetail(Model model, @PathVariable String opus) {
 		logger.trace(opus);
-		model.addAttribute("video", videoService.getVideo(opus));
-		return "video/videoDetail";
+		Video video = videoService.getVideo(opus);
+		model.addAttribute(video);
+		if (video.isArchive())
+			return "video/videoDetailArchive";
+		else
+			return "video/videoDetail";
 	}
 	
 	/**
@@ -453,12 +447,19 @@ public class VideoController extends AbstractController {
 		videoService.confirmCandidate(opus, path);
 	}
 	
+	/**rename video title
+	 * @param opus
+	 * @param newName
+	 */
 	@RequestMapping(value="/{opus}/rename", method=RequestMethod.POST)
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void rename(@PathVariable("opus") String opus, @RequestParam("newname") String newName) {
 		videoService.rename(opus, newName);
 	}
 	
+	/**
+	 * play count reset in history
+	 */
 	@RequestMapping("/transferPlayCountInfo")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void transferPlayCountInfo() {
@@ -473,6 +474,10 @@ public class VideoController extends AbstractController {
 		}
 	}
 	
+	/**rename actress
+	 * @param oriname
+	 * @param newname
+	 */
 	@RequestMapping(value="/actress/{oriname}/renameTo/{newname}", method=RequestMethod.PUT)
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void actressRename(@PathVariable("oriname") String oriname, @PathVariable("newname") String newname) {
@@ -484,6 +489,10 @@ public class VideoController extends AbstractController {
 		videoService.renameOfActress(oriname, newname);
 	}
 
+	/**rename studio name
+	 * @param oriname
+	 * @param newname
+	 */
 	@RequestMapping(value="/studio/{oriname}/renameTo/{newname}", method=RequestMethod.PUT)
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void studioRename(@PathVariable("oriname") String oriname, @PathVariable("newname") String newname) {
@@ -495,15 +504,24 @@ public class VideoController extends AbstractController {
 		videoService.renameOfStudio(oriname, newname);
 	}
 
+	/**parsing title
+	 * @param model
+	 * @param titleData
+	 * @return
+	 */
 	@RequestMapping("parseToTitle")
 	public String parseToTitle(Model model, @RequestParam(value="titleData", required=false, defaultValue="") String titleData) {
 		logger.trace("parse to title");
-		
 		model.addAttribute("titleList", videoService.parseToTitleData(titleData));
 		model.addAttribute("titleData", titleData);
 		return "video/parseToTitle";
 	}
 	
+	/**search torrent
+	 * @param model
+	 * @param opus
+	 * @return
+	 */
 	@RequestMapping("/torrent/search/{opus}")
 	public String torrentSearch(Model model, @PathVariable("opus") String opus) {
 		logger.trace("torrentSearch");

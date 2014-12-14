@@ -241,7 +241,6 @@ $(document).ready(function(){
 				</td>
 				<td class="nowrap">
 					<c:forEach items="${score.value}" var="video" varStatus="status">
-						<em>${video.rank}</em>
 						<jk:video video="${video}" view="label" mode="${param.view}" tooltip="
 ${video.scoreDesc}"/>
 					</c:forEach>

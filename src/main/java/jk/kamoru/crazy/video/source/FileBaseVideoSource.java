@@ -47,12 +47,12 @@ public class FileBaseVideoSource implements VideoSource {
 	@Inject Provider<Studio>   studioProvider;
 	@Inject Provider<Actress> actressProvider;
 
-	// property
-	private String[] paths;
-
 	// logic variables
 	private boolean loaded = false;
 	
+	// property
+	private String[] paths;
+
 	// property setter
 	public void setPaths(String...paths) {
 		this.paths = paths;
@@ -260,7 +260,7 @@ public class FileBaseVideoSource implements VideoSource {
 		if (videoMap.containsKey(opus.toLowerCase()))
 			return videoMap.get(opus.toLowerCase());
 		else
-			throw new VideoNotFoundException("Video not found : " + opus);
+			throw new VideoNotFoundException(opus);
 	}
 	@Override
 	public Studio getStudio(String name) {
@@ -269,7 +269,7 @@ public class FileBaseVideoSource implements VideoSource {
 		if (studioMap.containsKey(name.toLowerCase()))
 			return studioMap.get(name.toLowerCase());
 		else
-			throw new StudioNotFoundException("Studio not found : " + name);
+			throw new StudioNotFoundException(name);
 	}
 	@Override
 	public Actress getActress(String name) {
@@ -278,7 +278,7 @@ public class FileBaseVideoSource implements VideoSource {
 		if (actressMap.containsKey(VideoUtils.forwardNameSort(name)))
 			return actressMap.get(VideoUtils.forwardNameSort(name));
 		else
-			throw new ActressNotFoundException("Actress not found : " + name);
+			throw new ActressNotFoundException(name);
 	}
 	@Override
 	public List<Video> getVideoList() {

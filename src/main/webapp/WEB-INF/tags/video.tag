@@ -70,7 +70,7 @@
 <%
 	} else if (view.equalsIgnoreCase("label")) {
 %>
-<span class="${cssClass}" onclick="fnVideoDetail('${video.opus}')" title="${mode eq 's' ? video.fullname : video.title} ${tooltip}">${mode eq 's' ? 'O' : video.opus}</span>
+<span class="${cssClass}" onclick="fnVideoDetail('${video.opus}')" title="${mode eq 'simple' ? video.fullname : video.title} ${tooltip}">${mode eq 'simple' ? 'O' : video.opus}</span>
 <%
 	} else {
 %>
