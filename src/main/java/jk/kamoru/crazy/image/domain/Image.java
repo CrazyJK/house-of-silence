@@ -12,11 +12,18 @@ import jk.kamoru.crazy.image.ImageException;
 import jk.kamoru.util.FileUtils;
 import lombok.Cleanup;
 import lombok.Data;
+import lombok.extern.slf4j.Slf4j;
 
 import org.imgscalr.Scalr;
 import org.imgscalr.Scalr.Method;
 
+/**
+ * Image Domain
+ * @author kamoru
+ *
+ */
 @Data
+@Slf4j
 public class Image {
 
 	private int idx;
@@ -27,13 +34,13 @@ public class Image {
 	private File file;
 
 	public Image(File file) {
-		this.file = file;
-		init();
+		this(file, -1);
 	}
 
 	public Image(File file, int i) {
-		this(file);
+		this.file = file;
 		this.idx = i;
+		init();
 	}
 
 	private void init() {
@@ -43,17 +50,32 @@ public class Image {
 		this.lastModified = file.lastModified();
 	}
 
-	public byte[] getImageBytes(PictureType type) {
+	/**
+	 * return byte array of image file
+	 * @param type
+	 * @return image file byte array
+	 */
+	public byte[] getByteArray(ImageType type) {
 		try {
 			switch (type) {
 			case MASTER:
 				return FileUtils.readFileToByteArray(file);
 			case WEB:
-				return readBufferedImageToByteArray(Scalr.resize(ImageIO.read(file), Scalr.Mode.FIT_TO_WIDTH, 500));
+				return readBufferedImageToByteArray(
+						Scalr.resize(
+								ImageIO.read(file), 
+								Scalr.Mode.FIT_TO_WIDTH, 
+								ImageType.WEB.getSize()));
 			case THUMBNAIL:
-				return readBufferedImageToByteArray(Scalr.resize(ImageIO.read(file), Method.SPEED, 100, Scalr.OP_ANTIALIAS, Scalr.OP_BRIGHTER));
+				return readBufferedImageToByteArray(
+						Scalr.resize(
+								ImageIO.read(file), 
+								Method.SPEED, 
+								ImageType.THUMBNAIL.getSize(), 
+								Scalr.OP_ANTIALIAS, 
+								Scalr.OP_BRIGHTER));
 			default:
-				throw new CrazyException("wrong PictureType = " + type);
+				throw new CrazyException("unknown PictureType = " + type);
 			}
 		} catch (IOException e) {
 			throw new ImageException(this, "image io error", e);
@@ -68,8 +90,12 @@ public class Image {
 		return outputStream.toByteArray();
 	}
 
+	/**
+	 * delete image file
+	 */
 	public void delete() {
 		FileUtils.deleteQuietly(file);
+		log.info("DELETE - {}", name);
 	}
 
 }

@@ -6,7 +6,7 @@ import java.util.Date;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 
-import jk.kamoru.crazy.image.domain.PictureType;
+import jk.kamoru.crazy.image.domain.ImageType;
 import jk.kamoru.crazy.image.service.ImageService;
 import jk.kamoru.crazy.video.VIDEO;
 import jk.kamoru.crazy.video.util.VideoUtils;
@@ -31,15 +31,16 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 @Slf4j
 public class ImageController extends AbstractController {
 
-	private static final String LAST_IMAGE_INDEX_CACHE = "lastImageNo";
+	private static final String Cookie_LAST_IMAGE_INDEX = "lastImageNo";
 
-	private static final String LAST_RANDOM_IMAGE_INDEX_CACHE = "lastRandomImageNo";;
+	private static final String Cookie_LAST_RANDOM_IMAGE_INDEX = "lastRandomImageNo";;
 
 	@Autowired
 	private ImageService imageService;
 
 	@RequestMapping(method = RequestMethod.GET)
-	public String viewImageList(Model model, @RequestParam(value = "n", required = false, defaultValue = "-1") int n) {
+	public String viewSlide(Model model, 
+			@RequestParam(value = "n", required = false, defaultValue = "-1") int n) {
 		int count = imageService.getImageSourceSize();
 		model.addAttribute("imageCount", count);
 		model.addAttribute("selectedNumber", n > count ? count - 1 : n);
@@ -48,7 +49,8 @@ public class ImageController extends AbstractController {
 	}
 
 	@RequestMapping(value = "/slides", method = RequestMethod.GET)
-	public String slides(Model model, @RequestParam(value = "n", required = false, defaultValue = "-1") int n) {
+	public String viewSlidesjs(Model model, 
+			@RequestParam(value = "n", required = false, defaultValue = "-1") int n) {
 		int count = imageService.getImageSourceSize();
 		model.addAttribute("imageCount", count);
 		model.addAttribute("selectedNumber", n > count ? count - 1 : n);
@@ -56,65 +58,56 @@ public class ImageController extends AbstractController {
 	}
 
 	@RequestMapping(value = "/canvas", method = RequestMethod.GET)
-	public String canvas(Model model, HttpServletResponse response, @RequestParam(value = "n", required = false, defaultValue = "-1") int firstImageIndex,
+	public String viewCanvas(Model model, HttpServletResponse response, 
+			@RequestParam(value = "n", required = false, defaultValue = "-1") int firstImageIndex,
 			@RequestParam(value = "d", required = false, defaultValue = "-1") int deleteImageIndex,
-			@CookieValue(value = LAST_IMAGE_INDEX_CACHE, defaultValue = "-1") int lastViewImageIndex) {
-		int total = imageService.getImageSourceSize();
+			@CookieValue(value = Cookie_LAST_IMAGE_INDEX, defaultValue = "-1") int lastViewImageIndex) {
+		int count = imageService.getImageSourceSize();
 
-		if (deleteImageIndex > -1) {
+		if (deleteImageIndex > -1) 
 			imageService.delete(deleteImageIndex);
-		}
 
-		if (firstImageIndex > -1) {
-			firstImageIndex = firstImageIndex > total ? total - 1 : firstImageIndex;
-		} else {
-			if (deleteImageIndex > -1) {
+		if (firstImageIndex > -1)
+			firstImageIndex = firstImageIndex > count ? count - 1 : firstImageIndex;
+		else
+			if (deleteImageIndex > -1)
 				firstImageIndex = deleteImageIndex;
-			} else if (lastViewImageIndex > -1) {
+			else if (lastViewImageIndex > -1)
 				firstImageIndex = lastViewImageIndex;
-			}
-		}
+			else
+				firstImageIndex = imageService.getRandomImageNo();
 
-		if (firstImageIndex > -1) {
-			response.addCookie(new Cookie(LAST_IMAGE_INDEX_CACHE, String.valueOf(firstImageIndex)));
-		}
+		response.addCookie(new Cookie(Cookie_LAST_IMAGE_INDEX, String.valueOf(firstImageIndex)));
 
-		model.addAttribute("imageCount", total);
+		model.addAttribute("imageCount", count);
 		model.addAttribute("selectedNumber", firstImageIndex);
 		model.addAttribute("imageNameJSON", imageService.getImageNameJSON());
 		return "image/canvas";
 	}
 
 	@RequestMapping(value = "/{idx}/thumbnail")
-	public HttpEntity<byte[]> viewImageThumbnail(@PathVariable int idx) {
-		return getImageEntity(imageService.getImage(idx).getImageBytes(PictureType.THUMBNAIL), MediaType.IMAGE_GIF);
+	public HttpEntity<byte[]> imageThumbnail(@PathVariable int idx) {
+		return getImageEntity(imageService.getImage(idx).getByteArray(ImageType.THUMBNAIL), MediaType.IMAGE_GIF);
 	}
 
 	@RequestMapping(value = "/{idx}/WEB")
-	public HttpEntity<byte[]> viewImageWEB(@PathVariable int idx) {
-		return getImageEntity(imageService.getImage(idx).getImageBytes(PictureType.WEB), MediaType.IMAGE_JPEG);
+	public HttpEntity<byte[]> imageWEB(@PathVariable int idx) {
+		return getImageEntity(imageService.getImage(idx).getByteArray(ImageType.WEB), MediaType.IMAGE_JPEG);
 	}
 
 	@RequestMapping(value = "/{idx}")
-	public HttpEntity<byte[]> viewImage(@PathVariable int idx, HttpServletResponse response) {
-		response.addCookie(new Cookie(LAST_IMAGE_INDEX_CACHE, String.valueOf(idx)));
-		return getImageEntity(imageService.getImage(idx).getImageBytes(PictureType.MASTER), MediaType.IMAGE_JPEG);
-	}
-
-	@RequestMapping(value = "/{idx}", method = RequestMethod.DELETE)
-	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void delete(@PathVariable int idx) {
-		log.info("Delete image {}", idx);
-		imageService.delete(idx);
+	public HttpEntity<byte[]> imageMaster(@PathVariable int idx, HttpServletResponse response) {
+		response.addCookie(new Cookie(Cookie_LAST_IMAGE_INDEX, String.valueOf(idx)));
+		return getImageEntity(imageService.getImage(idx).getByteArray(ImageType.MASTER), MediaType.IMAGE_JPEG);
 	}
 
 	@RequestMapping(value = "/random")
-	public HttpEntity<byte[]> viewImageByRandom(HttpServletResponse response) throws IOException {
+	public HttpEntity<byte[]> imageRandom(HttpServletResponse response) throws IOException {
 
 		int randomNo = imageService.getRandomImageNo();
-		byte[] imageBytes = imageService.getImage(randomNo).getImageBytes(PictureType.MASTER);
+		byte[] imageBytes = imageService.getImage(randomNo).getByteArray(ImageType.MASTER);
 
-		response.addCookie(new Cookie(LAST_RANDOM_IMAGE_INDEX_CACHE, String.valueOf(randomNo)));
+		response.addCookie(new Cookie(Cookie_LAST_RANDOM_IMAGE_INDEX, String.valueOf(randomNo)));
 
 		HttpHeaders headers = new HttpHeaders();
 		headers.setCacheControl("max-age=1");
@@ -124,8 +117,15 @@ public class ImageController extends AbstractController {
 		return new HttpEntity<byte[]>(imageBytes, headers);
 	}
 
+	@RequestMapping(value = "/{idx}", method = RequestMethod.DELETE)
+	@ResponseStatus(HttpStatus.NO_CONTENT)
+	public void delete(@PathVariable int idx) {
+		log.info("Delete image {}", idx);
+		imageService.delete(idx);
+	}
+
 	@RequestMapping(value = "/google")
-	public String searchGoogle(Model model, @RequestParam(value = "q", required = false, defaultValue = "") String query) {
+	public String viewSearchGoogle(Model model, @RequestParam(value = "q", required = false, defaultValue = "") String query) {
 		model.addAttribute(VideoUtils.getGoogleImage(query));
 		return "image/google";
 	}

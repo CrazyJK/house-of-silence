@@ -2,12 +2,12 @@ package jk.kamoru.crazy.image.source;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-import jk.kamoru.crazy.CrazyException;
+import jk.kamoru.crazy.image.IMAGE;
+import jk.kamoru.crazy.image.ImageNotFoundException;
 import jk.kamoru.crazy.image.domain.Image;
 import jk.kamoru.util.FileUtils;
 import lombok.extern.slf4j.Slf4j;
@@ -17,87 +17,77 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Repository;
 
+/**
+ * Implementation of {@link ImageSource}
+ * @author kamoru
+ *
+ */
 @Repository
 @Slf4j
 public class LocalImageSource implements ImageSource {
 
-	private List<Image> imageList;
+	private List<Image> imageList = new ArrayList<Image>();
 
-	@Value("#{local['path.image.storage']}")	private String[] backgroundImagePoolPath;
+	@Value("#{local['path.image.storage']}") private String[] imageStoragePath;
 
-	private void listImages() {
-		List<File> imageFileList = new ArrayList<File>();
-		for (String path : this.backgroundImagePoolPath) {
+	private synchronized void load() {
+		int idx = 0;
+
+		imageList.clear();
+		for (String path : this.imageStoragePath) {
 			File dir = new File(path);
 			if (dir.isDirectory()) {
-				log.debug("directory scanning : {}", dir);
-				Collection<File> found = FileUtils.listFiles(dir, new String[] {"jpg", "jpeg", "gif", "png" }, true);
-				imageFileList.addAll(found);
+				log.debug("image scanning : {}", dir);
+				for (File file : FileUtils.listFiles(dir, IMAGE.imageSuffix, true))
+					imageList.add(new Image(file, idx++));
 			}
 		}
-
-		imageList = new ArrayList<Image>();
-		int idx = 0;
-		for (File file : imageFileList) {
-			imageList.add(new Image(file, idx++));
-		}
-		
-		try {
-			Collections.sort(imageList, new Comparator<Image>() {
-				@Override
-				public int compare(Image o1, Image o2) {
-					return NumberUtils.compare(o1.getLastModified(), o2.getLastModified());
-					/* 아래처럼 비교할 경우 에러 발생
-					   java.lang.IllegalArgumentException: Comparison method violates its general contract! 
-					return (int) (o1.getLastModified() - o2.getLastModified()); */
-//					return o1.getLastModified() - o2.getLastModified() > 0 ? 1 : -1;
-				}
-			});
-		}
-		catch (Exception e) {
-			log.warn("Error: {}", e.getMessage());
-		}
 		log.info("Total found image size : {}", imageList.size());
+		
+		Collections.sort(imageList, new Comparator<Image>() {
+			@Override
+			public int compare(Image o1, Image o2) {
+				return NumberUtils.compare(o1.getLastModified(), o2.getLastModified());
+			}
+		});
 	}
 
-	private List<Image> createImageSource() {
+	private List<Image> imageSource() {
 		if (imageList == null)
-			reload();
+			load();
 		return imageList;
 	}
 
 	@Override
 	public Image getImage(int idx) {
 		try {
-			return createImageSource().get(idx);
+			return imageSource().get(idx);
 		}
 		catch(IndexOutOfBoundsException  e) {
-			throw new CrazyException("Image not found " + idx, e);
+			throw new ImageNotFoundException(idx);
 		}
 	}
 
 	@Override
 	public List<Image> getImageList() {
-		return createImageSource();
+		return imageSource();
 	}
 
 	@Override
 	public int getImageSourceSize() {
-		return createImageSource().size();
+		return imageSource().size();
+	}
+
+	@Override
+	public void delete(int idx) {
+		imageSource().get(idx).delete();
+		imageSource().remove(idx);
 	}
 
 	@Override
 	@Scheduled(cron = "0 */7 * * * *")
 	public void reload() {
-		listImages();
-	}
-
-	@Override
-	public void delete(int idx) {
-		Image image = createImageSource().get(idx);
-		image.delete();
-		createImageSource().remove(idx);
-		log.info("DELETE - {}", image.getName());
+		load();
 	}
 
 }

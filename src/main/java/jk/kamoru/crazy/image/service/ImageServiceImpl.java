@@ -8,6 +8,11 @@ import jk.kamoru.crazy.image.source.ImageSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+/**
+ * Implementation of {@link ImageService}
+ * @author kamoru
+ *
+ */
 @Service
 public class ImageServiceImpl implements ImageService {
 
