@@ -1,37 +1,28 @@
 package jk.kamoru.crazy.video.util;
 
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.URL;
-import java.net.URLConnection;
-import java.net.URLEncoder;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
-import jk.kamoru.crazy.video.VIDEO;
 import jk.kamoru.crazy.video.domain.Video;
 import jk.kamoru.util.ArrayUtils;
 import jk.kamoru.util.FileUtils;
 import jk.kamoru.util.StringUtils;
 import net.sf.json.JSONArray;
-import net.sf.json.JSONException;
 import net.sf.json.JSONObject;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
+/**
+ * Video에서 이용되는 utility method 모음
+ * @author kamoru
+ *
+ */
 public class VideoUtils {
-
-	protected static final Logger logger = LoggerFactory.getLogger(VideoUtils.class);
 
 	/**
 	 * 배열을 컴마(,)로 구분한 문자열로 반환. a, b<br>
@@ -43,6 +34,214 @@ public class VideoUtils {
 	public static String arrayToString(Object array) {
 		String toString = ArrayUtils.toString(array, "");
 		return toString.substring(1, toString.length() - 1);
+	}
+
+	/**
+	 * 같은 배우 이름인지 확인
+	 * <br>대소문자 구분없이 공백을 기준으로 순차 정렬하여 비교.
+	 * 
+	 * @param name1
+	 * @param name2
+	 * @return {@code true} if equal
+	 */
+	public static boolean equalsActress(String name1, String name2) {
+		if (name1 == null || name2 == null)
+			return false;
+		return StringUtils.equalsIgnoreCase(sortForwardName(name1), sortForwardName(name2));
+	}
+
+	/**
+	 * 공백이 들어간 이름을 소문자 순차정렬해서 반환
+	 * 
+	 * @param name
+	 * @return string of sort name
+	 */
+	public static String sortForwardName(String name) {
+		if (name == null)
+			return "";
+		String[] nameArr = StringUtils.split(name);
+		Arrays.sort(nameArr);
+		return StringUtils.join(nameArr, " ");
+	}
+
+	/**
+	 * video list을 opus값 배열 스타일로 반환. ["abs-123", "avs-34"]
+	 * 
+	 * @param videoList
+	 * @return string of opus list
+	 */
+	public static String getOpusArrayStyleString(List<Video> videoList) {
+		StringBuilder sb = new StringBuilder("[");
+		for (int i = 0, iEnd = videoList.size(); i < iEnd; i++) {
+			if (i > 0)
+				sb.append(",");
+			sb.append("\"").append(videoList.get(i).getOpus()).append("\"");
+		}
+		sb.append("]");
+		return sb.toString();
+	}
+
+	/**
+	 * video list중 video파일이 있는것만 골라 opus값 배열 스타일로 반환. ["abs-123", "avs-34"]
+	 * 
+	 * @param videoList
+	 * @return string of opus list with file
+	 */
+	public static String getOpusArrayStyleStringWithVideofile(List<Video> videoList) {
+		List<Video> videoListWithVideofile = new ArrayList<Video>();
+		for (Video video : videoList)
+			if (video.isExistVideoFileList())
+				videoListWithVideofile.add(video);
+		return getOpusArrayStyleString(videoListWithVideofile);
+	}
+
+	/**
+	 * 특수문자를 제거한 문자 반환
+	 * 
+	 * @param str
+	 * @return string
+	 */
+	public static String removeSpecialCharacters(String str) {
+		String str_imsi = "";
+		String[] filter_word = { "", "\\.", "\\?", "\\/", "\\~", "\\!", "\\@", "\\#", "\\$", "\\%", "\\^", "\\&", "\\*", "\\(", "\\)", "\\_", "\\+", "\\=",
+				"\\|", "\\\\", "\\}", "\\]", "\\{", "\\[", "\\\"", "\\'", "\\:", "\\;", "\\<", "\\,", "\\>", "\\.", "\\?", "\\/" };
+		for (int i = 0; i < filter_word.length; i++) {
+			// System.out.println(i + "[" + filter_word[i] + "]");
+			str_imsi = str.replaceAll(filter_word[i], "");
+			str = str_imsi;
+		}
+		return str;
+	}
+
+	/**
+	 * 앞 뒤 공백, [ 제거. null이나 공백이면 "" 리턴
+	 * 
+	 * @param str
+	 * @return string
+	 */
+	public static String removeUnnecessaryCharacter(String str) {
+		return removeUnnecessaryCharacter(str, "");
+	}
+
+	/**
+	 * 앞 뒤 공백, [ 제거
+	 * 
+	 * @param str
+	 * @param defaultString
+	 * @return string
+	 */
+	public static String removeUnnecessaryCharacter(String str, String defaultString) {
+		if (str == null || str.trim().length() == 0)
+			return defaultString;
+
+		str = str.trim();
+		str = str.startsWith("[") ? str.substring(1) : str;
+		return str.trim().length() == 0 ? defaultString : str.trim();
+	}
+
+	/**
+	 * list를 컴마(,)로 구분한 string반환
+	 * 
+	 * @param list
+	 * @return string of list
+	 */
+	public static <T> String listToSimpleString(List<T> list) {
+		StringBuilder sb = new StringBuilder();
+		for (int i = 0, e = list.size(); i < e; i++) {
+			T object = list.get(i);
+			if (i > 0)
+				sb.append(", ");
+			sb.append(object);
+		}
+		return sb.toString();
+	}
+
+	/**
+	 * file list를 컴마(,)로 구분한 string으로 반환
+	 * 
+	 * @param list
+	 * @return string of list
+	 */
+	public static String listFileToSimpleString(List<File> list) {
+		StringBuilder sb = new StringBuilder();
+		for (int i = 0, e = list.size(); i < e; i++) {
+			File file = list.get(i);
+			if (i > 0)
+				sb.append(", ");
+			sb.append(file.getAbsolutePath());
+		}
+		return sb.toString();
+	}
+
+	/**
+	 * 문자열 equalsIgnoreCase 비교
+	 * <br> compare null is true
+	 * <br> compare empty is true
+	 * 
+	 * @param target
+	 * @param compare
+	 * @return {@code true} if equals
+	 */
+	public static boolean equals(String target, String compare) {
+		return StringUtils.isBlank(compare) || StringUtils.equalsIgnoreCase(target, compare);
+	}
+
+	/**
+	 * 문자열 containsIgnoreCase 비교
+	 * <br> compare null is true
+	 * <br> compare empty is true
+	 * 
+	 * @param target
+	 * @param compare
+	 * @return {@code true} if contains
+	 */
+	public static boolean containsName(String target, String compare) {
+		return StringUtils.isBlank(compare) || StringUtils.containsIgnoreCase(target, compare);
+	}
+
+	/**
+	 * 비디오에 배우가 포함되어 있는지
+	 * <br> compare null is true
+	 * <br> compare empty is true
+	 * 
+	 * @param target
+	 * @param compare
+	 * @return {@code true} if contains
+	 */
+	public static boolean containsActress(Video target, String compare) {
+		return StringUtils.isBlank(compare) || target.containsActress(compare);
+	}
+
+	/**
+	 * 배우 이름 중 하나라도 비디오에 포함되어 있는지
+	 * 
+	 * @param video
+	 * @param actressNameList
+	 * @return {@code true} if contains
+	 */
+	public static boolean containsActress(Video video, List<String> actressNameList) {
+		for (String actress : actressNameList)
+			if (containsActress(video, actress))
+				return true;
+		return false;
+	}
+
+	/**
+	 * 파일 이름으로 순차 정렬
+	 * 
+	 * @param files
+	 * @return
+	 */
+	public static List<File> sortFile(List<File> files) {
+		Collections.sort(files, new Comparator<File>() {
+
+			@Override
+			public int compare(File arg0, File arg1) {
+				return StringUtils.compareTo(arg0.getName(), arg1.getName());
+			}
+
+		});
+		return files;
 	}
 
 	/**
@@ -129,109 +328,6 @@ public class VideoUtils {
 		}
 	}
 
-	/**
-	 * 같은 이름인지 확인. 대소문자 구분없이 공백을 기준으로 순차 정렬하여 비교.
-	 * 
-	 * @param name1
-	 * @param name2
-	 * @return {@code true} if equal
-	 */
-	public static boolean equalsName(String name1, String name2) {
-		if (name1 == null || name2 == null)
-			return false;
-		return forwardNameSort(name1).equalsIgnoreCase(forwardNameSort(name2));
-	}
-
-	/**
-	 * 공백이 들어간 이름을 소문자 순차정렬해서 반환
-	 * 
-	 * @param name
-	 * @return string of sort name
-	 */
-	public static String forwardNameSort(String name) {
-		if (name == null)
-			return null;
-		String[] nameArr = StringUtils.split(name);
-		Arrays.sort(nameArr);
-		return StringUtils.join(nameArr, " ").trim();
-	}
-
-	/**
-	 * 주어진 이름을 구글 이미지 검색을 사용해 URL list로 반환.<br>
-	 * google url : https://ajax.googleapis.com/ajax/services/search/images<br>
-	 * 에러 발생시 빈 list 리턴.
-	 * 
-	 * @param name
-	 * @return list of url
-	 */
-	@SuppressWarnings("deprecation")
-	public static List<URL> getGoogleImage(String name) {
-		List<URL> list = new ArrayList<URL>();
-		try {
-			name = URLEncoder.encode(name);
-			URL url = new URL("https://ajax.googleapis.com/ajax/services/search/images?" + "v=1.0&q=" + URLEncoder.encode(name, VIDEO.URL_ENCODING)
-					+ "&userip=&safe=off");
-			logger.debug("{}", url);
-			URLConnection connection = url.openConnection();
-			connection.addRequestProperty("Referer", "http://www.kamoru.com");
-
-			String line;
-			StringBuilder builder = new StringBuilder();
-			BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream(), VIDEO.URL_ENCODING));
-			while ((line = reader.readLine()) != null) {
-				builder.append(line);
-			}
-			reader.close();
-
-			JSONObject json = JSONObject.fromObject(builder.toString());
-			JSONObject responseData = json.getJSONObject("responseData");
-			JSONArray results = responseData.getJSONArray("results");
-			for (int i = 0, e = results.size(); i < e; i++) {
-				String urlStr = results.getJSONObject(i).getString("url");
-				list.add(new URL(urlStr));
-			}
-		} catch (JSONException jsone) {
-			logger.error(jsone.getMessage());
-		} catch (Exception e) {
-			logger.error("Fail to get image url on google", e);
-		}
-		return list;
-	}
-
-	/**
-	 * video list을 opus값 배열 스타일로 반환. [abs-123, avs-34]
-	 * 
-	 * @param videoList
-	 * @return string of opus list
-	 */
-	public static String getOpusArrayStyleString(List<Video> videoList) {
-		StringBuilder sb = new StringBuilder();
-		sb.append("[");
-		for (int i = 0, iEnd = videoList.size(); i < iEnd; i++) {
-			if (i > 0)
-				sb.append(",");
-			sb.append("\"" + videoList.get(i).getOpus() + "\"");
-		}
-		sb.append("]");
-		return sb.toString();
-	}
-
-	/**
-	 * video list중 video파일이 있는것만 골라 opus값 배열 스타일로 반환. [abs-123, avs-34]
-	 * 
-	 * @param videoList
-	 * @return string of opus list with file
-	 */
-	public static String getOpusArrayStyleStringWithVideofile(List<Video> videoList) {
-		List<Video> videoListWithVideofile = new ArrayList<Video>();
-		for (Video video : videoList) {
-			if (video.getVideoFileList() != null && video.getVideoFileList().size() > 0) {
-				videoListWithVideofile.add(video);
-			}
-		}
-		return getOpusArrayStyleString(videoListWithVideofile);
-	}
-
 	public static void main(String[] args) throws Exception {
 		// VideoUtils.changeOldNameStyle("E:\\AV_JAP",
 		// "E:\\AV_JAP\\unclassified");
@@ -296,258 +392,6 @@ public class VideoUtils {
 		root.put("info", info);
 
 		System.out.println("---" + root.toString());
-
-	}
-
-	/**
-	 * 파일을 byte배열로 읽어 반환. null이거나 에러시 null반환
-	 * 
-	 * @param file
-	 * @return byte array of file
-	 */
-	public static byte[] readFileToByteArray(File file) {
-		if (file == null || !file.exists())
-			return null;
-		try {
-			return FileUtils.readFileToByteArray(file);
-		} catch (IOException e) {
-			logger.error("Fail to read file to byte array", e);
-			return null;
-		}
-	}
-
-	/**
-	 * 파일안의 내용을 숫자로 반환.
-	 * 
-	 * @param file
-	 * @return number of file
-	 */
-	public static int readFileToInteger(File file) {
-		try {
-			return Integer.parseInt(readFileToString(file));
-		} catch (Exception e) {
-			return 0;
-		}
-	}
-
-	/**
-	 * file의 내용을 읽어 반환. null이나 ioexception시 공백 반환
-	 * 
-	 * @param file
-	 * @return string of file
-	 */
-	public static String readFileToString(File file) {
-		if (file == null || !file.exists())
-			return "";
-		try {
-			return FileUtils.readFileToString(file, VIDEO.FILE_ENCODING);
-		} catch (IOException ioe) {
-			logger.error("Fail to read file to string", ioe);
-			return "";
-		}
-	}
-
-	/**
-	 * 특수문자를 제거한 문자 반환
-	 * 
-	 * @param str
-	 * @return string
-	 */
-	public static String removeSpecialCharacters(String str) {
-		String str_imsi = "";
-		String[] filter_word = { "", "\\.", "\\?", "\\/", "\\~", "\\!", "\\@", "\\#", "\\$", "\\%", "\\^", "\\&", "\\*", "\\(", "\\)", "\\_", "\\+", "\\=",
-				"\\|", "\\\\", "\\}", "\\]", "\\{", "\\[", "\\\"", "\\'", "\\:", "\\;", "\\<", "\\,", "\\>", "\\.", "\\?", "\\/" };
-		for (int i = 0; i < filter_word.length; i++) {
-			// System.out.println(i + "[" + filter_word[i] + "]");
-			str_imsi = str.replaceAll(filter_word[i], "");
-			str = str_imsi;
-		}
-		return str;
-	}
-
-	/**
-	 * 앞 뒤 공백, [ 제거. null이나 공백이면 "" 리턴
-	 * 
-	 * @param str
-	 * @return string
-	 */
-	public static String removeUnnecessaryCharacter(String str) {
-		return removeUnnecessaryCharacter(str, "");
-	}
-
-	/**
-	 * 앞 뒤 공백, [ 제거
-	 * 
-	 * @param str
-	 * @param defaultString
-	 * @return string
-	 */
-	public static String removeUnnecessaryCharacter(String str, String defaultString) {
-		if (str == null || str.trim().length() == 0)
-			return defaultString;
-
-		str = str.trim();
-		str = str.startsWith("[") ? str.substring(1) : str;
-		return str.trim().length() == 0 ? defaultString : str.trim();
-	}
-
-	/**
-	 * list를 컴마(,)로 구분한 string반환
-	 * 
-	 * @param list
-	 * @return string of list
-	 */
-	public static <T> String toListToSimpleString(List<T> list) {
-		StringBuilder sb = new StringBuilder();
-		for (int i = 0, e = list.size(); i < e; i++) {
-			T name = list.get(i);
-			sb.append(name);
-			if (i < e - 1)
-				sb.append(", ");
-		}
-		return sb.toString();
-	}
-
-	/**
-	 * file list를 컴마(,)로 구분한 string으로 반환
-	 * 
-	 * @param list
-	 * @return string of list
-	 */
-	public static String toFileListToSimpleString(List<File> list) {
-		StringBuilder sb = new StringBuilder();
-		for (int i = 0, e = list.size(); i < e; i++) {
-			File file = list.get(i);
-			sb.append(file.getAbsolutePath());
-			if (i < e - 1)
-				sb.append(", ");
-		}
-		return sb.toString();
-	}
-
-	/**
-	 * 문자열 저장
-	 * 
-	 * @param file
-	 * @param data
-	 */
-	public static void writeStringToFile(File file, String data) {
-		try {
-			FileUtils.writeStringToFile(file, data, VIDEO.FILE_ENCODING);
-		} catch (IOException e) {
-			logger.error("file write error ", e);
-		}
-	}
-
-	/**
-	 * null, " " or 글자가 같은지
-	 * 
-	 * @param target
-	 * @param compare
-	 * @return {@code true} if equals
-	 */
-	public static boolean equals(String target, String compare) {
-		return compare == null || compare.trim().length() == 0 || target.equalsIgnoreCase(compare);
-	}
-
-	/**
-	 * null, " " or 글자가 포함하는지
-	 * 
-	 * @param target
-	 * @param compare
-	 * @return {@code true} if contains
-	 */
-	public static boolean containsName(String target, String compare) {
-		return compare == null || compare.trim().length() == 0 || StringUtils.containsIgnoreCase(target, compare);
-	}
-
-	/**
-	 * null, " " or video에 포함하는 배우이름이 있는지
-	 * 
-	 * @param target
-	 * @param compare
-	 * @return {@code true} if contains
-	 */
-	public static boolean containsActress(Video target, String compare) {
-		return compare == null || compare.trim().length() == 0 || target.containsActress(compare);
-	}
-
-	/**
-	 * properties 형태의 파일을 읽어 Map으로 반환
-	 * 
-	 * @param file
-	 * @return 파일이 없으면 빈 Map
-	 */
-	public static Map<String, String> readFileToMap(File file) {
-		Map<String, String> map = new HashMap<String, String>();
-		if (file != null && file.exists()) {
-			try {
-				logger.debug("readFile : {}", file.getAbsolutePath());
-				List<String> strList = FileUtils.readLines(file, VIDEO.FILE_ENCODING);
-				for (String str : strList) {
-					String[] strs = StringUtils.split(str, "=", 2);
-					if (strs.length > 1)
-						map.put(strs[0], strs[1]);
-				}
-			} catch (IOException e) {
-				logger.error(e.getMessage(), e);
-			}
-		}
-		return map;
-	}
-
-	/**
-	 * params내요을 file로 저장
-	 * 
-	 * @param file
-	 * @param params
-	 */
-	public static void saveFileFromMap(File file, Map<String, String> params) {
-		StringBuffer sb = new StringBuffer();
-		for (Map.Entry<String, String> entry : params.entrySet()) {
-			sb.append(String.format("%s=%s%n", entry.getKey().toUpperCase().trim(), entry.getValue().trim()));
-		}
-		try {
-			FileUtils.writeStringToFile(file, sb.toString(), VIDEO.FILE_ENCODING);
-		} catch (IOException e) {
-			logger.error(e.getMessage(), e);
-		}
-	}
-
-	/**
-	 * 파라미터로 선택된 이름에 비디오의 배우 이름이 포함되어 있는지
-	 * 
-	 * @param video
-	 * @param actressNameList
-	 * @return {@code true} if contains
-	 */
-	public static boolean containsActress(Video video, List<String> actressNameList) {
-		boolean ret = false;
-		for (String actress : actressNameList) {
-			ret = ret || containsActress(video, actress);
-		}
-		return ret;
-	}
-
-	/**
-	 * 파일 이름으로 순차 정렬
-	 * 
-	 * @param files
-	 * @return
-	 */
-	public static List<File> sortFile(List<File> files) {
-		Collections.sort(files, new Comparator<File>() {
-
-			@Override
-			public int compare(File arg0, File arg1) {
-				return StringUtils.compareTo(arg0.getName(), arg1.getName());
-			}
-
-		});
-		return files;
-	}
-
-	public void convertHistory() {
 
 	}
 

@@ -26,18 +26,25 @@ import org.springframework.stereotype.Repository;
 @Slf4j
 public class LocalImageSource implements ImageSource {
 
-	private List<Image> imageList = new ArrayList<Image>();
+	private List<Image> imageList;
+	
+	private boolean loading = false;
 
 	@Value("#{local['path.image.storage']}") private String[] imageStoragePath;
 
 	private synchronized void load() {
+		loading = true;
+		
 		int idx = 0;
 
+		if (imageList == null)
+			imageList = new ArrayList<Image>();
 		imageList.clear();
+
 		for (String path : this.imageStoragePath) {
 			File dir = new File(path);
 			if (dir.isDirectory()) {
-				log.debug("image scanning : {}", dir);
+				log.info("image scanning : {}", dir);
 				for (File file : FileUtils.listFiles(dir, IMAGE.imageSuffix, true))
 					imageList.add(new Image(file, idx++));
 			}
@@ -50,11 +57,22 @@ public class LocalImageSource implements ImageSource {
 				return NumberUtils.compare(o1.getLastModified(), o2.getLastModified());
 			}
 		});
+		loading = false;
 	}
 
 	private List<Image> imageSource() {
 		if (imageList == null)
 			load();
+		else 
+			if (loading)
+				do {
+					try {
+						Thread.sleep(500);
+					} catch (InterruptedException e) {
+						log.error("sleep error", e);
+						break;
+					}
+				} while (loading);
 		return imageList;
 	}
 
@@ -64,7 +82,7 @@ public class LocalImageSource implements ImageSource {
 			return imageSource().get(idx);
 		}
 		catch(IndexOutOfBoundsException  e) {
-			throw new ImageNotFoundException(idx);
+			throw new ImageNotFoundException(idx, e);
 		}
 	}
 

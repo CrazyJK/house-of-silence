@@ -60,10 +60,25 @@ public interface VideoSource {
 	 */
 	void deleteVideo(String opus);
 
+	/**
+	 * video
+	 * @param opus
+	 * @return
+	 */
 	Video getVideo(String opus);
 	
+	/**
+	 * studio
+	 * @param name
+	 * @return
+	 */
 	Studio getStudio(String name);
 	
+	/**
+	 * actress
+	 * @param name
+	 * @return
+	 */
 	Actress getActress(String name);
 
 	/**

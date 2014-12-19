@@ -9,7 +9,7 @@ import javax.servlet.http.HttpServletResponse;
 import jk.kamoru.crazy.image.domain.ImageType;
 import jk.kamoru.crazy.image.service.ImageService;
 import jk.kamoru.crazy.video.VIDEO;
-import jk.kamoru.crazy.video.util.VideoUtils;
+import jk.kamoru.util.GoogleImageProvider;
 import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -126,7 +126,7 @@ public class ImageController extends AbstractController {
 
 	@RequestMapping(value = "/google")
 	public String viewSearchGoogle(Model model, @RequestParam(value = "q", required = false, defaultValue = "") String query) {
-		model.addAttribute(VideoUtils.getGoogleImage(query));
+		model.addAttribute(GoogleImageProvider.search(query));
 		return "image/google";
 	}
 

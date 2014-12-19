@@ -99,13 +99,13 @@ public class AccesslogInterceptor implements HandlerInterceptor {
 			exceptionInfo = "Error : " + ex.getMessage();
 		}
 		
-		String accesslog = String.format("[%s] %s %s %s %s %sms %s %s", 
+		String accesslog = String.format("[%s] %s %s %s %sms %s %s %s", 
 				request.getRemoteAddr(), 
 				request.getMethod(), 
 				request.getRequestURI(),
-				handlerlInfo,
 				StringUtils.trimToEmpty(response.getContentType()), 
 				elapsedtime,
+				handlerlInfo,
 				exceptionInfo,
 				modelAndViewInfo
 				);

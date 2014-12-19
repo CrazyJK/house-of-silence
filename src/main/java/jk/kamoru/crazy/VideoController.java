@@ -481,7 +481,7 @@ public class VideoController extends AbstractController {
 	@RequestMapping(value="/actress/{oriname}/renameTo/{newname}", method=RequestMethod.PUT)
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void actressRename(@PathVariable("oriname") String oriname, @PathVariable("newname") String newname) {
-		if (StringUtils.isNullOrBlank(oriname) || StringUtils.isNullOrBlank(newname)) {
+		if (StringUtils.isBlank(oriname) || StringUtils.isBlank(newname)) {
 			logger.warn("name is empty. [{}] to [{}]", oriname, newname);
 			return;
 		}
@@ -496,7 +496,7 @@ public class VideoController extends AbstractController {
 	@RequestMapping(value="/studio/{oriname}/renameTo/{newname}", method=RequestMethod.PUT)
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void studioRename(@PathVariable("oriname") String oriname, @PathVariable("newname") String newname) {
-		if (StringUtils.isNullOrBlank(oriname) || StringUtils.isNullOrBlank(newname)) {
+		if (StringUtils.isBlank(oriname) || StringUtils.isBlank(newname)) {
 			logger.warn("name is empty. [{}] to [{}]", oriname, newname);
 			return;
 		}

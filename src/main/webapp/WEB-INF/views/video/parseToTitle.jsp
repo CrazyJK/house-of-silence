@@ -39,6 +39,13 @@ function fnMarkChoice(opus) {
 
 <div id="content_div" class="div-box" style="overflow:auto;">
 	<table class="video-table">
+		<c:if test="${empty titleList}">
+		<tr>
+			<td>
+				No Video
+			</td>
+		</tr>
+		</c:if>
 		<c:forEach items="${titleList}" var="title" varStatus="status">
 		<tr id="check-${title.opus}" style="font-size:11px; color:blue;">
 			<td align="right"><span>${status.count}</span></td>

@@ -26,6 +26,10 @@ public class ImageException extends CrazyException {
 		this.image = image;
 	}
 	
+	public ImageException(String message, Throwable cause) {
+		super(message, cause);
+	}
+	
 	public ImageException(String message) {
 		super(message);
 	}

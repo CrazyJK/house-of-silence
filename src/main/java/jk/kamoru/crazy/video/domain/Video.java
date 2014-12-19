@@ -146,7 +146,7 @@ public class Video implements Comparable<Video>, Serializable {
 	 */
 	public boolean containsActress(String actressName) {
 		for(Actress actress : actressList)
-			if (VideoUtils.equalsName(actress.getName(), actressName))
+			if (VideoUtils.equalsActress(actress.getName(), actressName))
 				return true;
 		return false;
 	}
@@ -160,7 +160,7 @@ public class Video implements Comparable<Video>, Serializable {
 		for(Actress actress : actressList) {
 			list.add(actress.getName());
 		}
-		return VideoUtils.toListToSimpleString(list);
+		return VideoUtils.listToSimpleString(list);
 	}
 
 	/**
@@ -178,7 +178,15 @@ public class Video implements Comparable<Video>, Serializable {
 	 */
 	@JsonIgnore
 	public byte[] getCoverByteArray() {
-		return VideoUtils.readFileToByteArray(coverFile);
+		if (coverFile == null)
+			return null;
+		try {
+			return FileUtils.readFileToByteArray(coverFile);
+		} catch (IOException e) {
+			logger.error("read cover file error", e);
+			e.printStackTrace();
+			return null;
+		}
 	}
 	
 	/**

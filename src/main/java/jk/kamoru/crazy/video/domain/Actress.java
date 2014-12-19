@@ -2,6 +2,7 @@ package jk.kamoru.crazy.video.domain;
 
 import java.io.File;
 import java.io.Serializable;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -15,8 +16,11 @@ import javax.xml.bind.annotation.XmlTransient;
 import jk.kamoru.crazy.video.VIDEO;
 import jk.kamoru.crazy.video.util.VideoUtils;
 import jk.kamoru.util.FileUtils;
+import jk.kamoru.util.GoogleImageProvider;
 import jk.kamoru.util.StringUtils;
+import jk.kamoru.util.UtilException;
 import lombok.Data;
+import lombok.extern.slf4j.Slf4j;
 
 import org.codehaus.jackson.annotate.JsonIgnore;
 import org.springframework.beans.factory.annotation.Value;
@@ -26,6 +30,7 @@ import org.springframework.stereotype.Component;
 @Component
 @Scope("prototype")
 @Data
+@Slf4j
 @XmlRootElement(name = "actress", namespace = "http://www.w3.org/2001/XMLSchema-instance")
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Actress implements Serializable, Comparable<Actress> {
@@ -92,7 +97,7 @@ public class Actress implements Serializable, Comparable<Actress> {
 	}
 	
 	public boolean contains(String actressName) {
-		return VideoUtils.equalsName(name, actressName);
+		return VideoUtils.equalsActress(name, actressName);
 	}
 	
 	public String getBirth() {
@@ -118,17 +123,21 @@ public class Actress implements Serializable, Comparable<Actress> {
 	
 	@JsonIgnore
 	public List<URL> getWebImage() {
-		return VideoUtils.getGoogleImage(this.getName());
+		return GoogleImageProvider.search(name);
 	}
 	
 	private void loadInfo() {
 		if (!loaded) {
-			Map<String, String> info = VideoUtils.readFileToMap(new File(basePath[0], name + FileUtils.EXTENSION_SEPARATOR + VIDEO.EXT_ACTRESS));
-			this.localName = info.get("LOCALNAME");
-			this.birth     = info.get("BIRTH");
-			this.height    = info.get("HEIGHT");
-			this.bodySize  = info.get("BODYSIZE");
-			this.debut     = info.get("DEBUT");
+			try {
+				Map<String, String> info = FileUtils.readFileToMap(new File(basePath[0], name + FileUtils.EXTENSION_SEPARATOR + VIDEO.EXT_ACTRESS));
+				this.localName = info.get("LOCALNAME");
+				this.birth     = info.get("BIRTH");
+				this.height    = info.get("HEIGHT");
+				this.bodySize  = info.get("BODYSIZE");
+				this.debut     = info.get("DEBUT");
+			} catch (UtilException e) {
+				log.warn("info load error : {} - {}", name, e.getMessage());
+			}
 			loaded = true;
 		}
 	}

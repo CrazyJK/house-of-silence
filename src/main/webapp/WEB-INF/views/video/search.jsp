@@ -16,7 +16,7 @@ $(document).ready(function(){
 		
 		var event = window.event || e;
 		$("#debug").html(event.keyCode);
-		
+		/* 
 		if (!(event.keyCode >= 48 && event.keyCode <= 57) // 0 ~ 9
 				&& !(event.keyCode >= 65 && event.keyCode <= 90) // a ~ z
 				&& !(event.keyCode >= 96 && event.keyCode <= 105) // keypad : 0 ~ 9
@@ -25,6 +25,10 @@ $(document).ready(function(){
 				&& event.keyCode != 8 // backspace
 				&& event.keyCode != 13 // enter
 				) {
+			return;
+		}
+		 */
+		if (event.keyCode != 13) {
 			return;
 		}
 
@@ -123,7 +127,7 @@ function resizeSecondDiv() {
 
 <div id="header_div" class="div-box">
 	<label for="query"><s:message code="video.video"/> <s:message code="video.search"/></label>
-	<input type="search" name="query" id="query" style="width:200px;" class="searchInput" placeHolder="<s:message code="video.search"/>"/>
+	<input type="search" id="query" style="width:200px;" class="searchInput" placeHolder="<s:message code="video.search"/>"/>
 	<span id="url"></span>
 	<span id="debug"></span>
 </div>

@@ -9,13 +9,13 @@ package jk.kamoru.util;
  */
 public class StringUtils extends org.apache.commons.lang3.StringUtils {
 
-	/**returns {@code true} if {@code null} or equalsIgnoreCase("null") or length == 0
-	 * @param str 검사할 문자열
-	 * @return 검사 결과
-	 */
-	public static boolean isNullOrBlank(String str) {
-		return str == null || str.equalsIgnoreCase("null") || str.length() == 0;
-	}
+//	/**returns {@code true} if {@code null} or equalsIgnoreCase("null") or length == 0
+//	 * @param str 검사할 문자열
+//	 * @return 검사 결과
+//	 */
+//	public static boolean isNullOrBlank(String str) {
+//		return str == null || str.equalsIgnoreCase("null") || str.length() == 0;
+//	}
 	
 	/**{@code number}를 자리수 {@code digit}만큼 0을 붙인 문자열 반환
 	 * @param number 0을 붙일 숫자

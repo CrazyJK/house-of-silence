@@ -7,6 +7,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Logger;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -14,10 +15,11 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
 import jk.kamoru.crazy.video.VIDEO;
-import jk.kamoru.crazy.video.util.VideoUtils;
 import jk.kamoru.util.FileUtils;
 import jk.kamoru.util.StringUtils;
+import jk.kamoru.util.UtilException;
 import lombok.Data;
+import lombok.extern.slf4j.Slf4j;
 
 import org.codehaus.jackson.annotate.JsonIgnore;
 import org.springframework.beans.factory.annotation.Value;
@@ -27,6 +29,7 @@ import org.springframework.stereotype.Component;
 @Component
 @Scope("prototype")
 @Data
+@Slf4j
 @XmlRootElement(name = "studio", namespace = "http://www.w3.org/2001/XMLSchema-instance")
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Studio implements Serializable, Comparable<Studio> {
@@ -112,13 +115,15 @@ public class Studio implements Serializable, Comparable<Studio> {
 
 	private void loadInfo() {
 		if (!loaded) {
-			Map<String, String> info = VideoUtils.readFileToMap(new File(basePath[0], name + FileUtils.EXTENSION_SEPARATOR + VIDEO.EXT_STUDIO));
 			try {
+				Map<String, String> info = FileUtils.readFileToMap(new File(basePath[0], name + FileUtils.EXTENSION_SEPARATOR + VIDEO.EXT_STUDIO));
+				this.company = info.get("COMPANY");
 				this.homepage = new URL(info.get("HOMEPAGE"));
 			} catch (MalformedURLException e) {
-				// do nothing!
+				log.warn("malformed url error : {}", e.getMessage());
+			} catch (UtilException e) {
+				log.warn("info load error : {} - {}", name, e.getMessage());
 			}
-			this.company = info.get("COMPANY");
 			loaded = true;
 		}
 	}

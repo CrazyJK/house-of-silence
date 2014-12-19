@@ -401,7 +401,7 @@ public class VideoServiceImpl implements VideoService {
 	@Override
 	public void saveActressInfo(String name, Map<String, String> params) {
 		log.trace("name={}, params={}", name, params);
-		VideoUtils.saveFileFromMap(new File(basePath[0], name + FileUtils.EXTENSION_SEPARATOR + VIDEO.EXT_ACTRESS), params);
+		FileUtils.saveFileFromMap(new File(basePath[0], name + FileUtils.EXTENSION_SEPARATOR + VIDEO.EXT_ACTRESS), params);
 		videoDao.getActress(name).reloadInfo();
 	}
 
@@ -477,7 +477,7 @@ public class VideoServiceImpl implements VideoService {
 	@Override
 	public void saveStudioInfo(String studio, Map<String, String> params) {
 		log.trace("name={}, params={}", studio, params);
-		VideoUtils.saveFileFromMap(new File(basePath[0], studio + FileUtils.EXTENSION_SEPARATOR + VIDEO.EXT_STUDIO), params);
+		FileUtils.saveFileFromMap(new File(basePath[0], studio + FileUtils.EXTENSION_SEPARATOR + VIDEO.EXT_STUDIO), params);
 		videoDao.getStudio(studio).reloadInfo();
 	}
 	
@@ -653,19 +653,19 @@ public class VideoServiceImpl implements VideoService {
 		// 여유 공간
 		long freeSpace = mainBaseFile.getFreeSpace();
 
-		log.info("MOVE WATCHED VIDEO START :: Watched {}GB, free{}GB", usedSpace / FileUtils.ONE_GB, freeSpace / FileUtils.ONE_GB);
+		log.info("    MOVE WATCHED VIDEO START :: Watched {}GB, free{}GB", usedSpace / FileUtils.ONE_GB, freeSpace / FileUtils.ONE_GB);
 
 		// 전체 비디오중에서
 		for (Video video : getVideoListSortByScore()) {
 			
 			// 드라이드에 남은 공간이 최소 공간보다 작으면 break
 			if (freeSpace < MIN_FREE_SPAC) {
-				log.info("Not enough space. {} < {}", freeSpace / FileUtils.ONE_GB, MIN_FREE_SPAC / FileUtils.ONE_GB);
+				log.info("      Not enough space. {} < {}", freeSpace / FileUtils.ONE_GB, MIN_FREE_SPAC / FileUtils.ONE_GB);
 				break;
 			}
 			// Watched 폴더 크기가 최대 크기보다 커졌으면 break
 			if (usedSpace > maximumSizeOfEntireVideo) {
-				log.info("Exceed the maximum size. {}  > {}", usedSpace / FileUtils.ONE_GB, maximumSizeOfEntireVideo / FileUtils.ONE_GB);
+				log.info("      Exceed the maximum size. {}  > {}", usedSpace / FileUtils.ONE_GB, maximumSizeOfEntireVideo / FileUtils.ONE_GB);
 				break;
 			}
 			
@@ -683,12 +683,12 @@ public class VideoServiceImpl implements VideoService {
 
 			// 비디오를 옮긴다
 			countOfMoveVideo++;
-			log.info("  {}. move video : {} : {}", countOfMoveVideo, video.getScore(), video.getFullname());
+			log.info("      {}. move video : {} : {}", countOfMoveVideo, video.getScore(), video.getFullname());
 			videoDao.moveVideo(video.getOpus(), destDir.getAbsolutePath());
 
 			// 다 옮겼으면 break
 			if (countOfMoveVideo == maximumCountOfMoveVideo) {
-				log.info("Completed {} videos.", maximumCountOfMoveVideo);
+				log.info("      Completed {} videos.", maximumCountOfMoveVideo);
 				break;
 			}
 
@@ -704,7 +704,7 @@ public class VideoServiceImpl implements VideoService {
 		}
 		usedSpace = FileUtils.sizeOfDirectory(mainBaseFile);
 		freeSpace = mainBaseFile.getFreeSpace();
-		log.info("MOVE WATCHED VIDEO END :: Watched {}GB, free{}GB", usedSpace / FileUtils.ONE_GB, freeSpace / FileUtils.ONE_GB);
+		log.info("    MOVE WATCHED VIDEO END :: Watched {}GB, free{}GB", usedSpace / FileUtils.ONE_GB, freeSpace / FileUtils.ONE_GB);
 	}
 
 	@Override

@@ -33,7 +33,7 @@ public class ElapsedTimeAdvice implements MethodInterceptor {
 		String   className = invocation.getThis().getClass().getSimpleName();
 		String  methodName = invocation.getMethod().getName();
 		
-		logger.info("{}.{} Elapsed time : {} ms", className, methodName, elapsedTime);
+		logger.info("[{}.{}] Elapsed time : {} ms", className, methodName, elapsedTime);
 		return null;
 	}
 
