@@ -48,8 +48,8 @@ public class FileBaseVideoSource implements VideoSource {
 	@Inject Provider<Actress> actressProvider;
 
 	// logic variables
-	private boolean firstLoad = false;
-	private boolean loading = false;
+	private static boolean firstLoad = false;
+	private static boolean loading = false;
 	
 	// property
 	private String[] paths;
@@ -63,18 +63,24 @@ public class FileBaseVideoSource implements VideoSource {
 	 * 기존에 만든적이 없으면, video source를 로드를 호출한다.
 	 */
 	private final void videoSource() {
-		if (firstLoad)
-			if (loading)
+//		logger.info("firstLoad = {}", firstLoad);
+		if (firstLoad) {
+//			logger.info("loading = {}", loading);
+			if (loading) {
 				do {
 					try {
+						logger.info("loading...");
 						Thread.sleep(500);
 					} catch (InterruptedException e) {
 						logger.error("sleep error", e);
 						break;
 					}
 				} while(loading);
-		else
+			}
+		}
+		else {
 			load();
+		}
 			
 	}
 	

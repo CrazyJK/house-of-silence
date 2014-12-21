@@ -38,11 +38,10 @@ ol.items li {
 
 .mark {
 	background-color: green;
-	/* background: url('<c:url value="/res/img/yes_check.png"/>');
-	background-size: 30px 25px;
-	background-repeat: no-repeat; */
 }
-.mark td {
+.mark td:nth-child(1) {
+	background: url('/crazy/res/img/yes_check_mini.png');
+	background-repeat: no-repeat;
 	border-left: 1px solid red;
 	border-right: 1px solid red;
 }

@@ -39,17 +39,17 @@ select, option {
 div {
 	margin:10px;
 }
-body {
-	/* background-image:url('<s:url value="/res/img/orgrimmar_horde_territory.jpg"/>'); */
-	background-repeat: repeat;
-	background-position: center center;
+body#deco_body {
+	background-image:url('<s:url value="/res/img/kamoru_crazy_artistic.png"/>');
+	background-repeat: no-repeat;
+	/* background-position: center center; */
 }
 #sign-in {
 	margin:20px 20px 20px;
-	background-color: rgba(241, 241, 241, 0.5); 
+	background-color: rgba(241, 241, 241, .75); 
 	border:1px solid #e5e5e5;
 	border-radius:10px;
-	padding:20px 25px 15px; 
+	padding:20px 25px; 
 	width:300px;
 	float:right;
 }
@@ -57,6 +57,7 @@ body {
 	background-image: url('<s:url value="/res/img/favicon-kamoru.ico"/>');
 	background-repeat: no-repeat;
 	background-position: right top;
+	background-size: 64px;
 }
 #lang-chooser {
 	text-align:right;
