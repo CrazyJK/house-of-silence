@@ -517,6 +517,19 @@ public class VideoController extends AbstractController {
 		return "video/parseToTitle";
 	}
 	
+	/**parsing title
+	 * @param model
+	 * @param titleData
+	 * @return
+	 */
+	@RequestMapping("parseToTitle2")
+	public String parseToTitle2(Model model, @RequestParam(value="titleData", required=false, defaultValue="") String titleData) {
+		logger.trace("parse to title");
+		model.addAttribute("titleList", videoService.parseToTitleData2(titleData));
+		model.addAttribute("titleData", titleData);
+		return "video/parseToTitle2";
+	}
+	
 	/**search torrent
 	 * @param model
 	 * @param opus

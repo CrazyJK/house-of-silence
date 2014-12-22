@@ -869,6 +869,70 @@ public class VideoServiceImpl implements VideoService {
 	}
 	
 	@Override
+	public List<TitlePart> parseToTitleData2(String titleData) {
+		List<TitlePart> titlePartList = new ArrayList<TitlePart>();
+		
+		final String UNKNOWN 			 = "_Unknown";
+//		final String unclassifiedStudio  = UNKNOWN;
+		final String unclassifiedOpus 	 = UNKNOWN;
+		final String unclassifiedActress = "Amateur";
+
+		
+		if (!StringUtils.isEmpty(titleData)) {
+			String[] titles = titleData.split(System.getProperty("line.separator"));
+
+			try {
+				for (int i = 0; i < titles.length; i++) {
+					if (!StringUtils.isEmpty(titles[i])) {
+						String[] names 		= StringUtils.split(titles[i], "]");
+//						String studioName 	 = VideoUtils.removeUnnecessaryCharacter(names[0], unclassifiedStudio);
+						String opus 		 = VideoUtils.removeUnnecessaryCharacter(names[1], unclassifiedOpus);
+						String title 		 = VideoUtils.removeUnnecessaryCharacter(names[2], UNKNOWN);
+						String actressNames = VideoUtils.removeUnnecessaryCharacter(names[3], unclassifiedActress);
+						String releaseDate  = VideoUtils.removeUnnecessaryCharacter(names[4]);
+
+						TitlePart titlePart = new TitlePart();
+						titlePart.setOpus(opus);
+						titlePart.setTitle(title);
+						titlePart.setActress(actressNames);
+						titlePart.setReleaseDate(releaseDate);
+					
+						if (videoDao.contains(titlePart.getOpus())) {
+							log.info("{} exist", titlePart.getOpus());
+							continue;
+						}
+						
+						// history check
+						if (historyService.contains(titlePart.getOpus())) {
+							titlePart.setSeen();
+						}
+
+						// find Studio
+						List<Map<String, String>> histories = findHistory(StringUtils.substringBefore(titlePart.getOpus(), "-") + "-");
+						if (histories.size() > 0) {
+							Map<String, String> data = histories.get(0);
+							String desc = data.get("desc");
+							
+							titlePart.setStudio(StringUtils.substringBefore(StringUtils.substringAfter(desc, "["), "]"));
+						}
+						else {
+							titlePart.setStudio("");
+						}
+						
+						// add TitlePart
+						titlePartList.add(titlePart);
+					}
+				}
+			} catch(ArrayIndexOutOfBoundsException e) {
+				// do nothing
+			}
+			// sort list
+			Collections.sort(titlePartList);
+		}
+		return titlePartList;
+	}
+	
+	@Override
 	public Map<Float, List<Video>> groupByLength() {
 		log.trace("groupByLength");
 		Map<Float, List<Video>> map = new TreeMap<Float, List<Video>>(Collections.reverseOrder());

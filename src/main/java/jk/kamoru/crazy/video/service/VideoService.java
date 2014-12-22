@@ -257,6 +257,8 @@ public interface VideoService {
 
 	List<TitlePart> parseToTitleData(String titleData);
 
+	List<TitlePart> parseToTitleData2(String titleData);
+
 	/**get groups by length
 	 * @return map of length, video list
 	 */
