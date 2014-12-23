@@ -34,12 +34,6 @@ function fnSelectVideo(opus) {
 	fnMarkChoice(opus);
 	$("#totalCandidatedVideo").html(--totalCandidatedVideo);
 }
-/**
- * 비디오 확인을 기억하기 위해 css class를 변경한다.
- */
-function fnMarkChoice(opus) {
-	$("#check-" + opus).addClass("mark");
-}
 </script>
 </head>
 <body>
@@ -66,10 +60,8 @@ function fnMarkChoice(opus) {
 			<td class="number">
 				${status.count}
 			</td>
-			<td>
-				<span class="label"><a onclick="fnGoSearch('${video.opus}');">Torrent 【${video.opus}】</a></span>
-			</td>
-			<td>
+			<td class="label">
+				<a onclick="fnGoSearch('${video.opus}');">Torrent</a>
 				<input value="${video.fullname}" class="text" style="width:600px;" onclick="fnViewVideoDetail('${video.opus}')" />
 			</td>
 			<td style="width:100%;">

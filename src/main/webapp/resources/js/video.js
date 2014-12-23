@@ -266,6 +266,13 @@ function fnReloadVideoSource() {
 }
 
 /**
+ * 비디오 확인을 기억하기 위해 css class를 변경한다.
+ */
+function fnMarkChoice(opus) {
+	$("#check-" + opus).addClass("mark");
+}
+
+/**
  * background-size:contain; Scale the image to the largest size such that both its width and its height can fit inside the content area
  * 이 설정과 같이 움직이도록 하는 함수 
 function resizeBackgroundImage() {

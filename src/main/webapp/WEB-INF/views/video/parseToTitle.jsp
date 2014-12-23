@@ -13,13 +13,16 @@
 	width:100%;
 	font-size:11px;
 }
+code {
+	margin: 0 5px;
+	color: red;
+}
 </style>
+<script src="<c:url value="/res/zeroclipboard/ZeroClipboard.js"/>"></script>
 <script type="text/javascript">
-/**
- * 비디오 확인을 기억하기 위해 css class를 변경한다.
- */
-function fnMarkChoice(opus) {
-	$("#check-" + opus).addClass("mark");
+function fnFindVideo(opus) {
+	fnMarkChoice(opus);
+	popup('<s:eval expression="@prop['url.search.video']"/>' + opus, 'videoSearch', 900, 950);
 }
 </script>
 </head>
@@ -40,25 +43,24 @@ function fnMarkChoice(opus) {
 <div id="content_div" class="div-box" style="overflow:auto;">
 	<table class="video-table">
 		<c:if test="${empty titleList}">
-		<tr>
-			<td>
-				No Video
-			</td>
-		</tr>
+			<tr>
+				<td>
+					No Video
+				</td>
+			</tr>
 		</c:if>
 		<c:forEach items="${titleList}" var="title" varStatus="status">
-		<tr id="check-${title.opus}" style="font-size:11px; color:blue;">
-			<td align="right"><span>${status.count}</span></td>
-			<td>
-				<span class="label">
-					<input class="text" style="width:600px;" value="${title}"/>
-					<a onclick="fnMarkChoice('${title.opus}')" 
-						href="<s:eval expression="@prop['url.search.video']"/>${title.opus}" 
-						target="_blank" class="link">Get Info</a>
-				</span>
-				<c:if test="${title.check}"><span>${title.checkDesc}</span></c:if>
-			</td>
-		</tr>
+			<tr id="check-${title.opus}" style="font-size:11px; color:blue;">
+				<td class="number">
+					${status.count}
+				</td>
+				<td class="label">
+					<a id="copyBtn_${title.opus}" data-clipboard-target="dataTitle_${title.opus}" onclick="fnFindVideo('${title.opus}')">Get Info </a>
+					<input id="dataTitle_${title.opus}" class="text" style="width:600px;" value="${title}"/>
+					<c:if test="${title.check}"><code>${title.checkDesc}</code></c:if>
+				</td>
+			</tr>
+			<script type="text/javascript">new ZeroClipboard(document.getElementById("copyBtn_${title.opus}"));</script>
 		</c:forEach>
 	</table>
 </div>
