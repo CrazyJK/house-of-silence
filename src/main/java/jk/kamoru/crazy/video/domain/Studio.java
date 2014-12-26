@@ -7,7 +7,6 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Logger;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -115,15 +114,17 @@ public class Studio implements Serializable, Comparable<Studio> {
 
 	private void loadInfo() {
 		if (!loaded) {
-			try {
-				Map<String, String> info = FileUtils.readFileToMap(new File(basePath[0], name + FileUtils.EXTENSION_SEPARATOR + VIDEO.EXT_STUDIO));
-				this.company = info.get("COMPANY");
-				this.homepage = new URL(info.get("HOMEPAGE"));
-			} catch (MalformedURLException e) {
-				log.warn("malformed url error : {}", e.getMessage());
-			} catch (UtilException e) {
-				log.warn("info load error : {} - {}", name, e.getMessage());
-			}
+			File file = new File(basePath[0], name + FileUtils.EXTENSION_SEPARATOR + VIDEO.EXT_STUDIO);
+			if (file.isFile())
+				try {
+					Map<String, String> info = FileUtils.readFileToMap(file);
+					this.company = info.get("COMPANY");
+					this.homepage = new URL(info.get("HOMEPAGE"));
+				} catch (MalformedURLException e) {
+					log.warn("malformed url error : {}", e.getMessage());
+				} catch (UtilException e) {
+					log.warn("info load error : {} - {}", name, e.getMessage());
+				}
 			loaded = true;
 		}
 	}

@@ -2,7 +2,6 @@ package jk.kamoru.crazy.video.domain;
 
 import java.io.File;
 import java.io.Serializable;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -128,16 +127,18 @@ public class Actress implements Serializable, Comparable<Actress> {
 	
 	private void loadInfo() {
 		if (!loaded) {
-			try {
-				Map<String, String> info = FileUtils.readFileToMap(new File(basePath[0], name + FileUtils.EXTENSION_SEPARATOR + VIDEO.EXT_ACTRESS));
-				this.localName = info.get("LOCALNAME");
-				this.birth     = info.get("BIRTH");
-				this.height    = info.get("HEIGHT");
-				this.bodySize  = info.get("BODYSIZE");
-				this.debut     = info.get("DEBUT");
-			} catch (UtilException e) {
-				log.warn("info load error : {} - {}", name, e.getMessage());
-			}
+			File file = new File(basePath[0], name + FileUtils.EXTENSION_SEPARATOR + VIDEO.EXT_ACTRESS);
+			if (file.isFile())
+				try {
+					Map<String, String> info = FileUtils.readFileToMap(file);
+					this.localName = info.get("LOCALNAME");
+					this.birth     = info.get("BIRTH");
+					this.height    = info.get("HEIGHT");
+					this.bodySize  = info.get("BODYSIZE");
+					this.debut     = info.get("DEBUT");
+				} catch (UtilException e) {
+					log.warn("info load error : {} - {}", name, e.getMessage());
+				}
 			loaded = true;
 		}
 	}

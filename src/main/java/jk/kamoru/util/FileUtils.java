@@ -3,11 +3,11 @@ package jk.kamoru.util;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import jk.kamoru.KamoruException;
 import jk.kamoru.crazy.video.VIDEO;
 import jk.kamoru.crazy.video.VideoException;
 

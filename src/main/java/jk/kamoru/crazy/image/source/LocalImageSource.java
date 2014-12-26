@@ -103,7 +103,7 @@ public class LocalImageSource implements ImageSource {
 	}
 
 	@Override
-	@Scheduled(cron = "0 */7 * * * *")
+	@Scheduled(cron = "0 */17 * * * *")
 	public void reload() {
 		load();
 	}
