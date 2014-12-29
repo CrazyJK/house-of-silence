@@ -56,8 +56,8 @@ function fnFindVideo(opus) {
 				</td>
 				<td class="label">
 					<a id="copyBtn_${title.opus}" data-clipboard-target="dataTitle_${title.opus}" onclick="fnFindVideo('${title.opus}')">Get Info </a>
-					<input id="dataTitle_${title.opus}" class="text" style="width:600px;" value="${title}"/>
 					<c:if test="${title.check}"><code>${title.checkDesc}</code></c:if>
+					<input id="dataTitle_${title.opus}" class="text" style="width:600px;" value="${title}"/>
 				</td>
 			</tr>
 			<script type="text/javascript">new ZeroClipboard(document.getElementById("copyBtn_${title.opus}"));</script>
