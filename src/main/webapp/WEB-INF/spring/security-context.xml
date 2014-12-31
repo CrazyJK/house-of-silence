@@ -58,15 +58,15 @@
 
 	<beans:bean id="passwordEncoder" class="jk.kamoru.spring.security.PlainPasswordEncoder"/>
 
-	<beans:bean id="loginSuccessHandler" class="jk.kamoru.spring.security.KamoruAuthenticationSuccessHandler">
+	<beans:bean id="loginSuccessHandler" class="jk.kamoru.spring.security.web.KamoruAuthenticationSuccessHandler">
 	 	<beans:property name="defaultTargetUrl" value="#{security['defaultTargetUrl']}"/>
 	</beans:bean>
 	
-	<beans:bean id="loginFailureHandler" class="jk.kamoru.spring.security.KamoruAuthenticationFailureHandler">
+	<beans:bean id="loginFailureHandler" class="jk.kamoru.spring.security.web.KamoruAuthenticationFailureHandler">
 	 	<beans:property name="defaultFailureUrl" value="#{security['defaultFailureUrl']}"/>
 	</beans:bean>
 
-	<beans:bean id="jkEntryPoint" class="jk.kamoru.spring.security.KamoruAuthenticationEntryPoint" >
+	<beans:bean id="jkEntryPoint" class="jk.kamoru.spring.security.web.KamoruAuthenticationEntryPoint" >
 	 	<beans:property name="defaultFailureUrl" value="#{security['defaultFailureUrl']}"/>
 	</beans:bean>
 

@@ -16,7 +16,7 @@ import javax.xml.bind.annotation.XmlTransient;
 import jk.kamoru.crazy.video.VIDEO;
 import jk.kamoru.util.FileUtils;
 import jk.kamoru.util.StringUtils;
-import jk.kamoru.util.UtilException;
+import jk.kamoru.util.JKUtilException;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 
@@ -122,7 +122,7 @@ public class Studio implements Serializable, Comparable<Studio> {
 					this.homepage = new URL(info.get("HOMEPAGE"));
 				} catch (MalformedURLException e) {
 					log.warn("malformed url error : {}", e.getMessage());
-				} catch (UtilException e) {
+				} catch (JKUtilException e) {
 					log.warn("info load error : {} - {}", name, e.getMessage());
 				}
 			loaded = true;

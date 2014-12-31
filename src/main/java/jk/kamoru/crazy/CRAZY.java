@@ -1,8 +1,8 @@
 package jk.kamoru.crazy;
 
-import jk.kamoru.KAMORU;
+import jk.kamoru.JK;
 
-public interface CRAZY extends KAMORU {
+public interface CRAZY extends JK {
 	
 	public static final String CHARSET = "UTF-8";
 	

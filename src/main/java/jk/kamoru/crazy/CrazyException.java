@@ -1,8 +1,8 @@
 package jk.kamoru.crazy;
 
-import jk.kamoru.KamoruException;
+import jk.kamoru.JKException;
 
-public class CrazyException extends KamoruException {
+public class CrazyException extends JKException {
 
 	private static final long serialVersionUID = CRAZY.SERIAL_VERSION_UID;
 	

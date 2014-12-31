@@ -16,8 +16,8 @@ import jk.kamoru.crazy.video.VIDEO;
 import jk.kamoru.crazy.video.util.VideoUtils;
 import jk.kamoru.util.FileUtils;
 import jk.kamoru.util.GoogleImageProvider;
+import jk.kamoru.util.JKUtilException;
 import jk.kamoru.util.StringUtils;
-import jk.kamoru.util.UtilException;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 
@@ -136,7 +136,7 @@ public class Actress implements Serializable, Comparable<Actress> {
 					this.height    = info.get("HEIGHT");
 					this.bodySize  = info.get("BODYSIZE");
 					this.debut     = info.get("DEBUT");
-				} catch (UtilException e) {
+				} catch (JKUtilException e) {
 					log.warn("info load error : {} - {}", name, e.getMessage());
 				}
 			loaded = true;

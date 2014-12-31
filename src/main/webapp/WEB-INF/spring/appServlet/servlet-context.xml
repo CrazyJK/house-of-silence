@@ -74,7 +74,7 @@
 	</beans:bean>
     
     <!-- Exception Resolver -->
-    <beans:bean id="exceptionResolver" class="jk.kamoru.spring.SimpleMappingLoggerExceptionResolver">
+    <beans:bean id="exceptionResolver" class="jk.kamoru.spring.web.SimpleMappingLoggerExceptionResolver">
     	<beans:property name="exceptionMappings">
     		<beans:props>
     			<beans:prop key="jk.kamoru.crazy.video.VideoException">error/videoError</beans:prop>
@@ -95,8 +95,8 @@
     		<beans:property name="paramName" value="lang"/>
     	</beans:bean>
 		<!-- Controller Interceptor -->
-		<beans:bean class="jk.kamoru.spring.AccesslogInterceptor">
-			<beans:property name="when" value="#{T(jk.kamoru.spring.AccesslogInterceptor$WHEN).AFTER}"/>
+		<beans:bean class="jk.kamoru.spring.web.AccesslogInterceptor">
+			<beans:property name="when" value="#{T(jk.kamoru.spring.web.AccesslogInterceptor$WHEN).AFTER}"/>
 		</beans:bean>
     </interceptors>
     
