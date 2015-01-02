@@ -20,6 +20,9 @@ try {
 <meta charset="UTF-8" />
 <link rel="shortcut icon" type="image/x-icon" href="<c:url value="/res/img/favicon-kamoru.ico"/>">
 <title><sitemesh:write property='title'>Title goes here</sitemesh:write> - kAmOrU</title>
+
+<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+
 <link rel="stylesheet" href="<c:url value="/res/css/crazy-deco.css" />" />
 <link rel="stylesheet" href="<c:url value="/res/css/common.css" />" />
 <link rel="stylesheet" href="<c:url value="/res/css/scrollbar.css" />" />
