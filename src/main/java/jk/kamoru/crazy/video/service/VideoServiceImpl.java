@@ -65,6 +65,8 @@ public class VideoServiceImpl implements VideoService {
 	/** baseline score in properties */
 	@Value("#{prop['size.video.storage']}")  	private int 	 maximumGBSizeOfEntireVideo;
 
+	@Value("#{prop['parse.to.title.no_opus']}")  	private String 	 noParseOpusPrefix;
+
 	/** minimum free space of disk */
 	private final long MIN_FREE_SPAC = 10 * FileUtils.ONE_GB;
 	/** sleep time of moving video */
@@ -844,15 +846,22 @@ public class VideoServiceImpl implements VideoService {
 						}
 
 						// find Studio
-						List<Map<String, String>> histories = findHistory(StringUtils.substringBefore(titlePart.getOpus(), "-") + "-");
-						if (histories.size() > 0) {
-							Map<String, String> data = histories.get(0);
-							String desc = data.get("desc");
-							
-							titlePart.setStudio(StringUtils.substringBefore(StringUtils.substringAfter(desc, "["), "]"));
+						// TODO
+						String opusPrefix = StringUtils.substringBefore(titlePart.getOpus(), "-");
+						if (noParseOpusPrefix.contains(opusPrefix)) {
+							titlePart.setStudio("");
 						}
 						else {
-							titlePart.setStudio("");
+							List<Map<String, String>> histories = findHistory(opusPrefix + "-");
+							if (histories.size() > 0) {
+								Map<String, String> data = histories.get(0);
+								String desc = data.get("desc");
+								
+								titlePart.setStudio(StringUtils.substringBefore(StringUtils.substringAfter(desc, "["), "]"));
+							}
+							else {
+								titlePart.setStudio("");
+							}
 						}
 						
 						// add TitlePart

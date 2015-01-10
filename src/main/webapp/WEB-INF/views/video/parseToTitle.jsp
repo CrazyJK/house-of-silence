@@ -55,8 +55,10 @@ function fnFindVideo(opus) {
 					${status.count}
 				</td>
 				<td class="label">
-					<a id="copyBtn_${title.opus}" data-clipboard-target="dataTitle_${title.opus}" onclick="fnFindVideo('${title.opus}')">Get Info </a>
-					<c:if test="${title.check}"><code>${title.checkDesc}</code></c:if>
+					<span style="margin-right:10px;">
+						<a id="copyBtn_${title.opus}" data-clipboard-target="dataTitle_${title.opus}" onclick="fnFindVideo('${title.opus}')">Get Info </a>
+						<c:if test="${title.check}"><code>${title.checkDesc}</code></c:if>
+					</span>
 					<input id="dataTitle_${title.opus}" class="text" style="width:600px;" value="${title}"/>
 				</td>
 			</tr>

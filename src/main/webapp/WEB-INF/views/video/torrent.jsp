@@ -61,7 +61,9 @@ function fnSelectVideo(opus) {
 				${status.count}
 			</td>
 			<td class="label">
-				<a onclick="fnGoSearch('${video.opus}');">Torrent</a>
+				<span style="margin-right:10px;">
+					<a onclick="fnGoSearch('${video.opus}');">Torrent</a>
+				</span>
 				<input value="${video.fullname}" class="text" style="width:600px;" onclick="fnViewVideoDetail('${video.opus}')" />
 			</td>
 			<td style="width:100%;">
