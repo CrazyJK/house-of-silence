@@ -52,6 +52,7 @@ $(document).ready(function() {
 				}, 
 				60*1000);
 	}
+	loading(false);
 });
 
 /**
@@ -71,12 +72,37 @@ function showNav() {
 /**
  * post 액션
  */
-function actionFrame(url, method) {
+function actionFrame(reqUrl, method) {
+	$.ajax({
+		type : method ? method : "POST",
+		url : reqUrl,
+		beforeSend : function() {
+			loading(true, "Loading...");
+		}
+	}).done(function(msg) {
+		loading(true, "Done", 3000);
+	}).fail(function(xhr, status, error) {
+		loading(true, "fail : " + error);
+	}).always(function() {
+		//loading(false);
+	});
+	/*
 	var actionFrm = document.forms['actionFrm'];
 	actionFrm.action = url;
 	if (method)
 		$("#hiddenHttpMethod").val(method);
 	actionFrm.submit();
+	*/
+}
+function loading(show, msg, interval) {
+	if (show)
+		$("#loading-wrapper").css("display", "table");
+	else
+		$("#loading-wrapper").hide();
+	if (msg)
+		$("#loading-msg").html(msg);
+	if (interval)
+		$("#loading-wrapper").fadeOut(interval);
 }
 </script>
 
@@ -105,6 +131,14 @@ function actionFrame(url, method) {
 	
 <form name="actionFrm" target="ifrm" method="post"><input type="hidden" name="_method" id="hiddenHttpMethod"/></form>
 <iframe id="actionIframe" name="ifrm" style="display:none; width:100%;"></iframe>
-	
+
+<div id="loading-wrapper">
+	<div id="loading-wrapper-inner">
+		<div id="loading-container">
+			<span id="loading-msg"  onclick="loading(false);">Loading</span>
+		</div>
+	</div>
+</div>
+
 </body>
 </html>

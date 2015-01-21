@@ -65,8 +65,10 @@
 <%
 	} else if (view.equalsIgnoreCase("rank")) {
 %>
-<input type="range" id="Rank-${video.opus}" name="points" ${mode eq 's' ? 'style="width:70px;"' : ''} min="<s:eval expression="@prop['rank.minimum']"/>" max="<s:eval expression="@prop['rank.maximum']"/>" value="${video.rank}" onmouseup="fnRank('${video.opus}')" onchange="document.getElementById('Rank-${video.opus}-label').innerHTML = this.value;" />
-<em id="Rank-${video.opus}-label" class="rangeLabel">${video.rank}</em>
+<input type="range" id="Rank-${video.opus}" name="points" ${mode eq 's' ? 'style="width:70px;"' : ''} 
+	min="<s:eval expression="@prop['rank.minimum']"/>" max="<s:eval expression="@prop['rank.maximum']"/>" 
+	value="${video.rank}" onmouseup="fnRank('${video.opus}')" onchange="document.getElementById('Rank-${video.opus}-label').innerHTML = this.value;" />
+<em id="Rank-${video.opus}-label" class="${cssClass} rangeLabel">${video.rank}</em>
 <%
 	} else if (view.equalsIgnoreCase("label")) {
 %>
