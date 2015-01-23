@@ -28,7 +28,7 @@ function fnFindVideo(opus) {
 </head>
 <body>
 <div id="header_div" class="div-box">
-	<form method="post">
+	<form method="post" onsubmit="loading(true, 'Parsing...')">
 		<table style="width:100%;">
 			<tr>
 				<td width="100px;"><input type="submit" value="Parse(${fn:length(titleList)})"/></td>

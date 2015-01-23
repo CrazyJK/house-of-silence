@@ -181,6 +181,7 @@ div#actressDiv {
 	margin:0px; 
 	padding:0px; 
 	text-align:center;
+	border-radius: 4px;
 }
 .studioInfo,
 .actressInfo {

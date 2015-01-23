@@ -23,7 +23,12 @@ try {
 <link rel="stylesheet" href="<c:url value="/res/css/crazy-deco.css" />" />
 <link rel="stylesheet" href="<c:url value="/res/css/common.css" />" />
 <link rel="stylesheet" href="<c:url value="/res/css/scrollbar.css" />" />
-<!--[if lt IE 9]><script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
+<!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+<!--[if lt IE 9]>
+  <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+  <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+<![endif]-->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
 <script src="<c:url value="/res/js/common.js" />" type="text/javascript"></script>
 <script type="text/javascript">

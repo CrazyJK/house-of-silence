@@ -20,12 +20,17 @@ ul#color li div {
 </style>
 </head>
 <body>
-<h2>If you see custom color, input parameter by <code>?c=rgba(123,123,123,0.5)</code></h2>
+<h3>If you see custom color, input parameter by <code>?c=rgba(123,123,123,0.5)</code></h3>
 <ul id="color">
 <%	for (String color : colors) { %>
 	<li><div style="background-color:<%=color %>;"><%=color %></div>
 <%	} %>
 	<li><div style="background-color:<%=rgba %>;"><%=rgba %></div>
 </ul>
+
+<div class="alert alert-info" role="alert">
+	Find more color <a href="http://www.color-hex.com/">www.color-hex.com</a>
+</div>
+
 </body>
 </html>

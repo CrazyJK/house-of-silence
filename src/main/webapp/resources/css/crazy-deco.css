@@ -7,8 +7,9 @@ body#deco_body {
 	background-size:contain;
 }
 #deco_header {
-	background-color:#588;
+	background-color:#123;
 	margin:0;
+	color: white;
 }
 #deco_h1 {
 	width:900px;
@@ -33,17 +34,18 @@ body#deco_body {
 	margin: 0;
 	padding: 0;
 	width:150px;
-	background-color:#669393;
+	background-color:#123;
 	border-radius: 0 0 10px 10px;
 	padding-left: 10px;
 }
 #deco_nav div section h4 {
 	margin:0 10px 0 0;
 	line-height:28px;
+	color: white;
 }
 #deco_nav div section ul {
 	position:absolute;
-	background-color:rgba(85, 136, 136, .75);
+	background-color:rgba(17, 34, 51, .75);
 	margin:0;
 	border-radius:0 0 10px 10px;
 	list-style:none;
@@ -55,6 +57,7 @@ body#deco_body {
 #deco_nav div section ul li a {
 	font-size: 11px;
 	margin-right:10px;
+	color: white;
 }
 
 #deco_section {

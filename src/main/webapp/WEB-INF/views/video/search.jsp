@@ -32,10 +32,11 @@ $(document).ready(function(){
 			return;
 		}
 
-		
+		loading(true, 'Searching');
+		 
 		var keyword = $(this).val();
 		var queryUrl = context + 'video/search.json?q=' + keyword; 
-
+		
 		$.getJSON(queryUrl ,function(data) {
 			$('#foundVideoList').empty();
 			$('#foundHistoryList').empty();
@@ -110,6 +111,8 @@ $(document).ready(function(){
  		    $('#foundVideoList').slideDown();
  			$('#foundHistoryList').slideDown();
 			resizeDivHeight();
+			
+			loading(false);
 		});
 	});
 });
