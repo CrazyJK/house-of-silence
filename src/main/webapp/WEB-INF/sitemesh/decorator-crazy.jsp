@@ -20,10 +20,10 @@ try {
 <meta charset="UTF-8" />
 <link rel="shortcut icon" type="image/x-icon" href="<c:url value="/res/img/favicon-kamoru.ico"/>">
 <title><sitemesh:write property='title'>Title goes here</sitemesh:write> - kAmOrU</title>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
 <link rel="stylesheet" href="<c:url value="/res/css/crazy-deco.css" />" />
 <link rel="stylesheet" href="<c:url value="/res/css/common.css" />" />
 <link rel="stylesheet" href="<c:url value="/res/css/scrollbar.css" />" />
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
 <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
 <!--[if lt IE 9]>
   <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
