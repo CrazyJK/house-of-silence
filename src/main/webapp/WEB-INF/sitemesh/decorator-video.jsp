@@ -113,7 +113,17 @@ function loading(show, msg, interval) {
 
 </head>
 <body>
- 
+
+<div id="loading-wrapper">
+	<div id="loading-wrapper-inner">
+		<div id="loading-container">
+			<span id="loading-msg"  onclick="loading(false);">Loading</span>
+		</div>
+	</div>
+</div>
+<script type="text/javascript">
+loading(true, "Loading...");
+</script> 
 <nav id="deco_nav">
 	<ul>
 		<li><a href="<c:url value="/video"/>"><s:message code="video.main"/></a>
@@ -134,14 +144,6 @@ function loading(show, msg, interval) {
 	
 <form name="actionFrm" target="ifrm" method="post"><input type="hidden" name="_method" id="hiddenHttpMethod"/></form>
 <iframe id="actionIframe" name="ifrm" style="display:none; width:100%;"></iframe>
-
-<div id="loading-wrapper">
-	<div id="loading-wrapper-inner">
-		<div id="loading-container">
-			<span id="loading-msg"  onclick="loading(false);">Loading</span>
-		</div>
-	</div>
-</div>
 
 </body>
 </html>

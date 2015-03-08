@@ -43,6 +43,12 @@ ul.slidesjs-pagination {
 li.slidesjs-pagination-item {
 	display:inline-block;
 }
+li.slidesjs-pagination-item:first-child {
+	margin-right: 10px;
+}
+li.slidesjs-pagination-item:last-child {
+	margin-left: 10px;
+}
 li.slidesjs-pagination-item a {
 	background-color:rgba(255, 255, 255, 0.5); 
 	text-shadow:1px 1px 1px white; 
@@ -56,5 +62,8 @@ li.slidesjs-pagination-item a {
 li.slidesjs-pagination-item a.active {
 	/* padding: 5px; */
 	text-decoration:none;
-	color:blue;
+	color:#7d8ee2;
+}
+li.slidesjs-pagination-item a:hover {
+	text-shadow:1px 1px 1px #7d8ee2;
 }

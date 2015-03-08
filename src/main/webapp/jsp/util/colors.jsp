@@ -8,28 +8,51 @@
 <head>
 <title>Standard colors</title>
 <style type="text/css">
-ul#color li {
-	display:inline-block;
+#colors {
 	margin: 10px;
 }
-ul#color li div {
+/* #color div {
+	display:inline-block;
 	width:100px; height:100px;
 	text-shadow: 1px 1px 1px white;
 	border-radius: 10px;
+	text-align: center;
+} */
+.colordvcon {
+	display: inline-block;
+	margin: 3px 1px;
+	text-align: center;
+	font-family: Courier,monospace;
+	padding: 6px;
+	width: 132px;
+	border-radius: 5px;
+	-webkit-border-radius: 5px;
+}
+.colordva {
+	height: 120px;
+	width: 120px;
+	border-radius: 5px;
+	-webkit-border-radius: 5px;
 }
 </style>
 </head>
 <body>
 <h3>If you see custom color, input parameter by <code>?c=rgba(123,123,123,0.5)</code></h3>
-<ul id="color">
+<div id="colors">
 <%	for (String color : colors) { %>
-	<li><div style="background-color:<%=color %>;"><%=color %></div>
+	<div class="colordvcon">
+		<div class="colordva" style="background-color: <%=color%>;"></div>
+		<code><%=color%></code>
+	</div>
 <%	} %>
-	<li><div style="background-color:<%=rgba %>;"><%=rgba %></div>
-</ul>
+	<div class="colordvcon">
+		<div class="colordva" style="background-color: <%=rgba%>;"></div>
+		<code><%=rgba%></code>
+	</div>
+</div>
 
 <div class="alert alert-info" role="alert">
-	Find more color <a href="http://www.color-hex.com/">www.color-hex.com</a>
+	Find more color <a href="http://www.color-hex.com/" target="_blank">www.color-hex.com</a>
 </div>
 
 </body>

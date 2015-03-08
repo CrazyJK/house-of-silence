@@ -610,8 +610,11 @@ public class Video implements Comparable<Video>, Serializable {
 			if (file != null)
 				try {
 					FileUtils.moveFileToDirectory(file, archiveDir, false);
+				} catch (FileExistsException e) {
+					logger.warn("file exists in archive dir : {}", e.getMessage());
+					FileUtils.deleteQuietly(file);
 				} catch (IOException e) {
-					logger.error("move fail : {}", e);
+					logger.error("move fail", e);
 				}
 	}
 	

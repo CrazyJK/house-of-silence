@@ -46,8 +46,6 @@ function fnPutActressInfo() {
 </head>
 <body>
 
-
-
 <form id="actressForm" action="<s:url value="/video/actress/${actress.name}"/>" method="post">
 <input type="hidden" name="_method" id="hiddenHttpMethod" value="put"/>
 <input type="hidden" name="name" value="${actress.name}"/>
@@ -56,7 +54,7 @@ function fnPutActressInfo() {
 		<input class="actressInfo" type="text" name="newname" value="${actress.name}" id="newName" />
 		<input class="actressInfo" type="text" name="localname" value="${actress.localName}" />
 		<img src="<c:url value="/res/img/magnify${status.count%2}.png"/>" width="12px" title="<s:message code="video.find-info.actress"/>"
-			onclick="popup('<s:eval expression="@prop['actress.info.url']"/>${actress.reverseName}', 'info_${actress.name}', 800, 600)"/>
+			onclick="popup('<s:eval expression="@prop['url.search.actress']"/>${actress.reverseName}', 'info_${actress.name}', 800, 600)"/>
 		<span>Score ${actress.score}</span>
 		<span  class="button" style="float:right" onclick="fnRenameTo()">Rename</span>
 	</dt>
@@ -95,7 +93,7 @@ function fnPutActressInfo() {
 <div style="padding-left:60px;">
 <ul>
 	<c:forEach items="${actress.videoList}" var="video">
-		<%@ include file="/WEB-INF/views/video/videoCard.jspf" %>
+	<%@ include file="/WEB-INF/views/video/videoCard.jspf" %>
 	</c:forEach>
 </ul>
 </div>

@@ -29,14 +29,14 @@ body {
 	text-decoration: none;
 }
 #deco_nav li a:hover {
-	color: orange;
+	color: #7d8ee2;
 	text-decoration: none;
 	text-shadow: 1px 1px 1px navy;
 }
 #deco_nav li.menu-selected {
 	font-weight:bold;
-	text-shadow: 1px 1px 2px orange;
-	background-color: orange;
+	text-shadow: 1px 1px 2px #7d8ee2;
+	background-color: #7d8ee2;
 }
 #deco_nav li.menu-selected a {
 	color: white;
