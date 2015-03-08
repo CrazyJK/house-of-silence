@@ -114,7 +114,7 @@ public class Studio implements Serializable, Comparable<Studio> {
 
 	private void loadInfo() {
 		if (!loaded) {
-			File file = new File(basePath[0], name + FileUtils.EXTENSION_SEPARATOR + VIDEO.EXT_STUDIO);
+			File file = new File(new File(basePath[0], "_info"), name + FileUtils.EXTENSION_SEPARATOR + VIDEO.EXT_STUDIO);
 			if (file.isFile())
 				try {
 					Map<String, String> info = FileUtils.readFileToMap(file);

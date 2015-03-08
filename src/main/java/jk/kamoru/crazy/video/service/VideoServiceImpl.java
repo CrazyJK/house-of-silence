@@ -403,7 +403,7 @@ public class VideoServiceImpl implements VideoService {
 	@Override
 	public void saveActressInfo(String name, Map<String, String> params) {
 		log.trace("name={}, params={}", name, params);
-		FileUtils.saveFileFromMap(new File(basePath[0], name + FileUtils.EXTENSION_SEPARATOR + VIDEO.EXT_ACTRESS), params);
+		FileUtils.saveFileFromMap(new File(getInfoDir(), name + FileUtils.EXTENSION_SEPARATOR + VIDEO.EXT_ACTRESS), params);
 		videoDao.getActress(name).reloadInfo();
 	}
 
@@ -479,7 +479,7 @@ public class VideoServiceImpl implements VideoService {
 	@Override
 	public void saveStudioInfo(String studio, Map<String, String> params) {
 		log.trace("name={}, params={}", studio, params);
-		FileUtils.saveFileFromMap(new File(basePath[0], studio + FileUtils.EXTENSION_SEPARATOR + VIDEO.EXT_STUDIO), params);
+		FileUtils.saveFileFromMap(new File(getInfoDir(), studio + FileUtils.EXTENSION_SEPARATOR + VIDEO.EXT_STUDIO), params);
 		videoDao.getStudio(studio).reloadInfo();
 	}
 	
@@ -622,7 +622,9 @@ public class VideoServiceImpl implements VideoService {
 		Collections.sort(list, new Comparator<Video>(){
 			@Override
 			public int compare(Video o1, Video o2) {
-				return o2.getScore() - o1.getScore();
+				return o2.getScore() == o1.getScore() 
+						? StringUtils.compareTo(o2.getReleaseDate(), o1.getReleaseDate()) 
+								: o2.getScore() - o1.getScore();
 			}});
 		return list;
 	}
@@ -982,4 +984,7 @@ public class VideoServiceImpl implements VideoService {
 		return map;
 	}
 
+	private File getInfoDir() {
+		return new File(basePath[0], "_info");
+	}
 }
