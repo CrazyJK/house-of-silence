@@ -134,6 +134,18 @@ public class Video implements Comparable<Video>, Serializable {
 			return this.getLength() > comp.getLength() ? 1 : -1;
 		case SC:
 			return this.getScore() - comp.getScore();
+		case VC:
+			if (this.videoCandidates.size() > 0) {
+				if (comp.videoCandidates.size() == 0) {
+					return -1;
+				}
+			}
+			else {
+				if (comp.videoCandidates.size() > 0) {
+					return 1;
+				}
+			}
+			return StringUtils.compareToIgnoreCase(this.getStudio().getName(), comp.getStudio().getName());
 		default:
 			return StringUtils.compareTo(this, comp);
 		}

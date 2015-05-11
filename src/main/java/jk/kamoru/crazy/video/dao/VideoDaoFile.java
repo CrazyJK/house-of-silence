@@ -56,6 +56,12 @@ public class VideoDaoFile implements VideoDao {
 	}
 
 	@Override
+	public Video getArchiveVideo(String opus) {
+		logger.trace(opus);
+		return archiveVideoSource.getVideo(opus).setArchive(true);
+	}
+	
+	@Override
 //	@Cacheable("studioCache")
 	public Studio getStudio(String name) {
 		logger.trace(name);

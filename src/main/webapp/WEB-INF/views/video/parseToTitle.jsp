@@ -11,6 +11,7 @@
 <style type="text/css">
 .titleArea {
 	width:100%;
+	height:100%;
 	font-size:11px;
 }
 code {
@@ -32,16 +33,19 @@ function fnFindVideo(opus) {
 		<table style="width:100%;">
 			<tr>
 				<td width="100px;"><input type="submit" value="Parse(${fn:length(titleList)})"/></td>
-				<td><textarea name="titleData" class="titleArea">${titleData}</textarea></td>
+				<td></td>
 				<td><textarea class="titleArea"><c:forEach items="${titleList}" var="title" varStatus="status">${title}
 </c:forEach></textarea></td>
 			</tr>
 		</table>
+		<div style="position:absolute; top:100px; left:20px; width:300px; height:850px;">
+			<textarea name="titleData" class="titleArea">${titleData}</textarea>
+		</div>
 	</form>
 </div>
 
 <div id="content_div" class="div-box" style="overflow:auto;">
-	<table class="video-table">
+	<table class="video-table" style="margin-left:320px;">
 		<c:if test="${empty titleList}">
 			<tr>
 				<td>
@@ -66,6 +70,7 @@ function fnFindVideo(opus) {
 		</c:forEach>
 	</table>
 </div>
+
 
 </body>
 </html>

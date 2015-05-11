@@ -22,7 +22,9 @@ public enum Sort {
 	/** video length sort */
 	L("Length"), 
 	/** score sort */
-	SC("Score");
+	SC("Score"),
+	/** videoCandidates */
+	VC("VideoCandidates");
 	
 	private String sortString;
 	

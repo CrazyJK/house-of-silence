@@ -509,7 +509,7 @@ public class VideoController extends AbstractController {
 	 * @param titleData
 	 * @return
 	 */
-	@RequestMapping("parseToTitle")
+	@RequestMapping("/parseToTitle")
 	public String parseToTitle(Model model, @RequestParam(value="titleData", required=false, defaultValue="") String titleData) {
 		logger.trace("parse to title");
 		model.addAttribute("titleList", videoService.parseToTitleData(titleData));
@@ -522,7 +522,7 @@ public class VideoController extends AbstractController {
 	 * @param titleData
 	 * @return
 	 */
-	@RequestMapping("parseToTitle2")
+	@RequestMapping("/parseToTitle2")
 	public String parseToTitle2(Model model, @RequestParam(value="titleData", required=false, defaultValue="") String titleData) {
 		logger.trace("parse to title");
 		model.addAttribute("titleList", videoService.parseToTitleData2(titleData));

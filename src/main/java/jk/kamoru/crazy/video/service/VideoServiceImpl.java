@@ -48,9 +48,13 @@ import org.springframework.stereotype.Service;
 public class VideoServiceImpl implements VideoService {
 
 	/** base video path in properties */
-	@Value("#{local['path.video.storage']}") 		private String[] basePath;
+	@Value("#{local['path.video.storage']}") 		private String[] basePaths;
 	/** torrent completed file directory in properties */
-	@Value("#{local['path.video.downloaded']}") 	private String   torrentPath;
+	@Value("#{local['path.video.candidate']}") 		private String[] candidatePaths;
+	
+	/** extra video path in properties */
+	@Value("#{local['path.video.storage-extra']}") 	private String[] extraPaths;
+	
 	/** video player command path in properties */
 	@Value("#{local['app.video-player']}") 			private String   player;
 	/** subtitles editor command path in properties */
@@ -65,7 +69,7 @@ public class VideoServiceImpl implements VideoService {
 	/** baseline score in properties */
 	@Value("#{prop['size.video.storage']}")  	private int 	 maximumGBSizeOfEntireVideo;
 
-	@Value("#{prop['parse.to.title.no_opus']}")  	private String 	 noParseOpusPrefix;
+	@Value("#{prop['parse.to.title.no_opus']}") private String 	 noParseOpusPrefix;
 
 	/** minimum free space of disk */
 	private final long MIN_FREE_SPAC = 10 * FileUtils.ONE_GB;
@@ -383,8 +387,8 @@ public class VideoServiceImpl implements VideoService {
 		Long[] total = new Long[]{0l, 0l};
 		for (Video video : videoDao.getVideoList()) {
 			String path = video.getDelegatePath();
-			if (path.contains(basePath[0]))
-				path = basePath[0];
+			if (path.contains(basePaths[0]))
+				path = basePaths[0];
 			long length = video.getLength();
 			Long[] data = pathMap.get(path);
 			if (data == null) {
@@ -651,7 +655,7 @@ public class VideoServiceImpl implements VideoService {
 		// 옮긴 비디오 개수
 		int countOfMoveVideo = 0;
 		// Watched 폴더
-		File mainBaseFile = new File(basePath[0]);
+		File mainBaseFile = new File(basePaths[0]);
 		// Watched 폴더 크기
 		long usedSpace = FileUtils.sizeOfDirectory(mainBaseFile);
 		// 여유 공간
@@ -714,8 +718,20 @@ public class VideoServiceImpl implements VideoService {
 	@Override
 	public void arrangeVideo() {
 		for (Video video : videoDao.getVideoList()) {
-			log.trace("    arrange video {}", video.getOpus());
-			videoDao.arrangeVideo(video.getOpus());
+			String opus = video.getOpus();
+			log.trace("    arrange video {}", opus);
+			
+			// if no cover, find archive
+			if (video.isExistVideoFileList() && !video.isExistCoverFile()) {
+				try {
+					Video archiveVideo = videoDao.getArchiveVideo(opus);
+					if (archiveVideo.isExistCoverFile()) {
+						video.setCoverFile(archiveVideo.getCoverFile());
+						log.info("found in archive storage - {}", opus);
+					}
+				} catch (VideoException e) {}
+			}
+			videoDao.arrangeVideo(opus);
 		}
 	}
 	
@@ -726,30 +742,35 @@ public class VideoServiceImpl implements VideoService {
 		List<Video> list = new ArrayList<Video>();
 		for (Video video : videoDao.getVideoList())
 			if (!video.isExistVideoFileList()) {
-				video.setSortMethod(Sort.S);
+				video.setSortMethod(Sort.VC);
 				list.add(video);
 			}
-		Collections.sort(list);
 		
 		log.debug("  need torrent videos - {}", list.size());
 		
-		// get downloaded torrent file
-		File torrentDirectory = new File(torrentPath);
-		FileUtils.validateDirectory(torrentDirectory, "invalid torrent path");
-	
-		String[] extensions = String.format("%s,%s", CRAZY.SUFFIX_VIDEO.toUpperCase(), CRAZY.SUFFIX_VIDEO.toLowerCase()).split(",");
-		log.trace("extensions - {}", Arrays.toString(extensions));
+		List<File> foundFiles = new ArrayList<File>();
 		
-		Collection<File> torrents = FileUtils.listFiles(torrentDirectory, extensions, true);
-		log.debug("  found cadidates file - {}", torrents.size());
+		for (String candidatePath : candidatePaths) {
 		
+			// get downloaded torrent file
+			File torrentDirectory = new File(candidatePath);
+			FileUtils.validateDirectory(torrentDirectory, "invalid torrent path");
+		
+			String[] extensions = String.format("%s,%s", CRAZY.SUFFIX_VIDEO.toUpperCase(), CRAZY.SUFFIX_VIDEO.toLowerCase()).split(",");
+			log.trace("extensions - {}", Arrays.toString(extensions));
+			
+			Collection<File> torrents = FileUtils.listFiles(torrentDirectory, extensions, true);
+			log.info("  found cadidates file [{}] - {}", torrentDirectory, torrents.size());
+			
+			foundFiles.addAll(torrents);
+		}
 		// matching video file
 		for (Video video : list) {
 			video.resetVideoCandidates();
 			String opus = video.getOpus().toLowerCase();
 			log.debug("  OPUS : {}", opus);
 			for (String key : Arrays.asList(opus, StringUtils.remove(opus, "-"))) {
-				for (File file : torrents) {
+				for (File file : foundFiles) {
 					String fileName = file.getName().toLowerCase();
 					log.trace("    compare : {} = {}", fileName, key);
 					if (fileName.contains(key)) {
@@ -759,6 +780,7 @@ public class VideoServiceImpl implements VideoService {
 				}
 			}
 		}
+		Collections.sort(list);
 		return list;
 	}
 
@@ -768,7 +790,16 @@ public class VideoServiceImpl implements VideoService {
 		Video   video = videoDao.getVideo(opus);
 		int videoFileSize = video.getVideoFileList().size();
 		File     file = new File(path);
-		File destFile = new File(new File(basePath[basePath.length-1]), 
+		
+		File destPath = null;
+		for (String extraPath : extraPaths) {
+			if (FileUtils.compareDrive(path, extraPath))
+				destPath = new File(extraPath);
+		}
+		if (destPath == null)
+			throw new VideoException("Not found destination path for candidate file");
+		
+		File destFile = new File(destPath, 
 				video.getFullname() + (videoFileSize > 0 ? String.valueOf(videoFileSize+1) : "") + "." + FileUtils.getExtension(file));
 		try {
 			FileUtils.moveFile(file, destFile);
@@ -985,6 +1016,6 @@ public class VideoServiceImpl implements VideoService {
 	}
 
 	private File getInfoDir() {
-		return new File(basePath[0], "_info");
+		return new File(basePaths[0], "_info");
 	}
 }

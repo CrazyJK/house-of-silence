@@ -12,7 +12,7 @@
 	
 	<!-- VideoSource -->
 	<bean id="instanceVideoSource" class="jk.kamoru.crazy.video.source.FileBaseVideoSource">
-		<property name="paths" value="#{local['path.video.storage']}" />
+		<property name="paths" value="#{local['path.video.storage']},#{local['path.video.storage-extra']}" />
 	</bean>
 	<bean id="archiveVideoSource" class="jk.kamoru.crazy.video.source.FileBaseVideoSource">
 		<property name="paths" value="#{local['path.video.archive']}" />

@@ -79,4 +79,11 @@ public interface VideoDao {
 	void arrangeVideo(String opus);
 
 	boolean contains(String opus);
+
+	/**
+	 * archive video by opus
+	 * @param opus
+	 * @return
+	 */
+	Video getArchiveVideo(String opus);
 }
