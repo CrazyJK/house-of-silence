@@ -177,7 +177,7 @@ $(document).ready(function(){
 </section>
 
 <section>
-	<h3><s:message code="video.play"/> &amp; <s:message code="video.rank"/> </h3>
+	<h3>by <s:message code="video.play"/> &amp; <s:message code="video.rank"/> </h3>
 	<article>
 		<table class="video-table" style="background-color:lightgray">
 			<tr>
