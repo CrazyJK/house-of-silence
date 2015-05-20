@@ -36,6 +36,11 @@ div#content_div.div-box article {
 	border-radius:5px; 
 	background-color:rgba(255,165,0,.25);
 }
+.width50 {width:50px;}
+.width100 {width:100px;}
+.width150 {width:150px;}
+.width200 {width:200px;}
+
 </style>
 <script type="text/javascript">
 $(document).ready(function(){
@@ -109,8 +114,8 @@ $(document).ready(function(){
 	<article>
 		<table class="video-table" style="background-color:lightgray">
 			<tr>
-				<th class="nowrap"><s:message code="video.date"/></th>
-				<th class="nowrap"><s:message code="video.size"/></th>
+				<th class="nowrap width50"><s:message code="video.date"/></th>
+				<th class="nowrap width50"><s:message code="video.size"/></th>
 				<th class="nowrap"><s:message code="video.video"/></th>
 			</tr>
 			<c:forEach items="${dateMap}" var="date" varStatus="status">
@@ -133,8 +138,8 @@ $(document).ready(function(){
 	<article>
 		<table class="video-table" style="background-color:lightgray">
 			<tr>
-				<th class="nowrap"><s:message code="video.rank"/></th>
-				<th class="nowrap"><s:message code="video.size"/></th>
+				<th class="nowrap width50"><s:message code="video.rank"/></th>
+				<th class="nowrap width50"><s:message code="video.size"/></th>
 				<th class="nowrap"><s:message code="video.video"/></th>
 			</tr>
 			<c:forEach items="${rankMap}" var="rank" varStatus="status">
@@ -157,8 +162,8 @@ $(document).ready(function(){
 	<article>
 		<table class="video-table" style="background-color:lightgray">
 			<tr>
-				<th class="nowrap"><s:message code="video.play"/></th>
-				<th class="nowrap"><s:message code="video.size"/></th>
+				<th class="nowrap width50"><s:message code="video.play"/></th>
+				<th class="nowrap width50"><s:message code="video.size"/></th>
 				<th class="nowrap"><s:message code="video.video"/></th>
 			</tr>
 			<c:forEach items="${playMap}" var="play" varStatus="status">
@@ -181,7 +186,7 @@ $(document).ready(function(){
 	<article>
 		<table class="video-table" style="background-color:lightgray">
 			<tr>
-				<th class="nowrap">Play</th>
+				<th class="nowrap width50">Play</th>
 				<th class="nowrap">Rank 1</th>
 				<th class="nowrap">Rank 2</th>
 				<th class="nowrap">Rank 3</th>
@@ -223,9 +228,9 @@ $(document).ready(function(){
 	<article>
 		<table class="video-table" style="background-color:lightgray">
 			<tr>
-				<th class="nowrap"><s:message code="video.score"/></th>
-				<th class="nowrap"><s:message code="video.size"/></th>
-				<th class="nowrap"><s:message code="video.length"/></th>
+				<th class="nowrap width50"><s:message code="video.score"/></th>
+				<th class="nowrap width50"><s:message code="video.size"/></th>
+				<th class="nowrap width50"><s:message code="video.length"/></th>
 				<th class="nowrap"><s:message code="video.video"/></th>
 			</tr>
 			<c:set var="totalLength" value="0"/>
@@ -256,8 +261,8 @@ ${video.scoreDesc}"/>
 	<article>
 		<table class="video-table" style="background-color:lightgray">
 			<tr>
-				<th class="nowrap"><s:message code="video.length"/></th>
-				<th class="nowrap"><s:message code="video.size"/></th>
+				<th class="nowrap width50"><s:message code="video.length"/></th>
+				<th class="nowrap width50"><s:message code="video.size"/></th>
 				<th class="nowrap"><s:message code="video.video"/></th>
 			</tr>
 			<c:set var="totalLength" value="0"/>
@@ -281,9 +286,9 @@ ${video.scoreDesc}"/>
 	<article>
 		<table class="video-table" style="background-color:lightgray">
 			<tr>
-				<th class="nowrap"><s:message code="video.extension"/></th>
-				<th class="nowrap"><s:message code="video.size"/></th>
-				<th class="nowrap"><s:message code="video.length"/></th>
+				<th class="nowrap width50"><s:message code="video.extension"/></th>
+				<th class="nowrap width50"><s:message code="video.size"/></th>
+				<th class="nowrap width50"><s:message code="video.length"/></th>
 				<th class="nowrap"><s:message code="video.video"/></th>
 			</tr>
 			<c:set var="totalLength" value="0"/>

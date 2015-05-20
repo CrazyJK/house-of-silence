@@ -40,6 +40,17 @@ public class HistoryDaoFile implements HistoryDao {
 
 	@Autowired VideoDao videoDao;
 	
+//	@PostConstruct
+//	public void init() {
+//		if (!getHistoryFile().exists())
+//			try {
+//				getHistoryFile().createNewFile();
+//				log.warn("history file created {}", getHistoryFile().getAbsolutePath());
+//			} catch (IOException e) {
+//				log.error("history cannot create", e);
+//			}
+//	}
+	
 	/**get history file
 	 * @return {@link #historyFile}
 	 */

@@ -1,3 +1,4 @@
+var calculatedDivHeight = 0;
 
 /**
  * div container 높이 조정
@@ -5,7 +6,7 @@
 function resizeDivHeight() {
 	var windowHeight = $(window).height();
 	var header = $("#header_div").outerHeight();
-	var calculatedDivHeight = windowHeight - header - 20 * 2; 
+	calculatedDivHeight = windowHeight - header - 20 * 2; 
 	$("#content_div").outerHeight(calculatedDivHeight);	
 	try {
 		resizeSecondDiv();

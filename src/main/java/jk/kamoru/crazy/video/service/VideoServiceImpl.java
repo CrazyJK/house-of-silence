@@ -30,6 +30,7 @@ import jk.kamoru.crazy.video.domain.VideoSearch;
 import jk.kamoru.crazy.video.util.VideoUtils;
 import jk.kamoru.util.ArrayUtils;
 import jk.kamoru.util.FileUtils;
+import jk.kamoru.util.JKUtilException;
 import jk.kamoru.util.RuntimeUtils;
 import jk.kamoru.util.StringUtils;
 import lombok.extern.slf4j.Slf4j;
@@ -754,13 +755,19 @@ public class VideoServiceImpl implements VideoService {
 		
 			// get downloaded torrent file
 			File torrentDirectory = new File(candidatePath);
-			FileUtils.validateDirectory(torrentDirectory, "invalid torrent path");
+			try {
+				FileUtils.validateDirectory(torrentDirectory, "torrent path " + candidatePath);
+			}
+			catch (JKUtilException e) {
+				log.error(e.getMessage());
+				continue;
+			}
 		
 			String[] extensions = String.format("%s,%s", CRAZY.SUFFIX_VIDEO.toUpperCase(), CRAZY.SUFFIX_VIDEO.toLowerCase()).split(",");
 			log.trace("extensions - {}", Arrays.toString(extensions));
 			
 			Collection<File> torrents = FileUtils.listFiles(torrentDirectory, extensions, true);
-			log.info("  found cadidates file [{}] - {}", torrentDirectory, torrents.size());
+			log.info("  found {} cadidates file in [{}]", torrents.size(), torrentDirectory);
 			
 			foundFiles.addAll(torrents);
 		}
