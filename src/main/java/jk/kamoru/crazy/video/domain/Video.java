@@ -880,7 +880,7 @@ public class Video implements Comparable<Video>, Serializable {
 	 * @return score
 	 */
 	public int getScore() {
-		if (getPlayScore() == 0)
+		if (getPlayCount() == 0)
 			return 0;
 		else
 			return getRankScore() + getPlayScore() + getActressScore() + getSubtitlesScore();
@@ -890,7 +890,7 @@ public class Video implements Comparable<Video>, Serializable {
 	 * @return 비디오 점수 설명 
 	 */
 	public String getScoreDesc() {
-		return String.format("Rank[%s]*%s + Play[%s]*%s + Actress[%s]*%s + Subtitles[%s]*%s = %s", 
+		return String.format("Rank[%s]*%s + Play[%s]*%s/10 + Actress[%s]*%s/10 + Subtitles[%s]*%s = %s", 
 				getRank(), rankRatio,
 				getPlayCount(), playRatio,
 				getActressScoreDesc(), actressRatio,
@@ -912,7 +912,7 @@ public class Video implements Comparable<Video>, Serializable {
 	 * @return score of play count
 	 */
 	public int getPlayScore() {
-		return getPlayCount() * playRatio;
+		return Math.round(getPlayCount() * playRatio / 10);
 	}
 
 	/**환산된 배우 점수
@@ -925,7 +925,7 @@ public class Video implements Comparable<Video>, Serializable {
 			return actressVideoScore;
 			
 		for (Actress actress : getActressList()) {
-			actressVideoScore += actress.getVideoList().size() * actressRatio;
+			actressVideoScore += Math.round(actress.getVideoList().size() * actressRatio / 10);
 		}
 		return actressVideoScore;
 	}
