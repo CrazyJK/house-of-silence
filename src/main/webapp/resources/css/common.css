@@ -22,10 +22,6 @@ a:hover {
 	text-shadow: 2px 2px 2px #123;
 }
 
-.selected {
-	color: blue;
-}
-
 ul.stack-view {
 	font-family:"나눔고딕코딩";
 	color: black; 
@@ -68,6 +64,9 @@ li.notExist {
 	text-align: right;
 }
 
+.selected {
+	color: blue;
+}
 
 #stack-trace,
 #request-attribute,

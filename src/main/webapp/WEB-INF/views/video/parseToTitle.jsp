@@ -26,9 +26,9 @@ function fnFindVideo(opus) {
 	fnMarkChoice(opus);
 	popup('<s:eval expression="@prop['url.search.video']"/>' + opus, 'videoSearch', 900, 950);
 }
-$(document).ready(function() {
-	$("#titleData").outerHeight(calculatedDivHeight - 5);	
-});
+function resizeSecondDiv() {
+	$("#inputDiv").outerHeight(calculatedDivHeight - 25);	
+}
 </script>
 </head>
 <body>
@@ -38,12 +38,12 @@ $(document).ready(function() {
 			<tr>
 				<td width="100px;"><input type="submit" value="Parse(${fn:length(titleList)})"/></td>
 				<td></td>
-				<td><textarea class="titleArea" placeholder="result area"><c:forEach items="${titleList}" var="title" varStatus="status">${title}
+				<td><textarea class="titleArea" placeholder="parsing result" readonly><c:forEach items="${titleList}" var="title" varStatus="status">${title}
 </c:forEach></textarea></td>
 			</tr>
 		</table>
-		<div style="position:absolute; top:100px; left:20px; width:300px;">
-			<textarea id="titleData" name="titleData" class="titleArea" placeholder="title area">${titleData}</textarea>
+		<div id="inputDiv" style="position:absolute; top:100px; left:20px; width:300px;">
+			<textarea id="titleData" name="titleData" class="titleArea" placeholder="input title data">${titleData}</textarea>
 		</div>
 	</form>
 </div>
