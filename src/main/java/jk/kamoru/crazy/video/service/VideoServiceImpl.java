@@ -12,6 +12,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
+import java.util.regex.Pattern;
 
 import jk.kamoru.crazy.CRAZY;
 import jk.kamoru.crazy.video.VIDEO;
@@ -864,17 +865,58 @@ public class VideoServiceImpl implements VideoService {
 		List<TitlePart> titlePartList = new ArrayList<TitlePart>();
 		
 		if (!StringUtils.isEmpty(titleData)) {
+			titleData += System.getProperty("line.separator") + System.getProperty("line.separator") + "eof";
 			String[] titles = titleData.split(System.getProperty("line.separator"));
 
+			String text = null;
 			try {
 				for (int i = 0; i < titles.length; i++) {
 					if (titles[i].trim().length() > 0) {
+//						log.info("START =======================================");
 						// make TitlePart
 						TitlePart titlePart = new TitlePart();
-						titlePart.setOpus(titles[i++].trim().toUpperCase());
-						titlePart.setActress(titles[i++].trim());
-						titlePart.setReleaseDate(titles[i++].trim());
-						titlePart.setTitle(titles[i].trim());
+						// opus
+						text = titles[i++].trim().toUpperCase();
+//						log.info("text:{} ------------------", text);
+						titlePart.setOpus(text);
+//						log.info("1. opus : {}", text);
+						
+						// actress
+						text = titles[i++].trim();
+//						log.info("text:{} ------------------", text);
+						if (!Pattern.matches("^[a-zA-Z\\s,]+", text)) { // 배우이름이 없어서 날자가 온거면
+							text = "";
+							i--;
+						}
+						titlePart.setActress(text);
+//						log.info("2. actress : {}", text);
+						
+						// release date
+						text = titles[i++].trim();
+//						log.info("text:{} ------------------", text);
+						if (!Pattern.matches("\\d{4}.\\d{2}.\\d{2}", text)) { // 날자가 없어서 제목이 온거면
+							text = "";
+							i--;
+						}
+						titlePart.setReleaseDate(text);
+//						log.info("3. releaseDate : {}", text);
+						
+						// title
+						String title = "";
+						while (true) {
+							text = titles[i++].trim();
+//							log.info("text:{} ------------------", text);
+							if (StringUtils.isEmpty(text)) {
+//								log.info("text is empty. next ------------------");
+								i--;
+								break;
+							}
+							title += text + " ";
+						}
+						titlePart.setTitle(title.trim());
+//						log.info("4. title : {}", title);
+						
+						// check already contains
 						if (videoDao.contains(titlePart.getOpus())) {
 							log.info("{} exist", titlePart.getOpus());
 							continue;
@@ -909,7 +951,7 @@ public class VideoServiceImpl implements VideoService {
 					}
 				}
 			} catch(ArrayIndexOutOfBoundsException e) {
-				// do nothing
+				log.error("End");
 			}
 			// sort list
 			Collections.sort(titlePartList);

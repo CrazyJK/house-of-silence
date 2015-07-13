@@ -1,9 +1,9 @@
 @CHARSET "UTF-8";
 
 em {
-	background-color: rgba(0,127,0,.5);
-	font-style: normal;
-	font-size: 12px;
+	/* background-color: rgba(60, 239, 164, 0.5); */
+  	font-style: italic;
+  	font-size: 12px;
 }
 .highlighted {
 	background-color:yellow;

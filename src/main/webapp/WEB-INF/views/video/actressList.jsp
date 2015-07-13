@@ -36,6 +36,7 @@ $(document).ready(function(){
 		<tr class="nowrap">
 			<td class="number">${status.count}</td>
 			<td class="${sort eq 'NAME' ? 'label' : ''}" onclick="fnViewActressDetail('${actress.name}')">${actress.name}</td>
+			<td>${actress.age}</td>
 			<td class="${sort eq 'BIRTH' ? 'label' : ''}">${actress.birth}</td>
 			<td class="${sort eq 'BODY' ? 'label' : ''}">${actress.bodySize}</td>
 			<td class="${sort eq 'HEIGHT' ? 'label' : ''}">${actress.height}</td>

@@ -29,6 +29,16 @@ function fnFindVideo(opus) {
 function resizeSecondDiv() {
 	$("#inputDiv").outerHeight(calculatedDivHeight - 25);	
 }
+function toggleInputDiv() {
+	$("#inputDiv").toggle("fast", function() {
+		if ($(this).css("display") == "none") {
+			$("#resultList").css("margin-left", "0px");
+		}
+		else {
+			$("#resultList").css("margin-left", "320px");
+		}
+	});
+}
 </script>
 </head>
 <body>
@@ -36,7 +46,10 @@ function resizeSecondDiv() {
 	<form method="post" onsubmit="loading(true, 'Parsing...')">
 		<table style="width:100%;">
 			<tr>
-				<td width="100px;"><input type="submit" value="Parse(${fn:length(titleList)})"/></td>
+				<td width="150px;">
+					<input type="button" onclick="toggleInputDiv()" value="hide"/>
+					<input type="submit" value="Parse(${fn:length(titleList)})"/>
+				</td>
 				<td></td>
 				<td><textarea class="titleArea" placeholder="parsing result" readonly><c:forEach items="${titleList}" var="title" varStatus="status">${title}
 </c:forEach></textarea></td>
@@ -49,7 +62,7 @@ function resizeSecondDiv() {
 </div>
 
 <div id="content_div" class="div-box" style="overflow:auto;">
-	<table style="padding-left:320px; width:100%;">
+	<table id="resultList" style="margin-left:320px; width:100%;">
 		<tr>
 			<td>
 				<table class="video-table">
@@ -70,7 +83,7 @@ function resizeSecondDiv() {
 									<a id="copyBtn_${title.opus}" data-clipboard-target="dataTitle_${title.opus}" onclick="fnFindVideo('${title.opus}')">Get Info </a>
 									<c:if test="${title.check}"><code>${title.checkDesc}</code></c:if>
 								</span>
-								<input id="dataTitle_${title.opus}" class="text" style="width:600px;" value="${title}"/>
+								<input id="dataTitle_${title.opus}" class="text" style="width:800px;" value="${title}"/>
 							</td>
 						</tr>
 						<script type="text/javascript">new ZeroClipboard(document.getElementById("copyBtn_${title.opus}"));</script>

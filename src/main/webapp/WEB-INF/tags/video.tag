@@ -40,7 +40,7 @@
 	} else if (view.equalsIgnoreCase("actress")) {
 %>
 <c:forEach items="${video.actressList}" var="actress" varStatus="status">
-<span class="${cssClass}" onclick="fnViewActressDetail('${actress.name}')" title="${actress}">${actress.name}</span>
+<span class="${cssClass}" onclick="fnViewActressDetail('${actress.name}')" title="${actress}">${actress.name} <em>${actress.age}</em></span>
 <img src="<c:url value="/res/img/magnify${status.count%2}.png"/>" width="12px" title="<s:message code="video.find-info.actress"/>"
 			onclick="popup('<s:eval expression="@prop['url.search.actress']"/>${actress.reverseName}', 'info_${actress.name}', 800, 600)"/>
 </c:forEach>

@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.Serializable;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
 
@@ -44,6 +45,7 @@ public class Actress implements Serializable, Comparable<Actress> {
 	private String bodySize;
 	private String debut;
 	private String height;
+	private String age;
 	
 	@XmlTransient
 	@JsonIgnore
@@ -70,7 +72,7 @@ public class Actress implements Serializable, Comparable<Actress> {
 	
 	@Override
 	public String toString() {
-		return String.format("%s Score %s %s %s %s %s %s [%s]",
+		return String.format("%s %s점 %s %s %s년 %scm %s %s편",
 						name, getScore(), StringUtils.trimToEmpty(birth), StringUtils.trimToEmpty(bodySize), StringUtils.trimToEmpty(debut), StringUtils.trimToEmpty(height), StringUtils.trimToEmpty(localName), videoList.size());
 	}
 	@Override
@@ -118,6 +120,18 @@ public class Actress implements Serializable, Comparable<Actress> {
 	public String getLocalName() {
 		loadInfo();
 		return localName;
+	}
+	public String getAge() {
+		loadInfo();
+		if (StringUtils.isEmpty(age) && !StringUtils.isEmpty(birth))
+			try {
+				Calendar cal = Calendar.getInstance();
+				int CurrYear = cal.get(Calendar.YEAR);
+				int birthYear = Integer.parseInt(birth.substring(0, 4));
+				age = String.valueOf(CurrYear - birthYear + 1);
+				log.debug("{} - {} + 1 = {}", CurrYear, birthYear, age);
+			} catch(Exception e) {}
+		return age;
 	}
 	
 	@JsonIgnore

@@ -71,7 +71,7 @@ function fnPutActressInfo() {
 		<span class="label-title">Size :  <input class="actressInfo" type="text" name="bodySize" value="${actress.bodySize}" /></span>
 		<span class="label-title">Height :<input class="actressInfo" type="text" name="height"   value="${actress.height}"   /></span>
 		<span class="label-title">Debut : <input class="actressInfo" type="text" name="debut"    value="${actress.debut}"    /></span>
-		<span class="button" style="float:right" onclick="fnPutActressInfo()">Save</span>
+		<span class="button" style="/*float:right*/" onclick="fnPutActressInfo()">Save</span>
 	</dd>
 	<dd>
 		<span class="label-title">Studio(${fn:length(actress.studioList)})</span>

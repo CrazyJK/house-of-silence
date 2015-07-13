@@ -10,8 +10,8 @@
 <script type="text/javascript">
 $(document).ready(function() {
 	$("body").css("background-image","url('<c:url value="/video/${video.opus}/cover" />')");
-	$("body").css("background-size", "contain");
-	$("#renameForm").hide();
+//	$("body").css("background-size", "cover");
+//	$("#renameForm").hide();
 });
 function fnToggleRenameForm() {
 	$("#renameForm").toggle();
@@ -39,27 +39,34 @@ function fnToggleFileinfo() {
 	<c:if test="${video.etcInfo ne ''}">
 	<dd><span class="label-large">ETC info : ${video.etcInfo}</span></dd>
 	</c:if>
-	
+	<%-- 
 	<dd><span class="label" onclick="fnToggleRenameForm()">Rename</span>
 		<form id="renameForm" method="post" action="<s:url value="/video/${video.opus}/rename"/>" target="ifrm">
 			<input type="text" name="newname" value="${video.fullname}" style="width:600px; background-color:rgba(255,255,255);" class="text"/>
 			<input type="submit" value="rename" class="text"/>
 		</form>
 	</dd>
+	 --%>
+	<dd><span class="label-large" onclick="fnToggleFileinfo()">Files</span>
+		<div id="fileinfoDiv" style="display:none; background-color:white; border-radius: 10px;" class="">
+			<ul>
+				<li><span class="label" onclick="opener.fnPlay('${video.opus}')" title="VIDEO">${video.videoFileListPath}</span>
+				<li><span class="label" title="COVER">${video.coverFilePath}</span>
+				<li><span class="label" title="INFO">${video.infoFilePath}</span>
+				
+				<c:if test="${video.subtitlesFileListPath ne ''}">
+				<li><span class="label" onclick="opener.fnEditSubtitles('${video.opus}')" title="SMI">${video.subtitlesFileListPath}</span>
+				</c:if>
 	
-	<dd><span class="label" onclick="fnToggleFileinfo()">Fileinfo</span>
-		<div id="fileinfoDiv" style="display:none;">
-			<span class="label" onclick="opener.fnPlay('${video.opus}')">VIDEO : ${video.videoFileListPath}</span>
-			<span class="label">COVER : ${video.coverFilePath}</span>
-			<span class="label">INFO : ${video.infoFilePath}</span>
-			
-			<c:if test="${video.subtitlesFileListPath ne ''}">
-			<span class="label" onclick="opener.fnEditSubtitles('${video.opus}')">SMI : ${video.subtitlesFileListPath}</span>
-			</c:if>
-
-			<c:if test="${video.etcFileListPath ne ''}">
-			<div  class="label-large">ETC : ${video.etcFileListPath}</div>
-			</c:if>
+				<c:if test="${video.etcFileListPath ne ''}">
+				<li><div  class="label" title="ETC"> : ${video.etcFileListPath}</div>
+				</c:if>
+				<li><form id="renameForm" method="post" action="<s:url value="/video/${video.opus}/rename"/>" target="ifrm" style="padding:0 0 3px 5px;">
+					<input type="text" name="newname" value="${video.fullname}" style="width:750px; background-color:rgba(255,255,255);" class="text"/>
+					<input type="submit" value="rename" class="text"/>
+					</form>
+				
+			</ul>
 		</div>
 	</dd>
 	
@@ -70,7 +77,7 @@ function fnToggleFileinfo() {
 	<dd>
 		<c:forEach items="${video.actressList}" var="actress">
 		<span class="label-large actressSpan" onclick="fnViewActressDetail('${actress.name}')">
-			${actress.name} (${fn:length(actress.videoList)}), Score ${actress.score}</span>
+			${actress.name} <em>${actress.age}</em> (${fn:length(actress.videoList)}), Score ${actress.score}</span>
 		<div style="padding-left:60px;">
 			<ul>
 			<c:forEach items="${actress.videoList}" var="video">

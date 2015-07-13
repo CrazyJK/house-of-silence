@@ -98,6 +98,14 @@ public class TitlePart implements Comparable<TitlePart> {
 	 * @param actress the actress to set
 	 */
 	public void setActress(String actress) {
+		String[] array = StringUtils.split(actress);
+		if (array != null) {
+			actress = "";
+			for (String name : array) {
+				actress += StringUtils.capitalize(name.toLowerCase()) + " ";
+			}
+			actress = actress.trim();
+		}
 		this.actress = actress;
 		// 한글이 포함되어 있으면
 		if (Pattern.matches(regexKorean, actress)) {

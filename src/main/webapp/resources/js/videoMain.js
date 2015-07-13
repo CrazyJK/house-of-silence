@@ -199,4 +199,5 @@ $(document).ready(function(){
 		});
 	}
 
+	$(".nonExist").attr("onclick", "");
 });
