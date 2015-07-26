@@ -76,7 +76,7 @@ public class VideoServiceImpl implements VideoService {
 	/** minimum free space of disk */
 	private final long MIN_FREE_SPAC = 10 * FileUtils.ONE_GB;
 	/** sleep time of moving video */
-	private final long SLEEP_TIME = 10 * 1000;
+	private final long SLEEP_TIME = 5 * 1000;
 	
 	/** video dao */
 	@Autowired VideoDao videoDao;
@@ -435,7 +435,7 @@ public class VideoServiceImpl implements VideoService {
 	@Override
 	public Map<Integer, List<Video>> groupByRank() {
 		log.trace("groupByRank");
-		Map<Integer, List<Video>> map = new TreeMap<Integer, List<Video>>();
+		Map<Integer, List<Video>> map = new TreeMap<Integer, List<Video>>(Collections.reverseOrder());
 		for (Video video : videoDao.getVideoList()) {
 			Integer rank = video.getRank();
 			if (map.containsKey(rank)) {
@@ -454,7 +454,7 @@ public class VideoServiceImpl implements VideoService {
 	@Override
 	public Map<Integer, List<Video>> groupByPlay() {
 		log.trace("groupByPlay");
-		Map<Integer, List<Video>> map = new TreeMap<Integer, List<Video>>();
+		Map<Integer, List<Video>> map = new TreeMap<Integer, List<Video>>(Collections.reverseOrder());
 		for (Video video : videoDao.getVideoList()) {
 			Integer play = video.getPlayCount();
 			if (map.containsKey(play)) {
@@ -472,7 +472,7 @@ public class VideoServiceImpl implements VideoService {
 
 	@Override
 	public void moveVideo(String opus, String path) {
-		log.trace("{} move to {}", opus, path);
+		log.info("{} move to {}", opus, path);
 		videoDao.moveVideo(opus, path);
 	}
 
@@ -649,6 +649,7 @@ public class VideoServiceImpl implements VideoService {
 	}
 	
 	@Override
+	
 	public void moveWatchedVideo() {
 		/// 폴더의 최대 크기
 		long maximumSizeOfEntireVideo = maximumGBSizeOfEntireVideo * FileUtils.ONE_GB;
@@ -662,8 +663,8 @@ public class VideoServiceImpl implements VideoService {
 		long usedSpace = FileUtils.sizeOfDirectory(mainBaseFile);
 		// 여유 공간
 		long freeSpace = mainBaseFile.getFreeSpace();
-
-		log.info("    MOVE WATCHED VIDEO START :: Watched {}GB, free{}GB", usedSpace / FileUtils.ONE_GB, freeSpace / FileUtils.ONE_GB);
+		
+		log.info("    MOVE WATCHED VIDEO START :: Watched {} GB, free {} GB", usedSpace / FileUtils.ONE_GB, freeSpace / FileUtils.ONE_GB);
 
 		// 전체 비디오중에서
 		for (Video video : getVideoListSortByScore()) {
@@ -693,28 +694,30 @@ public class VideoServiceImpl implements VideoService {
 
 			// 비디오를 옮긴다
 			countOfMoveVideo++;
-			log.info("      {}. move video : {} : {}", countOfMoveVideo, video.getScore(), video.getFullname());
+			log.info("    move {} to {}", video.getTitle(), destDir.getPath());
 			videoDao.moveVideo(video.getOpus(), destDir.getAbsolutePath());
-
+			
 			// 다 옮겼으면 break
 			if (countOfMoveVideo == maximumCountOfMoveVideo) {
 				log.info("      Completed {} videos.", maximumCountOfMoveVideo);
 				break;
 			}
-
-			// 잠시 쉰다.
-			try {
-				Thread.sleep(SLEEP_TIME);
-			} catch (InterruptedException e) {
-				log.error("sleep error", e);
+			else {
+				// 잠시 쉰다.
+				try {
+					Thread.sleep(SLEEP_TIME);
+				} catch (InterruptedException e) {
+					log.error("sleep error", e);
+				}
 			}
+
 			// 공간을 다시 젠다
 			usedSpace = FileUtils.sizeOfDirectory(mainBaseFile);
 			freeSpace = mainBaseFile.getFreeSpace();
 		}
 		usedSpace = FileUtils.sizeOfDirectory(mainBaseFile);
 		freeSpace = mainBaseFile.getFreeSpace();
-		log.info("    MOVE WATCHED VIDEO END :: Watched {}GB, free{}GB", usedSpace / FileUtils.ONE_GB, freeSpace / FileUtils.ONE_GB);
+		log.info("    MOVE WATCHED VIDEO END :: Watched {} GB, free {} GB", usedSpace / FileUtils.ONE_GB, freeSpace / FileUtils.ONE_GB);
 	}
 
 	@Override
@@ -795,27 +798,33 @@ public class VideoServiceImpl implements VideoService {
 	@Override
 	public void confirmCandidate(String opus, String path) {
 		log.trace("confirmCandidate : {} - {}", opus, path);
-		Video   video = videoDao.getVideo(opus);
-		int videoFileSize = video.getVideoFileList().size();
-		File     file = new File(path);
 		
-		File destPath = null;
+		File destinationPath = null;
 		for (String extraPath : extraPaths) {
-			if (FileUtils.compareDrive(path, extraPath))
-				destPath = new File(extraPath);
+			if (FileUtils.compareDrive(path, extraPath)) {
+				destinationPath = new File(extraPath);
+				break;
+			}
 		}
-		if (destPath == null)
-			throw new VideoException("Not found destination path for candidate file");
+		if (destinationPath == null)
+			throw new VideoException("Not found proper destination path for candidate file");
 		
-		File destFile = new File(destPath, 
-				video.getFullname() + (videoFileSize > 0 ? String.valueOf(videoFileSize+1) : "") + "." + FileUtils.getExtension(file));
+		Video video = videoDao.getVideo(opus);
+		int videoFileSize = video.getVideoFileList().size();
+		File candidatedVideofile = new File(path);
+		File videoFile = new File(destinationPath, 
+				String.format("%s%s.%s", 
+						video.getFullname(), 
+						videoFileSize > 0 ? String.valueOf(++videoFileSize) : "", 
+						FileUtils.getExtension(candidatedVideofile)));
 		try {
-			FileUtils.moveFile(file, destFile);
-			log.info("move to {}", destFile.getAbsoluteFile());
-		} catch (IOException e) {
+			FileUtils.moveFile(candidatedVideofile, videoFile);
+			log.info("move to {}", videoFile.getAbsoluteFile());
+		} 
+		catch (IOException e) {
 			throw new VideoException(video, "candidate file moving error", e);
 		}
-		video.addVideoFile(destFile);
+		video.addVideoFile(videoFile);
 	}
 
 	@Override
@@ -1024,12 +1033,12 @@ public class VideoServiceImpl implements VideoService {
 	}
 	
 	@Override
-	public Map<Float, List<Video>> groupByLength() {
+	public Map<Integer, List<Video>> groupByLength() {
 		log.trace("groupByLength");
-		Map<Float, List<Video>> map = new TreeMap<Float, List<Video>>(Collections.reverseOrder());
+		Map<Integer, List<Video>> map = new TreeMap<Integer, List<Video>>(Collections.reverseOrder());
 		for (Video video : videoDao.getVideoList()) {
-			double d = video.getLength() / (double) FileUtils.ONE_GB;
-			Float length = Float.parseFloat(String.format("%.1f", d));
+			Integer length = (int)Math.ceil(video.getLength() / (double)FileUtils.ONE_GB);
+//			Integer length = Integer.parseInt(d);
 
 			if (map.containsKey(length)) {
 				map.get(length).add(video);

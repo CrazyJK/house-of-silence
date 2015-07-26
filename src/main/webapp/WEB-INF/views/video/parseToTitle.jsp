@@ -19,6 +19,11 @@ code {
 	margin: 0 5px;
 	color: red;
 }
+#OpusQuery {
+	width: 80px;
+	font-size:11px;
+	border: 0;
+}
 </style>
 <script src="<c:url value="/res/zeroclipboard/ZeroClipboard.js"/>"></script>
 <script type="text/javascript">
@@ -30,6 +35,8 @@ function resizeSecondDiv() {
 	$("#inputDiv").outerHeight(calculatedDivHeight - 25);	
 }
 function toggleInputDiv() {
+	$("#inputTd").toggle();
+/*
 	$("#inputDiv").toggle("fast", function() {
 		if ($(this).css("display") == "none") {
 			$("#resultList").css("margin-left", "0px");
@@ -38,55 +45,58 @@ function toggleInputDiv() {
 			$("#resultList").css("margin-left", "320px");
 		}
 	});
+*/
 }
 </script>
 </head>
 <body>
+
+<form method="post" onsubmit="loading(true, 'Parsing...')">
+
 <div id="header_div" class="div-box">
-	<form method="post" onsubmit="loading(true, 'Parsing...')">
-		<table style="width:100%;">
-			<tr>
-				<td width="150px;">
-					<input type="button" onclick="toggleInputDiv()" value="hide"/>
-					<input type="submit" value="Parse(${fn:length(titleList)})"/>
-				</td>
-				<td></td>
-				<td><textarea class="titleArea" placeholder="parsing result" readonly><c:forEach items="${titleList}" var="title" varStatus="status">${title}
-</c:forEach></textarea></td>
-			</tr>
-		</table>
-		<div id="inputDiv" style="position:absolute; top:100px; left:20px; width:300px;">
-			<textarea id="titleData" name="titleData" class="titleArea" placeholder="input title data">${titleData}</textarea>
-		</div>
-	</form>
+	<span class="label-large"><a onclick="toggleInputDiv()">hide</a></span>
+	<input class="label-large" type="submit" value="Parse(${fn:length(titleList)})"/>
+	<span class="label-large">
+		<input id="OpusQuery" placeholder="Opus"/>
+		<a onclick="fnFindVideo($('#OpusQuery').val())">Search</a>
+	</span>
+	<%-- <textarea class="titleArea" placeholder="parsing result" readonly><c:forEach items="${titleList}" var="title" varStatus="status">${title}
+	</c:forEach></textarea> --%>
 </div>
 
 <div id="content_div" class="div-box" style="overflow:auto;">
-	<table id="resultList" style="margin-left:320px; width:100%;">
+	<table id="resultList" style="width:100%;">
 		<tr>
+			<td id="inputTd" style="width:300px;">
+				<div id="inputDiv" style="position:absolute; top:80px; left:20px; width:300px;">
+					<textarea id="titleData" name="titleData" class="titleArea" placeholder="input title data">${titleData}</textarea>
+				</div>
+			</td>
 			<td>
 				<table class="video-table">
 					<c:if test="${empty titleList}">
-						<tr>
-							<td>
-								No Video
-							</td>
-						</tr>
+					<tr>
+						<td>
+							No Video
+						</td>
+					</tr>
 					</c:if>
 					<c:forEach items="${titleList}" var="title" varStatus="status">
-						<tr id="check-${title.opus}" style="font-size:11px; color:blue;">
-							<td class="number">
-								${status.count}
-							</td>
-							<td class="label">
-								<span style="margin-right:10px;">
-									<a id="copyBtn_${title.opus}" data-clipboard-target="dataTitle_${title.opus}" onclick="fnFindVideo('${title.opus}')">Get Info </a>
-									<c:if test="${title.check}"><code>${title.checkDesc}</code></c:if>
-								</span>
-								<input id="dataTitle_${title.opus}" class="text" style="width:800px;" value="${title}"/>
-							</td>
-						</tr>
-						<script type="text/javascript">new ZeroClipboard(document.getElementById("copyBtn_${title.opus}"));</script>
+					<tr id="check-${title.opus}" style="font-size:11px; color:blue;">
+						<td class="number" width="10px">
+							${status.count}
+						</td>
+						<td width="80px">
+							<span class="label">
+							<a id="copyBtn_${title.opus}" data-clipboard-target="dataTitle_${title.opus}" onclick="fnFindVideo('${title.opus}')">Get Info </a>
+							<c:if test="${title.check}"><code>${title.checkDescShort}</code></c:if>
+							</span>
+						</td>
+						<td>
+							<input id="dataTitle_${title.opus}" class="text" style="width:100%;" value="${title}"/>
+						</td>
+					</tr>
+					<script type="text/javascript">new ZeroClipboard(document.getElementById("copyBtn_${title.opus}"));</script>
 					</c:forEach>
 				</table>
 			</td>
@@ -94,6 +104,7 @@ function toggleInputDiv() {
 	</table>
 </div>
 
+</form>
 
 </body>
 </html>

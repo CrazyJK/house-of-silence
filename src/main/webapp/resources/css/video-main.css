@@ -62,7 +62,6 @@ div#actressDiv {
 	display:none;
 }
 #totalCount, 
-#debug,
 #bgimg {
 	font-size:15px; 
 	text-shadow:1px 1px 1px yellow;
@@ -279,7 +278,7 @@ div#actressDiv {
 	color:black; 
 	text-shadow:1px 1px 1px white; 
 	padding:0px 5px 0px 5px;
-	margin-bottom: 5px;
+	margin:0 5px 5px 5px; 
 	border:1px solid orange; 
 }
 .label-title {

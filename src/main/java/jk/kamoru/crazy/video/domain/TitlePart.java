@@ -17,6 +17,7 @@ public class TitlePart implements Comparable<TitlePart> {
 
 	Boolean check;
 	String checkDesc;
+	String checkDescShort;
 	
 	final String regexKorean = ".*[ㄱ-ㅎㅏ-ㅣ가-힣]+.*";
 	final String regexSimple = "\\d{4}.\\d{2}.\\d{2}";
@@ -24,6 +25,7 @@ public class TitlePart implements Comparable<TitlePart> {
 	
 	public TitlePart() {
 		this.checkDesc = "";
+		this.checkDescShort = "";
 	}
 	
 	public TitlePart(String title) {
@@ -67,6 +69,7 @@ public class TitlePart implements Comparable<TitlePart> {
 		if (StringUtils.isBlank(studio)) {
 			this.check = true;
 			this.checkDesc += "Studio ";
+			this.checkDescShort += "S ";
 		}
 	}
 
@@ -79,6 +82,7 @@ public class TitlePart implements Comparable<TitlePart> {
 		if (StringUtils.containsWhitespace(opus)) {
 			this.check = true;
 			this.checkDesc += "Opus ";
+			this.checkDescShort += "O ";
 		}
 	}
 
@@ -91,6 +95,7 @@ public class TitlePart implements Comparable<TitlePart> {
 		if (StringUtils.isBlank(title)) {
 			this.check = true;
 			this.checkDesc += "Title ";
+			this.checkDescShort += "T ";
 		}
 	}
 
@@ -111,6 +116,7 @@ public class TitlePart implements Comparable<TitlePart> {
 		if (Pattern.matches(regexKorean, actress)) {
 			this.check = true;
 			this.checkDesc += "Actress ";
+			this.checkDescShort += "A ";
 		}
 	}
 
@@ -123,16 +129,19 @@ public class TitlePart implements Comparable<TitlePart> {
 		if (StringUtils.isBlank(releaseDate)) {
 			this.check = true;
 			this.checkDesc += "Date ";
+			this.checkDescShort += "D ";
 		}
 		else {
 			// 패턴이 틀리면 
 			if (!Pattern.matches(regexSimple, releaseDate)) {
 				this.check = true;
 				this.checkDesc += "Date ";
+				this.checkDescShort += "D ";
 			}
 			else if (!Pattern.matches(regexDate, releaseDate)) {
 				this.check = true;
 				this.checkDesc += "Date ";
+				this.checkDescShort += "D ";
 			}
 		}
 	}
@@ -151,5 +160,6 @@ public class TitlePart implements Comparable<TitlePart> {
 	public void setSeen() {
 		this.check = true;
 		this.checkDesc += "Seen ";
+		this.checkDescShort += "Seen ";
 	}
 }

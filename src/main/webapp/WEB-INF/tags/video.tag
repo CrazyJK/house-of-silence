@@ -15,7 +15,7 @@
 <%
 	if (view.equalsIgnoreCase("video")) {
 %>
-<span class="${cssClass} ${video.existVideoFileList ? 'exist' : 'nonExist'}" title="${video.playCount} played, <fmt:formatNumber value="${video.length / ONE_GB}" pattern="#,##0 GB"/>" onclick="fnPlay('${video.opus}')">${mode eq 's' ? 'V' : 'Video'}</span>
+<span class="${cssClass} ${video.existVideoFileList ? 'exist' : 'nonExist'}" title="${video.playCount} played, <fmt:formatNumber value="${video.length / ONE_GB}" pattern="#,##0 GB"/>" onclick="fnPlay('${video.opus}')">${mode eq 's' ? 'V' : 'Video'} ${video.size}</span>
 <%
 	} else if (view.equalsIgnoreCase("cover")) {
 %>
@@ -27,7 +27,7 @@
 <%
 	} else if (view.equalsIgnoreCase("overview")) {
 %>
-<span class="${cssClass} ${video.existOverview ? 'exist' : 'nonExist'}" onclick="fnEditOverview('${video.opus}')" title="${video.overviewText}">${mode eq 's' ? 'O' : 'Overview'}</span>
+<span class="${cssClass} " onclick="fnEditOverview('${video.opus}')" title="${video.overviewText}">${mode eq 's' ? 'O' : video.existOverview ? video.overviewText : 'Overview'}</span>
 <%
 	} else if (view.equalsIgnoreCase("download")) {
 %>
@@ -72,7 +72,7 @@
 <%
 	} else if (view.equalsIgnoreCase("label")) {
 %>
-<span class="${cssClass}" onclick="fnVideoDetail('${video.opus}')" title="${mode eq 'simple' ? video.fullname : video.title} ${tooltip}">${mode eq 'simple' ? 'O' : video.opus}</span>
+<span class="${cssClass}" onclick="fnVideoDetail('${video.opus}')" title="${video.fullname} ${tooltip}" data-opus="${video.opus}">${mode eq 'simple' ? 'O' : video.opus}</span>
 <%
 	} else {
 %>

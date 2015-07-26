@@ -564,7 +564,7 @@ public class Video implements Comparable<Video>, Serializable {
 	 * destDir 폴더로 전체 파일 이동
 	 * @param destDir
 	 */
-	public void move(String destDir) {
+	public synchronized void move(String destDir) {
 		File destFile = new File(destDir);
 		if (!destFile.exists()) 
 			throw new VideoException(this, "directory(" + destDir + ") is not exist!");
@@ -1052,5 +1052,11 @@ public class Video implements Comparable<Video>, Serializable {
 		return this;
 	}
 
-	
+	public int getSize() {
+		if (isExistVideoFileList()) {
+			return getVideoFileList().size();
+		}
+		else 
+			return 0;
+	}
 }

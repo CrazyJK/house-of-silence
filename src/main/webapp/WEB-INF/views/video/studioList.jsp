@@ -20,14 +20,20 @@ $(document).ready(function(){
 </head>
 <body>
 <div id="header_div" class="div-box">
-	<s:message code="video.total"/> <s:message code="video.studio"/> : ${fn:length(studioList)}
-	<input type="search" name="search" id="search" style="width:200px;" 
-		class="searchInput" placeHolder="<s:message code="video.search"/>" onkeyup="searchContent(this.value)"/>
-	<c:forEach items="${sorts}" var="s">
-	<label class="item sort-item">
-		<input type="radio" name="sort" value="${s}" ${s eq sort ? 'checked' : ''}>
-		<span><s:message code="studio.sort.${s}"/></span></label>
-	</c:forEach>
+	<span class="label-large">
+		<s:message code="video.total"/> <s:message code="video.studio"/> : ${fn:length(studioList)}
+	</span>
+	<span class="label-large">
+		<input type="search" name="search" id="search" style="width:200px;" 
+			class="searchInput" placeHolder="<s:message code="video.search"/>" onkeyup="searchContent(this.value)"/>
+	</span>
+	<span class="label-large">
+		<c:forEach items="${sorts}" var="s">
+		<label class="item sort-item">
+			<input type="radio" name="sort" value="${s}" ${s eq sort ? 'checked' : ''}>
+			<span><s:message code="studio.sort.${s}"/></span></label>
+		</c:forEach>
+	</span>
 </div>
 
 <div id="content_div" class="div-box">

@@ -8,42 +8,56 @@
 <html>
 <head>
 <title><s:message code="video.torrent"/></title>
+<style type="text/css">
+#searchInput {
+	width:200px;
+}
+</style>
 <script type="text/javascript">
 var totalCandidatedVideo = 0;
 
 $(document).ready(function(){
-//	$("td").addClass("nowrap");
 	$("#totalCandidatedVideo").html(totalCandidatedVideo);
+	
+	$("#searchInput").bind("keyup", function() {
+		var keyword = $(this).val();
+		$("div#content_div input:text").each(function() {
+			if ($(this).val().toLowerCase().indexOf(keyword.toLowerCase()) > -1)
+				$(this).parent().parent().show();
+			else
+				$(this).parent().parent().hide();
+		});
+	});
 });
 
-function searchInput(keyword) {
-	$("div#content_div input").each(function() {
-		if ($(this).val().toLowerCase().indexOf(keyword.toLowerCase()) > -1) {
-			$(this).parent().parent().show();
-		}
-		else {
-			$(this).parent().parent().hide();
-		}
-	});
-}
 function fnGoSearch(opus) {
 	fnMarkChoice(opus);
 	popup('<c:url value="/video/torrent/search/"/>' + opus, 'torrentSearch', 900, 950);
 }
 function fnSelectVideo(opus) {
-	fnMarkChoice(opus);
+//	fnMarkChoice(opus);
+	$("#check-" + opus).hide();
 	$("#totalCandidatedVideo").html(--totalCandidatedVideo);
+}
+function confirmAll() {
+//	alert("Not working...");
+	$("form input:submit").each(function() {
+		$(this).click();
+		$(this).parent().parent().parent().hide();
+	}); 
 }
 </script>
 </head>
 <body>
 
 <div id="header_div" class="div-box">
-	<s:message code="video.search"/>
-	<input type="search" style="width:200px;" class="searchInput" 
-		placeHolder="<s:message code="video.search"/>" onkeyup="searchInput(this.value)"/>
-	<s:message code="video.torrent-summary" arguments="${fn:length(videoList)}"/>
-	<span id="totalCandidatedVideo"></span>
+	<span class="label-large">
+		<s:message code="video.torrent-summary" arguments="${fn:length(videoList)}"/><code id="totalCandidatedVideo"></code>
+	</span>
+	<label class="label-large">
+		<input type="search" id="searchInput" class="searchInput" placeHolder="<s:message code="video.search"/>" />
+	</label>
+	<span class="label-large" onclick="confirmAll()">Confirm all!!!</span>
 </div>
 
 <div id="content_div" class="div-box" style="overflow:auto;">
@@ -66,11 +80,11 @@ function fnSelectVideo(opus) {
 				</span>
 				<input value="${video.fullname}" class="text" style="width:600px;" onclick="fnViewVideoDetail('${video.opus}')" />
 			</td>
-			<td style="width:100%;">
+			<td>
 				<c:forEach items="${video.videoCandidates}" var="candidate">
 				<form method="post" target="ifrm" action="<c:url value="/video/${video.opus}/confirmCandidate"/>">
-					<input type="submit" value="${candidate.name}" onclick="fnSelectVideo('${video.opus}')"/>
 					<input type="hidden" name="path" value="${candidate.absolutePath}"/>
+					<input type="submit" value="${candidate.name}" onclick="fnSelectVideo('${video.opus}');"/>
 				</form>
 				<script type="text/javascript">
 					totalCandidatedVideo += 1;	

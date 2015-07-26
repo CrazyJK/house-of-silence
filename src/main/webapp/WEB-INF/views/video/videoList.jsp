@@ -22,15 +22,21 @@ $(document).ready(function(){
 </head>
 <body>
 <div id="header_div" class="div-box">
-	<s:message code="video.total"/> <s:message code="video.video"/> : ${fn:length(videoList)}
-	<input type="search" name="search" id="search" style="width:100px;" 
-		class="searchInput" placeHolder="<s:message code="video.search"/>" onkeyup="searchContent(this.value)"/>
-	<c:forEach items="${sorts}" var="s">
-	<label class="item sort-item">
-		<input type="radio" name="sort" value="${s}" ${s eq sort ? 'checked' : ''} style="display:none;">
-		<span><s:message code="video.sort.${s.desc}"/></span></label>
-	</c:forEach>
-	<span style="float:right;" title="Rank[<s:eval expression="@prop['score.ratio.rank']"/>] 
+	<span class="label-large">
+		<s:message code="video.total"/> <s:message code="video.video"/> : ${fn:length(videoList)}
+	</span>
+	<span class="label-large">
+		<input type="search" name="search" id="search" style="width:100px;" 
+			class="searchInput" placeHolder="<s:message code="video.search"/>" onkeyup="searchContent(this.value)"/>
+	</span>
+	<span class="label-large">
+		<c:forEach items="${sorts}" var="s">
+		<label class="item sort-item">
+			<input type="radio" name="sort" value="${s}" ${s eq sort ? 'checked' : ''} style="display:none;">
+			<span><s:message code="video.sort.${s.desc}"/></span></label>
+		</c:forEach>
+	</span>
+	<span class="label" title="Rank[<s:eval expression="@prop['score.ratio.rank']"/>] 
 Play[<s:eval expression="@prop['score.ratio.play']"/>]
 Actress[<s:eval expression="@prop['score.ratio.actress']"/>]
 Subtitles[<s:eval expression="@prop['score.ratio.subtitles']"/>]

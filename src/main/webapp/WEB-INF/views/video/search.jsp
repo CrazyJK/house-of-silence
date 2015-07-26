@@ -129,10 +129,12 @@ function resizeSecondDiv() {
 <body>
 
 <div id="header_div" class="div-box">
-	<label for="query"><s:message code="video.video"/> <s:message code="video.search"/></label>
-	<input type="search" id="query" style="width:200px;" class="searchInput" placeHolder="<s:message code="video.search"/>"/>
-	<span id="url"></span>
-	<span id="debug"></span>
+	<label class="label-large">
+		<s:message code="video.video"/> <s:message code="video.search"/>
+		<input type="search" id="query" style="width:200px;" class="searchInput" placeHolder="<s:message code="video.search"/>"/>
+	</label>
+	<span id="url" class="label"></span>
+	<span id="debug" class="label"></span>
 </div>
 
 <div id="content_div">

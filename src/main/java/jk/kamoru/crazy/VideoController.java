@@ -8,6 +8,7 @@ import java.util.Map;
 
 import jk.kamoru.crazy.image.service.ImageService;
 import jk.kamoru.crazy.video.VIDEO;
+import jk.kamoru.crazy.video.VideoBatch;
 import jk.kamoru.crazy.video.domain.Action;
 import jk.kamoru.crazy.video.domain.ActressSort;
 import jk.kamoru.crazy.video.domain.History;
@@ -52,6 +53,7 @@ public class VideoController extends AbstractController {
 	@Autowired private ImageService imageService;
 	@Autowired private VideoService videoService;
 	@Autowired private HistoryService historyService;
+	@Autowired private VideoBatch videoBatch;
 
 	/**minimum rank model attrubute by named 'minRank'
 	 * @return model attribute
@@ -117,17 +119,23 @@ public class VideoController extends AbstractController {
 	@RequestMapping(value="/briefing", method=RequestMethod.GET)
 	public String briefing(Model model) {
 		logger.trace("briefing");
-		model.addAttribute("pathMap", videoService.groupByPath());
-		model.addAttribute("dateMap", videoService.groupByDate());
-		model.addAttribute("rankMap", videoService.groupByRank());
-		model.addAttribute("playMap", videoService.groupByPlay());
-		model.addAttribute("scoreMap", videoService.groupByScore());
-		model.addAttribute("lengthMap", videoService.groupByLength());
-		model.addAttribute("extensionMap", videoService.groupByExtension());
+
+		videoService.reload();
+		model.addAttribute("pathMap", 		videoService.groupByPath());
+		model.addAttribute("dateMap", 		videoService.groupByDate());
+		model.addAttribute("rankMap", 		videoService.groupByRank());
+		model.addAttribute("playMap", 		videoService.groupByPlay());
+		model.addAttribute("scoreMap", 		videoService.groupByScore());
+		model.addAttribute("lengthMap", 	videoService.groupByLength());
+		model.addAttribute("extensionMap", 	videoService.groupByExtension());
 		
 		model.addAttribute(videoService.getStudioList());
 		model.addAttribute(videoService.getActressList());
 		model.addAttribute(videoService.getVideoList());
+		
+		model.addAttribute("MOVE_WATCHED_VIDEO", 		videoBatch.isMOVE_WATCHED_VIDEO());
+		model.addAttribute("DELETE_LOWER_RANK_VIDEO", 	videoBatch.isDELETE_LOWER_RANK_VIDEO());
+		model.addAttribute("DELETE_LOWER_SCORE_VIDEO", 	videoBatch.isDELETE_LOWER_SCORE_VIDEO());
 		
 		return "video/briefing";
 	}
@@ -540,6 +548,22 @@ public class VideoController extends AbstractController {
 		logger.trace("torrentSearch");
 		model.addAttribute(videoService.getVideo(opus));
 		return "video/torrentSearch";
+	}
+
+	@RequestMapping(value="/set/MOVE_WATCHED_VIDEO/{setValue}", method=RequestMethod.POST)
+	@ResponseStatus(HttpStatus.NO_CONTENT)
+	public void setMOVE_WATCHED_VIDEO(@PathVariable("setValue") boolean setValue) {
+		videoBatch.setMOVE_WATCHED_VIDEO(setValue);
+	}
+	@RequestMapping(value="/set/DELETE_LOWER_RANK_VIDEO/{setValue}", method=RequestMethod.POST)
+	@ResponseStatus(HttpStatus.NO_CONTENT)
+	public void setDELETE_LOWER_RANK_VIDEO(@PathVariable("setValue") boolean setValue) {
+		videoBatch.setDELETE_LOWER_RANK_VIDEO(setValue);
+	}
+	@RequestMapping(value="/set/DELETE_LOWER_SCORE_VIDEO/{setValue}", method=RequestMethod.POST)
+	@ResponseStatus(HttpStatus.NO_CONTENT)
+	public void setDELETE_LOWER_SCORE_VIDEO(@PathVariable("setValue") boolean setValue) {
+		videoBatch.setDELETE_LOWER_SCORE_VIDEO(setValue);
 	}
 
 }

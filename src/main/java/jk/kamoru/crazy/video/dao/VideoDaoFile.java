@@ -92,7 +92,9 @@ public class VideoDaoFile implements VideoDao {
 //	@CacheEvict(value = { "videoCache" }, allEntries=true)
 	public void moveVideo(String opus, String destPath) {
 		logger.trace(opus);
+		long elapsedTime = System.currentTimeMillis();
 		instanceVideoSource.moveVideo(opus, destPath);
+		logger.info("{} moved. elapsed time {} ms", opus, System.currentTimeMillis() - elapsedTime);
 	}
 	@Override
 //	@CacheEvict(value = { "videoCache", "studioCache", "actressCache" }, allEntries=true)

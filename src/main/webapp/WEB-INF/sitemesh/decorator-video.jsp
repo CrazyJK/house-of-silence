@@ -75,17 +75,17 @@ function showNav() {
 /**
  * post 액션
  */
-function actionFrame(reqUrl, method) {
+function actionFrame(reqUrl, method, msg) {
 	$.ajax({
 		type : method ? method : "POST",
 		url : reqUrl,
 		beforeSend : function() {
-			loading(true, "Loading...");
+			loading(true, msg ? msg : "Loading...");
 		}
 	}).done(function(msg) {
 		loading(true, "Done", 3000);
 	}).fail(function(xhr, status, error) {
-		loading(true, "fail : " + error);
+		loading(true, "fail : [" + status + "] "+ error);
 	}).always(function() {
 		//loading(false);
 	});

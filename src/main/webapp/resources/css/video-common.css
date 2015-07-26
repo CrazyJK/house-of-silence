@@ -1,9 +1,8 @@
 @CHARSET "UTF-8";
 
 em {
-	/* background-color: rgba(60, 239, 164, 0.5); */
-  	font-style: italic;
-  	font-size: 12px;
+	background-color: rgba(60, 239, 164, 0.5);
+  	font-style: normal;
 }
 .highlighted {
 	background-color:yellow;
@@ -52,6 +51,12 @@ ol.items li {
 }
 .text:focus {
 	background-color:yellow;
+}
+.right {
+	text-align: right;
+}
+.center {
+	text-align: center;
 }
 
 #loading-wrapper {

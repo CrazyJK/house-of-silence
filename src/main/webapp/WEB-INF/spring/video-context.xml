@@ -21,6 +21,7 @@
 	<!-- AOP : VideoSource.load() -->	
 	<aop:config>
 		<aop:advisor advice-ref="elapsedTimeAdvice" pointcut="execution(* jk.kamoru.*..*Source.reload())"/>
+		<aop:advisor advice-ref="elapsedTimeAdvice" pointcut="execution(* jk.kamoru.crazy.video.service.VideoServiceImpl.moveWatchedVideo())"/>
 	</aop:config>
 	<bean id="elapsedTimeAdvice" class="jk.kamoru.spring.ElapsedTimeAdvice" />
 	

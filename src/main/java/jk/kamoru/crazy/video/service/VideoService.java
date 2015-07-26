@@ -262,7 +262,7 @@ public interface VideoService {
 	/**get groups by length
 	 * @return map of length, video list
 	 */
-	Map<Float, List<Video>> groupByLength();
+	Map<Integer, List<Video>> groupByLength();
 
 	Map<String, List<Video>> groupByExtension();
 	
