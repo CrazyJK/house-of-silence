@@ -11,7 +11,7 @@
 
 	<!-- DispatcherServlet Context: defines this servlet's request-processing infrastructure -->
 	
-	<context:component-scan base-package="jk.kamoru.crazy" >
+	<context:component-scan base-package="jk.kamoru.crazy" use-default-filters="false">
 		<context:include-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
 	</context:component-scan>
 	

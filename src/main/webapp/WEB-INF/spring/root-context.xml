@@ -29,8 +29,10 @@
 			<property name="fallbackToSystemLocale" value="false" />
 		</bean>
 	
-		<context:component-scan base-package="jk.kamoru.crazy" >
-			<context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
+		<context:component-scan base-package="jk.kamoru.crazy" use-default-filters="false">
+			<context:include-filter type="annotation" expression="org.springframework.stereotype.Service" />
+			<context:include-filter type="annotation" expression="org.springframework.stereotype.Repository" />
+			<context:include-filter type="annotation" expression="org.springframework.stereotype.Component" />
 		</context:component-scan>
 	
 
