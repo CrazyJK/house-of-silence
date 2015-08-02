@@ -81,17 +81,17 @@ public class Actress implements Serializable, Comparable<Actress> {
 		case NAME:
 			return StringUtils.compareToIgnoreCase(this.getName(), comp.getName());
 		case BIRTH:
-			return StringUtils.compareToIgnoreCase(this.getBirth(), comp.getBirth());
+			return StringUtils.compareToIgnoreCase(comp.getBirth(), this.getBirth());
 		case BODY:
-			return StringUtils.compareToIgnoreCase(this.getBodySize(), comp.getBodySize());
+			return StringUtils.compareToIgnoreCase(comp.getBodySize(), this.getBodySize());
 		case HEIGHT:
-			return StringUtils.compareToIgnoreCase(this.getHeight(), comp.getHeight());
+			return StringUtils.compareToIgnoreCase(comp.getHeight(), this.getHeight());
 		case DEBUT:
-			return StringUtils.compareToIgnoreCase(this.getDebut(), comp.getDebut());
+			return StringUtils.compareToIgnoreCase(comp.getDebut(), this.getDebut());
 		case VIDEO:
-			return this.getVideoList().size() - comp.getVideoList().size();
+			return comp.getVideoList().size() - this.getVideoList().size();
 		case SCORE:
-			return this.getScore() - comp.getScore();
+			return comp.getScore() - this.getScore();
 		default:
 			return StringUtils.compareToIgnoreCase(this.getName(), comp.getName());
 		}
