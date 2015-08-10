@@ -141,7 +141,7 @@ public class Actress implements Serializable, Comparable<Actress> {
 	
 	private void loadInfo() {
 		if (!loaded) {
-			File file = new File(new File(basePath[0], "_info"), name + FileUtils.EXTENSION_SEPARATOR + VIDEO.EXT_ACTRESS);
+			File file = getInfoFile();
 			if (file.isFile())
 				try {
 					Map<String, String> info = FileUtils.readFileToMap(file);
@@ -155,6 +155,9 @@ public class Actress implements Serializable, Comparable<Actress> {
 				}
 			loaded = true;
 		}
+	}
+	private File getInfoFile() {
+		return new File(new File(basePath[0], "_info"), name + FileUtils.EXTENSION_SEPARATOR + VIDEO.EXT_ACTRESS);
 	}
 	public void reloadInfo() {
 		loaded = false;
@@ -198,5 +201,9 @@ public class Actress implements Serializable, Comparable<Actress> {
 			return reverseName;
 		}
 		return name;
+	}
+	public void renameInfo(String newName) {
+		FileUtils.rename(getInfoFile(), newName + FileUtils.EXTENSION_SEPARATOR + VIDEO.EXT_ACTRESS);
+		reloadInfo();
 	}
 }

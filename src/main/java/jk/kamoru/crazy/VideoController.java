@@ -101,7 +101,7 @@ public class VideoController extends AbstractController {
 		return "video/actressDetail";
 	}
 
-	/**save actres info
+	/**save actres info TODO
 	 * @param actressName
 	 * @param params map of info
 	 */
@@ -109,7 +109,12 @@ public class VideoController extends AbstractController {
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void putActressInfo(@PathVariable String actressName, @RequestParam Map<String, String> params) {
 		logger.trace("{}", params);
-		videoService.saveActressInfo(actressName, params);
+		String oriname = params.get("name");
+		String newname = params.get("newname");
+		if (StringUtils.equals(oriname, newname)) {
+			videoService.renameOfActress(oriname, newname);
+		}
+		videoService.saveActressInfo(newname, params);
 	}
 
 	/**display status briefing view
@@ -485,6 +490,7 @@ public class VideoController extends AbstractController {
 	/**rename actress
 	 * @param oriname
 	 * @param newname
+	 * @deprecated {@link #putActressInfo(String, Map)}으로 통합
 	 */
 	@RequestMapping(value="/actress/{oriname}/renameTo/{newname}", method=RequestMethod.PUT)
 	@ResponseStatus(HttpStatus.NO_CONTENT)

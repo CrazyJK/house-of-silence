@@ -188,7 +188,8 @@ div#actressDiv {
 	border:0; 
 	color: navy; 
 	margin:0px; 
-	padding:0px; 
+	padding:0px;
+	text-align: center;
 }
 .actressInfo {
 	width:120px; 

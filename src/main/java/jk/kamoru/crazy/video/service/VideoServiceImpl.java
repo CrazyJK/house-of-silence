@@ -859,6 +859,7 @@ public class VideoServiceImpl implements VideoService {
 		for (Video video : actress.getVideoList()) {
 			video.renameOfActress(newName);
 		}
+		actress.renameInfo(newName);
 		videoDao.reload();
 	}
 

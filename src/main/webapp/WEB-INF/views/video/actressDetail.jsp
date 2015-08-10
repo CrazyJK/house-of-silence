@@ -51,7 +51,7 @@ function fnPutActressInfo() {
 <input type="hidden" name="name" value="${actress.name}"/>
 <dl class="dl-detail">
 	<dt class="label-large center">
-		<input class="actressInfo" type="text" name="newname" value="${actress.name}" id="newName" />
+		<input class="actressInfo" type="text" name="newname"   value="${actress.name}"      id="newName" />
 		<input class="actressInfo" type="text" name="localname" value="${actress.localName}" />
 		<img src="<c:url value="/res/img/magnify${status.count%2}.png"/>" width="12px" title="<s:message code="video.find-info.actress"/>"
 			onclick="popup('<s:eval expression="@prop['url.search.actress']"/>${actress.reverseName}', 'info_${actress.name}', 800, 600)"/>
@@ -87,15 +87,19 @@ function fnPutActressInfo() {
 	<dd>
 		<span class="label-title">Video(${fn:length(actress.videoList)})</span>
 	</dd>
+	<dd>
+		<div style="padding-left:60px;">
+		<ul>
+			<c:forEach items="${actress.videoList}" var="video">
+			<%@ include file="/WEB-INF/views/video/videoCard.jspf" %>
+			</c:forEach>
+		</ul>
+		</div>
+	</dd>
 </dl>
 </form>
 
 <div style="padding-left:60px;">
-<ul>
-	<c:forEach items="${actress.videoList}" var="video">
-	<%@ include file="/WEB-INF/views/video/videoCard.jspf" %>
-	</c:forEach>
-</ul>
 </div>
 </body>
 </html>
