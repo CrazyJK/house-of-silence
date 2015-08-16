@@ -59,3 +59,6 @@
 	</ol>
 </div>
 	
+<script type="text/javascript">
+loading(true, "done", 100);
+</script>	

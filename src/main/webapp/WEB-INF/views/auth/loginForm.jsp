@@ -91,7 +91,7 @@ $(document).ready(function(){
 		    <div>
 		    	<label>
 		    		<s:message code="default.password"/>
-		    		<input type='password' name='j_password' placeholder="<s:message code="default.password"/>"/></label>
+		    		<input type='password' name='j_password' placeholder="<s:message code="default.password"/>" value="${passwd}"/></label>
 		    </div>
 		    <div>
 		    	<input name="submit" type="submit" value="<s:message code="default.login"/>"/>

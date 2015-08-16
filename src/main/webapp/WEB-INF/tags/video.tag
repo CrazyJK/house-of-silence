@@ -15,7 +15,15 @@
 <%
 	if (view.equalsIgnoreCase("video")) {
 %>
-<span class="${cssClass} ${video.existVideoFileList ? 'exist' : 'nonExist'}" title="${video.playCount} played, <fmt:formatNumber value="${video.length / ONE_GB}" pattern="#,##0 GB"/>" onclick="fnPlay('${video.opus}')">${mode eq 's' ? 'V' : 'Video'} ${video.size}</span>
+<span class="${cssClass} ${video.existVideoFileList ? 'exist' : 'nonExist'}" 
+		title="${video.playCount} played" 
+		onclick="fnPlay('${video.opus}')">
+			${mode eq 's' ? 'V' : 'Video'}
+<c:if test="${mode eq 'l'}">			
+			<em>${video.size}</em>
+			<em><fmt:formatNumber value="${video.length / ONE_GB}" pattern="#,##0GB"/></em>
+</c:if>			
+</span>
 <%
 	} else if (view.equalsIgnoreCase("cover")) {
 %>
@@ -40,16 +48,22 @@
 	} else if (view.equalsIgnoreCase("actress")) {
 %>
 <c:forEach items="${video.actressList}" var="actress" varStatus="status">
-<span class="${cssClass}" onclick="fnViewActressDetail('${actress.name}')" title="${actress}">${actress.name} <em>${actress.age}</em></span>
-<img src="<c:url value="/res/img/magnify${status.count%2}.png"/>" width="12px" title="<s:message code="video.find-info.actress"/>"
+<span class="${cssClass}" onclick="fnViewActressDetail('${actress.name}')" title="${actress}">${actress.name}
+<c:if test="${mode eq 'l'}"><em>${actress.age}</em></c:if></span>
+<c:if test="${mode eq 'l'}">
+	<span class="${cssClass}" onclick="fnFavorite(this, '${actress.name}')">${actress.favorite ? '★' : '☆'}</span>
+	<img src="<c:url value="/res/img/magnify${status.count%2}.png"/>" width="12px" title="<s:message code="video.find-info.actress"/>"
 			onclick="popup('<s:eval expression="@prop['url.search.actress']"/>${actress.reverseName}', 'info_${actress.name}', 800, 600)"/>
+</c:if>
 </c:forEach>
 <%
 	} else if (view.equalsIgnoreCase("opus")) {
 %>
 <span class="${cssClass}">${video.opus}</span>
-<img src="<c:url value="/res/img/magnify${status.count%2}.png"/>" width="12px" title="<s:message code="video.find-info.opus"/>"
-	onclick="popup('<s:eval expression="@prop['url.search.video']"/>${video.opus}', 'info_${video.opus}', 800, 600)"/>
+<c:if test="${mode eq 'l'}">
+	<img src="<c:url value="/res/img/magnify${status.count%2}.png"/>" width="12px" title="<s:message code="video.find-info.opus"/>"
+		onclick="popup('<s:eval expression="@prop['url.search.video']"/>${video.opus}', 'info_${video.opus}', 800, 600)"/>
+</c:if>
 <%
 	} else if (view.equalsIgnoreCase("studio")) {
 %>
@@ -62,6 +76,9 @@
 	} else if (view.equalsIgnoreCase("score")) {
 %>
 <span class="${cssClass} rangeLabel" title="${video.scoreDesc}">${video.score}</span>
+<c:if test="${mode eq 'l'}">
+	<span class="label" onclick="fnVideoReset('${video.opus}')">Reset</span>
+</c:if>
 <%
 	} else if (view.equalsIgnoreCase("rank")) {
 %>

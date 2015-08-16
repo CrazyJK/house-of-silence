@@ -124,6 +124,16 @@ function resizeSecondDiv() {
 	$("#resultVideoDiv").outerHeight(calculatedDivHeight);	
 	$("#resultHistoryDiv").outerHeight(calculatedDivHeight);	
 }
+
+function fnSearchOpus() {
+	popup('<s:eval expression="@prop['url.search.video']"/>' + $("#query").val(), 'videoSearch', 900, 950);
+}
+function fnSearchActress() {
+	popup('<s:eval expression="@prop['url.search.actress']"/>' + $("#query").val(), 'actressSearch', 900, 950);
+}
+function fnSearchTorrent() {
+	popup('<s:eval expression="@prop['url.search.torrent']"/>' + $("#query").val(), 'torrentSearch', 900, 950);
+}
 </script>
 </head>
 <body>
@@ -135,6 +145,9 @@ function resizeSecondDiv() {
 	</label>
 	<span id="url" class="label"></span>
 	<span id="debug" class="label"></span>
+	<a class="label" onclick="fnSearchOpus()"   >Opus</a>
+	<a class="label" onclick="fnSearchActress()">Actress</a>
+	<a class="label" onclick="fnSearchTorrent()">Torrent</a>
 </div>
 
 <div id="content_div">

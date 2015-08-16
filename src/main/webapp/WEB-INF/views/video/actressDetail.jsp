@@ -31,32 +31,50 @@ $(document).ready(function(){
 	
 });
 
+/**
+ * @deprecated
+ */
 function fnRenameTo() {
 	var actressForm = document.forms['actressForm'];
 	actressForm.action = "<s:url value="/video/actress/${actress.name}/renameTo/"/>" + $("#newName").val();
 	actressForm.submit();
 }
 
-function fnPutActressInfo() {
+function fnSaveActressInfo() {
+	loading(true, "Saving...");
 	var actressForm = document.forms['actressForm'];
 	actressForm.action = "<s:url value="/video/actress/${actress.name}"/>";
 	actressForm.submit();
+	if (opener) {
+		if (opener.location.href.indexOf("video/actress") > -1) 
+			opener.location.reload();
+	}
+}
+function toogleFavorite(dom) {
+	var favorite = $("#favorite").val() == 'true';
+	$("#favoriteTEXT").html(favorite ? '☆' : '★');
+	$("#favorite").val(!favorite);
+	if (opener) {
+		// TODO 메인의 배우 정보 업데이트 해야함
+	}
 }
 </script>
 </head>
 <body>
 
 <form id="actressForm" action="<s:url value="/video/actress/${actress.name}"/>" method="post">
-<input type="hidden" name="_method" id="hiddenHttpMethod" value="put"/>
+<input type="hidden" name="_method" id="hiddenHttpMethod" value="post"/>
 <input type="hidden" name="name" value="${actress.name}"/>
+<input type="hidden" name="favorite" id="favorite" value="${actress.favorite}"/>
 <dl class="dl-detail">
 	<dt class="label-large center">
+		<span id="favoriteTEXT" onclick="toogleFavorite()">${actress.favorite ? '★' : '☆'}</span>
 		<input class="actressInfo" type="text" name="newname"   value="${actress.name}"      id="newName" />
 		<input class="actressInfo" type="text" name="localname" value="${actress.localName}" />
 		<img src="<c:url value="/res/img/magnify${status.count%2}.png"/>" width="12px" title="<s:message code="video.find-info.actress"/>"
-			onclick="popup('<s:eval expression="@prop['url.search.actress']"/>${actress.reverseName}', 'info_${actress.name}', 800, 600)"/>
+			onclick="popup('<s:eval expression="@prop['url.search.actress']"/>${actress.reverseName}', 'infoActress', 800, 600)"/>
 		<span>Score ${actress.score}</span>
-		<span  class="button" style="float:right" onclick="fnRenameTo()">Rename</span>
+		<%-- <span  class="button" style="float:right" onclick="fnRenameTo()">Rename</span> --%>
 	</dt>
 	<dd style="text-align:center;">
 		<div id="actressImageContainer">
@@ -71,7 +89,7 @@ function fnPutActressInfo() {
 		<span class="label-title">Size :  <input class="actressInfo" type="text" name="bodySize" value="${actress.bodySize}" /></span>
 		<span class="label-title">Height :<input class="actressInfo" type="text" name="height"   value="${actress.height}"   /></span>
 		<span class="label-title">Debut : <input class="actressInfo" type="text" name="debut"    value="${actress.debut}"    /></span>
-		<span class="button" style="/*float:right*/" onclick="fnPutActressInfo()">Save</span>
+		<span class="button" style="/*float:right*/" onclick="fnSaveActressInfo()">Save</span>
 	</dd>
 	<dd>
 		<span class="label-title">Studio(${fn:length(actress.studioList)})</span>

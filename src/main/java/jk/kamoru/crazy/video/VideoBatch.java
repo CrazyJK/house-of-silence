@@ -2,7 +2,6 @@ package jk.kamoru.crazy.video;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Collection;
 
 import javax.annotation.PostConstruct;
 

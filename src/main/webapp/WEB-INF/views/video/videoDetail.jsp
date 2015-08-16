@@ -7,6 +7,11 @@
 <html>
 <head>
 <title>[${video.opus}] ${video.title}</title>
+<style type="text/css">
+dl {
+	background-color: rgba( 255, 255, 255, 0.5 );
+}
+</style>
 <script type="text/javascript">
 $(document).ready(function() {
 	$("body").css("background-image","url('<c:url value="/video/${video.opus}/cover" />')");

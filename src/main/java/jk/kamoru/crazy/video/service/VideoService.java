@@ -265,5 +265,10 @@ public interface VideoService {
 	Map<Integer, List<Video>> groupByLength();
 
 	Map<String, List<Video>> groupByExtension();
+
+	/**reset rank and playcount
+	 * @param opus
+	 */
+	void resetVideoScore(String opus);
 	
 }

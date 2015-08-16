@@ -73,6 +73,13 @@ function fnPlay(selectedOpus) {
 		fnVideoDetail(selectedOpus);
 	}  
 }
+function fnVideoReset(selectedOpus) {
+	$("#hiddenHttpMethod").val("PUT");
+	$("#actionFrm").removeAttr("target");
+	var frm = document.forms["actionFrm"];
+	frm.action = context + "video/" + selectedOpus + "/reset";
+	frm.submit();
+}
 function fnRandomPlay() {
 	debug("Random play start");
 	if(opusArray.length == 0) {
@@ -161,6 +168,15 @@ function fnViewStudioDetail(name) {
 
 function fnViewVideoDetail(opus) {
 	popup(context + "video/" + opus, "videoDetail-" + opus, 800, 600);
+}
+
+function fnFavorite(dom, name) {
+	var val = dom.innerHTML == '★';
+	dom.innerHTML = val ? '☆' : '★';
+	$("#hiddenHttpMethod").val('PUT');
+	var frm = document.forms["actionFrm"];
+	frm.action = context + "video/actress/" + name + "/favorite/" + !val;
+	frm.submit();
 }
 
 function debug(msg) {

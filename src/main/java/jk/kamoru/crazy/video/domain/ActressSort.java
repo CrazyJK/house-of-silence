@@ -9,6 +9,10 @@ public enum ActressSort {
 	 */
 	NAME, 
 	/**
+	 * my favorite
+	 */
+	FAVORITE,
+	/**
 	 * actress birth date
 	 */
 	BIRTH, 

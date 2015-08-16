@@ -142,7 +142,7 @@ loading(true, "Loading...");
 
 <sitemesh:write property="body">Body goes here. Blah blah blah.</sitemesh:write>
 	
-<form name="actionFrm" target="ifrm" method="post"><input type="hidden" name="_method" id="hiddenHttpMethod"/></form>
+<form id="actionFrm" name="actionFrm" target="ifrm" method="post"><input type="hidden" name="_method" id="hiddenHttpMethod"/></form>
 <iframe id="actionIframe" name="ifrm" style="display:none; width:100%;"></iframe>
 
 </body>

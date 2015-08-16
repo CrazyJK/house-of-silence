@@ -1006,8 +1006,9 @@ public class Video implements Comparable<Video>, Serializable {
 		}
 	}
 
-	public void renameOfActress(String newName) {
-		String newVideoName = String.format("[%s][%s][%s][%s][%s]", studio.getName(), opus, title, newName, StringUtils.isEmpty(releaseDate) ? getVideoDate() : releaseDate);
+	public void renameOfActress(String oldName, String newName) {
+		String actressNames = this.getActressName().replace(oldName, newName);
+		String newVideoName = String.format("[%s][%s][%s][%s][%s]", studio.getName(), opus, title, actressNames, StringUtils.isEmpty(releaseDate) ? getVideoDate() : releaseDate);
 		rename(newVideoName);
 	}
 
@@ -1058,5 +1059,11 @@ public class Video implements Comparable<Video>, Serializable {
 		}
 		else 
 			return 0;
+	}
+
+	public void resetScore() {
+		this.rank = 0;
+		this.playCount = 0;
+		this.saveInfo();
 	}
 }

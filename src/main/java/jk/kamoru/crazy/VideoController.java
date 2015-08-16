@@ -10,6 +10,7 @@ import jk.kamoru.crazy.image.service.ImageService;
 import jk.kamoru.crazy.video.VIDEO;
 import jk.kamoru.crazy.video.VideoBatch;
 import jk.kamoru.crazy.video.domain.Action;
+import jk.kamoru.crazy.video.domain.Actress;
 import jk.kamoru.crazy.video.domain.ActressSort;
 import jk.kamoru.crazy.video.domain.History;
 import jk.kamoru.crazy.video.domain.Sort;
@@ -101,22 +102,34 @@ public class VideoController extends AbstractController {
 		return "video/actressDetail";
 	}
 
-	/**save actres info TODO
+	/**save actres info
 	 * @param actressName
 	 * @param params map of info
 	 */
-	@RequestMapping(value="/actress/{actressName}", method=RequestMethod.PUT)
-	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void putActressInfo(@PathVariable String actressName, @RequestParam Map<String, String> params) {
+	@RequestMapping(value="/actress/{actressName}", method=RequestMethod.POST)
+//	@ResponseStatus(HttpStatus.NO_CONTENT)
+	public String saveActressInfo(@PathVariable String actressName, @RequestParam Map<String, String> params) {
 		logger.trace("{}", params);
 		String oriname = params.get("name");
 		String newname = params.get("newname");
-		if (StringUtils.equals(oriname, newname)) {
+		if (!StringUtils.equals(oriname, newname)) {
 			videoService.renameOfActress(oriname, newname);
 		}
 		videoService.saveActressInfo(newname, params);
+		return "redirect:/video/actress/" + newname;
 	}
 
+	@RequestMapping(value="/actress/{actressName}/favorite/{favorite}", method=RequestMethod.PUT)
+	@ResponseStatus(HttpStatus.NO_CONTENT)
+	public void putActressFavorite(@PathVariable String actressName, @PathVariable Boolean favorite) {
+		logger.trace("{}, {}", actressName, favorite);
+		
+		Actress actress = videoService.getActress(actressName);
+		Map<String, String> params = actress.getInfoMap();
+		params.put(Actress.FAVORITE, favorite.toString());
+		videoService.saveActressInfo(actressName, params);
+	}
+	
 	/**display status briefing view
 	 * @param model
 	 * @return view name
@@ -335,6 +348,18 @@ public class VideoController extends AbstractController {
 			return "video/videoDetailArchive";
 		else
 			return "video/videoDetail";
+	}
+	
+	/**rank, play 초기화
+	 * @param model
+	 * @param opus
+	 * @return
+	 */
+	@RequestMapping(value="/{opus}/reset", method=RequestMethod.PUT)
+	public String videoReset(Model model, @PathVariable String opus) {
+		logger.trace(opus);
+		videoService.resetVideoScore(opus);
+		return "redirect:/video/" + opus;
 	}
 	
 	/**

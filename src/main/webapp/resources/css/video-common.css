@@ -1,8 +1,10 @@
 @CHARSET "UTF-8";
 
 em {
-	background-color: rgba(60, 239, 164, 0.5);
-  	font-style: normal;
+  	background-color: rgba(198, 255, 0, 0.75);
+    font-style: normal;
+    font-size: 12px;
+    border-radius: 5px;
 }
 .highlighted {
 	background-color:yellow;
@@ -58,6 +60,22 @@ ol.items li {
 .center {
 	text-align: center;
 }
+.overflow-hidden {
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+.width30  {width: 30px;}
+.width50  {width: 50px;}
+.width60  {width: 60px;}
+.width80  {width: 80px;}
+.width100 {width: 100px;}
+.width150 {width: 150px;}
+.width200 {width: 200px;}
+.width300 {width: 300px;}
+.width400 {width: 400px;}
+.width500 {width: 500px;}
+.width-rank {width: 15%}
 
 #loading-wrapper {
 	background-color: rgba(255, 0, 255, .25); 

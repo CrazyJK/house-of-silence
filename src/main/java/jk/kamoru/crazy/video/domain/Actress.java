@@ -39,6 +39,15 @@ public class Actress implements Serializable, Comparable<Actress> {
 
 	@Value("#{local['path.video.storage']}") 		private String[] basePath;
 
+	public static String NAME = "NAME";
+	public static String FAVORITE = "FAVORITE";
+	public static String LOCALNAME = "LOCALNAME";
+	public static String BIRTH = "BIRTH";
+	public static String BODYSIZE = "BODYSIZE";
+	public static String HEIGHT = "HEIGHT";
+	public static String DEBUT = "DEBUT";
+	public static String POINTS = "POINTS";
+	
 	private String name;
 	private String localName;
 	private String birth;
@@ -46,6 +55,7 @@ public class Actress implements Serializable, Comparable<Actress> {
 	private String debut;
 	private String height;
 	private String age;
+	private Boolean favorite;
 	
 	@XmlTransient
 	@JsonIgnore
@@ -92,6 +102,8 @@ public class Actress implements Serializable, Comparable<Actress> {
 			return comp.getVideoList().size() - this.getVideoList().size();
 		case SCORE:
 			return comp.getScore() - this.getScore();
+		case FAVORITE:
+			return StringUtils.compareTo(comp.getFavorite(), this.getFavorite());
 		default:
 			return StringUtils.compareToIgnoreCase(this.getName(), comp.getName());
 		}
@@ -133,26 +145,41 @@ public class Actress implements Serializable, Comparable<Actress> {
 			} catch(Exception e) {}
 		return age;
 	}
+	public Boolean getFavorite() {
+		loadInfo();
+		return favorite;
+	}
 	
 	@JsonIgnore
 	public List<URL> getWebImage() {
 		return GoogleImageProvider.search(name);
 	}
-	
+	@JsonIgnore
+	public Map<String, String> getInfoMap() {
+		File file = getInfoFile();
+		if (file.isFile()) {
+			try {
+				Map<String, String> info = FileUtils.readFileToMap(file);
+				return info;
+			} catch (JKUtilException e) {
+				log.warn("info load error : {} - {}", name, e.getMessage());
+				return null;
+			}
+		}
+		else
+			return null;
+	}
 	private void loadInfo() {
 		if (!loaded) {
-			File file = getInfoFile();
-			if (file.isFile())
-				try {
-					Map<String, String> info = FileUtils.readFileToMap(file);
-					this.localName = info.get("LOCALNAME");
-					this.birth     = info.get("BIRTH");
-					this.height    = info.get("HEIGHT");
-					this.bodySize  = info.get("BODYSIZE");
-					this.debut     = info.get("DEBUT");
-				} catch (JKUtilException e) {
-					log.warn("info load error : {} - {}", name, e.getMessage());
-				}
+			Map<String, String> info = getInfoMap();
+			if (info == null)
+				return;
+			this.localName = info.get(LOCALNAME);
+			this.birth     = info.get(BIRTH);
+			this.height    = info.get(HEIGHT);
+			this.bodySize  = info.get(BODYSIZE);
+			this.debut     = info.get(DEBUT);
+			this.favorite  = Boolean.valueOf(info.get(FAVORITE));
 			loaded = true;
 		}
 	}
@@ -203,7 +230,9 @@ public class Actress implements Serializable, Comparable<Actress> {
 		return name;
 	}
 	public void renameInfo(String newName) {
-		FileUtils.rename(getInfoFile(), newName + FileUtils.EXTENSION_SEPARATOR + VIDEO.EXT_ACTRESS);
+		File infoFile = getInfoFile();
+		if (infoFile.exists())
+			FileUtils.rename(getInfoFile(), newName + FileUtils.EXTENSION_SEPARATOR + VIDEO.EXT_ACTRESS);
 		reloadInfo();
 	}
 }

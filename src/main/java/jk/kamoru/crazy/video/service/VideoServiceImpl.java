@@ -857,7 +857,7 @@ public class VideoServiceImpl implements VideoService {
 	public void renameOfActress(String name, String newName) {
 		Actress actress = videoDao.getActress(name);
 		for (Video video : actress.getVideoList()) {
-			video.renameOfActress(newName);
+			video.renameOfActress(name, newName);
 		}
 		actress.renameInfo(newName);
 		videoDao.reload();
@@ -938,7 +938,6 @@ public class VideoServiceImpl implements VideoService {
 						}
 
 						// find Studio
-						// TODO
 						String opusPrefix = StringUtils.substringBefore(titlePart.getOpus(), "-");
 						if (noParseOpusPrefix.contains(opusPrefix)) {
 							titlePart.setStudio("");
@@ -1076,5 +1075,10 @@ public class VideoServiceImpl implements VideoService {
 
 	private File getInfoDir() {
 		return new File(basePaths[0], "_info");
+	}
+
+	@Override
+	public void resetVideoScore(String opus) {
+		videoDao.getVideo(opus).resetScore();
 	}
 }

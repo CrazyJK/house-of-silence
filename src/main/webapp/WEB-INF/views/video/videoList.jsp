@@ -13,7 +13,7 @@ $(document).ready(function(){
 	
 	$("input[type=radio]").bind("click", function(){
 		var selectedSort = $(this).val();
-		var reverseOrder = '${sort}' == selectedSort ? !${reverse} : false;
+		var reverseOrder = '${sort}' == selectedSort ? !${reverse} : true;
 		location.href = "?sort=" + selectedSort + "&r=" + reverseOrder;
 	}).css("display","none");
 
@@ -47,19 +47,40 @@ Unseen[<s:eval expression="@prop['score.ratio.unseen']"/>]">Ratio</span>
 	<table class="video-table">
 		<c:forEach items="${videoList}" var="video" varStatus="status">
 		<tr class="nowrap">
-			<td class="number">${status.count}</td>
-			<td class="${sort eq 'S' ? 'label' : ''}"><span onclick="fnViewStudioDetail('${video.studio.name}')">${video.studio.name}</span></td>
-			<td class="${sort eq 'O' ? 'label' : ''}" width="60px"><span onclick="fnViewVideoDetail('${video.opus}')">${video.opus}</span></td>
-			<td class="${sort eq 'T' ? 'label' : ''}">${video.title}</td>
-			<td class="${sort eq 'A' ? 'label' : ''}"><c:forEach items="${video.actressList}" var="actress">
-				<span onclick="fnViewActressDetail('${actress.name}')">${actress.name}</span>
-				</c:forEach>
+			<td class="number">
+				${status.count}
 			</td>
-			<td class="${sort eq 'M' ? 'label' : ''}" width="80px">${video.videoDate}</td>
-			<td class="${sort eq 'P' ? 'label' : ''}" width="15px">${video.playCount}</td>
-			<td class="${sort eq 'R' ? 'label' : ''}" width="10px">${video.rank}</td>
-			<td class="number ${sort eq 'L' ? 'label' : ''}" width="45px"><fmt:formatNumber value="${video.length / ONE_GB}" pattern="#,##0.00G"/></td>
-			<td class="number ${sort eq 'SC' ? 'label' : ''}"><span title="${video.scoreDesc}">${video.score}</span></td>
+			<td class="${sort eq 'S' ? 'label' : ''}">
+				<div class="overflow-hidden width100"><span onclick="fnViewStudioDetail('${video.studio.name}')">${video.studio.name}</span></div>
+			</td>
+			<td class="${sort eq 'O' ? 'label' : ''}">
+				<span onclick="fnViewVideoDetail('${video.opus}')">${video.opus}</span>
+			</td>
+			<td class="${sort eq 'T' ? 'label' : ''}">
+				<div class="overflow-hidden width400" title="${video.title}">${video.title}</div>
+			</td>
+			<td class="${sort eq 'A' ? 'label' : ''}">
+				<div class="overflow-hidden width100">
+				<c:forEach items="${video.actressList}" var="actress">
+					<span onclick="fnViewActressDetail('${actress.name}')">${actress.name}</span>
+				</c:forEach>
+				</div>
+			</td>
+			<td class="${sort eq 'M' ? 'label' : ''}">
+				${video.videoDate}
+			</td>
+			<td class="${sort eq 'P' ? 'label' : ''}">
+				${video.playCount}
+			</td>
+			<td class="${sort eq 'R' ? 'label' : ''}">
+				${video.rank}
+			</td>
+			<td class="${sort eq 'L' ? 'label' : ''} number">
+				<fmt:formatNumber value="${video.length / ONE_GB}" pattern="#,##0.00G"/>
+			</td>
+			<td class="${sort eq 'SC' ? 'label' : ''} number">
+				<span title="${video.scoreDesc}">${video.score}</span>
+			</td>
 		</tr>
 		</c:forEach>
 	</table>

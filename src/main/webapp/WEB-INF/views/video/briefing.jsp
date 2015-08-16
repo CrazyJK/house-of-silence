@@ -37,14 +37,6 @@ div#content_div.div-box article {
 	border-radius:5px; 
 	background-color:rgba(255,165,0,.25);
 }
-.width30  {width: 30px;}
-.width50  {width: 50px;}
-.width60  {width: 60px;}
-.width80  {width: 80px;}
-.width100 {width: 100px;}
-.width150 {width: 150px;}
-.width200 {width: 200px;}
-.width-rank {width: 15%}
 
 .videoCount {
 	float:right;
@@ -281,17 +273,22 @@ function setDELETE_LOWER_SCORE_VIDEO() {
 			<tr>
 				<th class="nowrap width80"><s:message code="video.score"/></th>
 				<th class="nowrap width60"><s:message code="video.length"/></th>
+				<th class="nowrap width60"><s:message code="video.length.sum"/></th>
 				<th class="nowrap"><s:message code="video.video"/></th>
 			</tr>
 			<c:set var="totalLength" value="0"/>
 			<c:forEach items="${scoreMap}" var="score" varStatus="status">
+				<c:set var="stepLength" value="0"/>
+				<c:forEach items="${score.value}" var="video" varStatus="status">
+					<c:set var="stepLength"  value="${stepLength + video.length}"/>
+					<c:set var="totalLength" value="${totalLength + video.length}"/>
+				</c:forEach>
 			<tr>
 				<td class="nowrap">${score.key} <span class="videoCount">${fn:length(score.value)}</span></td>
 				<td class="nowrap right">
-					<c:set var="totalLength" value="0"/>
-					<c:forEach items="${score.value}" var="video" varStatus="status">
-						<c:set var="totalLength" value="${totalLength + video.length}"/>
-					</c:forEach>				
+					<span class="videoSize"><fmt:formatNumber value="${stepLength / ONE_GB}" pattern="#,##0 GB"/></span>
+				</td>
+				<td class="nowrap right">
 					<span class="videoSize"><fmt:formatNumber value="${totalLength / ONE_GB}" pattern="#,##0 GB"/></span>
 				</td>
 				<td class="nowrap">
