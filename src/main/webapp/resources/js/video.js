@@ -75,9 +75,16 @@ function fnPlay(selectedOpus) {
 }
 function fnVideoReset(selectedOpus) {
 	$("#hiddenHttpMethod").val("PUT");
-	$("#actionFrm").removeAttr("target");
+//	$("#actionFrm").removeAttr("target");
 	var frm = document.forms["actionFrm"];
 	frm.action = context + "video/" + selectedOpus + "/reset";
+	frm.submit();
+}
+function fnVideoWrong(selectedOpus) {
+	$("#hiddenHttpMethod").val("PUT");
+//	$("#actionFrm").removeAttr("target");
+	var frm = document.forms["actionFrm"];
+	frm.action = context + "video/" + selectedOpus + "/wrong";
 	frm.submit();
 }
 function fnRandomPlay() {

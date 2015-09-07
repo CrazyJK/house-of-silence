@@ -78,6 +78,7 @@
 <span class="${cssClass} rangeLabel" title="${video.scoreDesc}">${video.score}</span>
 <c:if test="${mode eq 'l'}">
 	<span class="label" onclick="fnVideoReset('${video.opus}')">Reset</span>
+	<span class="label" onclick="fnVideoWrong('${video.opus}')">Wrong</span>
 </c:if>
 <%
 	} else if (view.equalsIgnoreCase("rank")) {

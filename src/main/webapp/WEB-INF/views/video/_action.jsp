@@ -4,7 +4,15 @@
 <html>
 <head>
 <meta charset="UTF-8" />
-<title>av action</title> 
+<title>av action</title>
+<script type="text/javascript">
+if (parent) {
+	alert('${result}');
+}
+if (opener) {
+	location.reload();
+}
+</script> 
 </head>
 <body>
 ${result}

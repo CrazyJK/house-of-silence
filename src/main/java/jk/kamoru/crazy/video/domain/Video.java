@@ -568,14 +568,18 @@ public class Video implements Comparable<Video>, Serializable {
 		File destFile = new File(destDir);
 		if (!destFile.exists()) 
 			throw new VideoException(this, "directory(" + destDir + ") is not exist!");
+		move(destFile);
+	}
+
+	public synchronized void move(File destFile) {
 		for (File file : getFileAll()) {
-			if (file != null && file.exists() && !file.getParent().equals(destDir)) {
+			if (file != null && file.exists() && !file.getParent().equals(destFile.getAbsolutePath())) {
 				if (destFile.getFreeSpace() < file.length()) {
 					logger.warn("destination is small. size=" + destFile.getFreeSpace());
 					break;
 				}
 				try {
-					logger.debug("attempt to move file from {} to {}", file.getAbsolutePath(), destDir);
+					logger.debug("attempt to move file from {} to {}", file.getAbsolutePath(), destFile.getAbsolutePath());
 					FileUtils.moveFileToDirectory(file, destFile, false);
 				} catch (FileExistsException fe) {
 					logger.warn("File exist, then delete ", fe);
@@ -586,7 +590,7 @@ public class Video implements Comparable<Video>, Serializable {
 			}
 		}
 	}
-
+	
 	/**
 	 * actress를 추가한다. 기존actress가 발견되면 ref를 갱신.
 	 * @param actress
@@ -1065,5 +1069,25 @@ public class Video implements Comparable<Video>, Serializable {
 		this.rank = 0;
 		this.playCount = 0;
 		this.saveInfo();
+	}
+
+	/**
+	 * 비디오 파일을 최상위 루트로 이동
+	 */
+	public void moveOutside() {
+		if (this.isExistVideoFileList()) {
+			File root = FileUtils.getRootDirectory(this.getDelegateFile());
+			for (File file : this.getVideoFileList()) {
+				try {
+					FileUtils.moveFileToDirectory(file, root, false);
+				} catch (FileExistsException e) {
+					logger.warn("file exists in root dir[{}] : {}", root.getAbsolutePath(), e.getMessage());
+					FileUtils.deleteQuietly(file);
+				} catch (IOException e) {
+					logger.error("move fail", e);
+				}
+			}
+			this.setVideoFileList(null);
+		}
 	}
 }

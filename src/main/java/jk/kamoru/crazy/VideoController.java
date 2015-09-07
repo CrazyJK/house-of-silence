@@ -356,12 +356,24 @@ public class VideoController extends AbstractController {
 	 * @return
 	 */
 	@RequestMapping(value="/{opus}/reset", method=RequestMethod.PUT)
-	public String videoReset(Model model, @PathVariable String opus) {
+	@ResponseStatus(HttpStatus.NO_CONTENT)
+	public void videoReset(@PathVariable String opus) {
 		logger.trace(opus);
 		videoService.resetVideoScore(opus);
-		return "redirect:/video/" + opus;
 	}
-	
+
+	/**잘못 매칭된 비디오. 밖으로 옮기고, info초기화
+	 * @param model
+	 * @param opus
+	 * @return
+	 */
+	@RequestMapping(value="/{opus}/wrong", method=RequestMethod.PUT)
+	@ResponseStatus(HttpStatus.NO_CONTENT)
+	public void videoWrong(@PathVariable String opus) {
+		logger.trace(opus);
+		videoService.resetWrongVideo(opus);
+	}
+
 	/**
 	 * Test code. 
 	 */

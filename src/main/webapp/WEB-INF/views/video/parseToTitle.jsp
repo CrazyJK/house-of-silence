@@ -19,11 +19,6 @@ code {
 	margin: 0 5px;
 	color: red;
 }
-#OpusQuery {
-	width: 80px;
-	font-size:11px;
-	border: 0;
-}
 </style>
 <script src="<c:url value="/res/zeroclipboard/ZeroClipboard.js"/>"></script>
 <script type="text/javascript">
@@ -47,6 +42,15 @@ function toggleInputDiv() {
 	});
 */
 }
+function fnSearchOpus() {
+	popup('<s:eval expression="@prop['url.search.video']"/>' + $("#query").val(), 'videoSearch', 900, 950);
+}
+function fnSearchActress() {
+	popup('<s:eval expression="@prop['url.search.actress']"/>' + $("#query").val(), 'actressSearch', 900, 950);
+}
+function fnSearchTorrent() {
+	popup('<s:eval expression="@prop['url.search.torrent']"/>' + $("#query").val(), 'torrentSearch', 900, 950);
+}
 </script>
 </head>
 <body>
@@ -57,11 +61,15 @@ function toggleInputDiv() {
 	<span class="label-large"><a onclick="toggleInputDiv()">hide</a></span>
 	<input class="label-large" type="submit" value="Parse(${fn:length(titleList)})"/>
 	<span class="label-large">
-		<input id="OpusQuery" placeholder="Opus"/>
-		<a onclick="fnFindVideo($('#OpusQuery').val())">Search</a>
+		<input type="search" id="query" style="width:180px;" class="searchInput" placeholder="<s:message code="video.opus"/>, <s:message code="video.actress"/>, <s:message code="video.torrent"/>"/>
 	</span>
-	<%-- <textarea class="titleArea" placeholder="parsing result" readonly><c:forEach items="${titleList}" var="title" varStatus="status">${title}
-	</c:forEach></textarea> --%>
+	<a class="label-large" onclick="fnSearchOpus()"    title="<s:message code="video.find-info.opus"/>"   ><s:message code="video.opus"/></a>
+	<a class="label-large" onclick="fnSearchActress()" title="<s:message code="video.find-info.actress"/>"><s:message code="video.actress"/></a>
+	<a class="label-large" onclick="fnSearchTorrent()" title="<s:message code="video.find-info.torrent"/>"><s:message code="video.torrent"/></a>
+	<%-- 
+		<textarea class="titleArea" placeholder="parsing result" readonly><c:forEach items="${titleList}" var="title" varStatus="status">${title}
+		</c:forEach></textarea> 
+	--%>
 </div>
 
 <div id="content_div" class="div-box" style="overflow:auto;">

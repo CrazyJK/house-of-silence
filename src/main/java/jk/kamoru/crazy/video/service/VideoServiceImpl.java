@@ -72,6 +72,7 @@ public class VideoServiceImpl implements VideoService {
 	@Value("#{prop['size.video.storage']}")  	private int 	 maximumGBSizeOfEntireVideo;
 
 	@Value("#{prop['parse.to.title.no_opus']}") private String 	 noParseOpusPrefix;
+	@Value("#{prop['parse.to.title.re_opus']}") private String[] replaceOpus;
 
 	/** minimum free space of disk */
 	private final long MIN_FREE_SPAC = 10 * FileUtils.ONE_GB;
@@ -942,6 +943,15 @@ public class VideoServiceImpl implements VideoService {
 						if (noParseOpusPrefix.contains(opusPrefix)) {
 							titlePart.setStudio("");
 						}
+						else if (StringUtils.contains(ArrayUtils.toStringComma(replaceOpus), opusPrefix)) {
+							for (String reOpus : replaceOpus) {
+								String[] opus = StringUtils.split(reOpus, "-");
+								if (StringUtils.equals(opus[0], opusPrefix)) {
+									titlePart.setStudio(opus[1]);
+									break;
+								}
+							}
+						}
 						else {
 							List<Map<String, String>> histories = findHistory(opusPrefix + "-");
 							if (histories.size() > 0) {
@@ -1080,5 +1090,13 @@ public class VideoServiceImpl implements VideoService {
 	@Override
 	public void resetVideoScore(String opus) {
 		videoDao.getVideo(opus).resetScore();
+		videoDao.reload();
+	}
+
+	@Override
+	public void resetWrongVideo(String opus) {
+		videoDao.getVideo(opus).moveOutside();
+		videoDao.getVideo(opus).resetScore();
+		videoDao.reload();
 	}
 }

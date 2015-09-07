@@ -1,8 +1,10 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ taglib prefix="c"      uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib prefix="fn"     uri="http://java.sun.com/jsp/jstl/functions" %>
-<%@ taglib prefix="s" uri="http://www.springframework.org/tags" %>
-<%@ taglib prefix="jk"     tagdir="/WEB-INF/tags"%>
+<%@ taglib prefix="c"	uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fn"	uri="http://java.sun.com/jsp/jstl/functions" %>
+<%@ taglib prefix="fmt"	uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="s"	uri="http://www.springframework.org/tags" %>
+<%@ taglib prefix="jk"	tagdir="/WEB-INF/tags"%>
+<c:set var="ONE_GB" value="${1024*1024*1024}"/>
 <!DOCTYPE html>
 <html>
 <head>
@@ -55,7 +57,7 @@ function fnToggleFileinfo() {
 	<dd><span class="label-large" onclick="fnToggleFileinfo()">Files</span>
 		<div id="fileinfoDiv" style="display:none; background-color:white; border-radius: 10px;" class="">
 			<ul>
-				<li><span class="label" onclick="opener.fnPlay('${video.opus}')" title="VIDEO">${video.videoFileListPath}</span>
+				<li><span class="label" onclick="opener.fnPlay('${video.opus}')" title="VIDEO <fmt:formatNumber value="${video.length / ONE_GB}" pattern="#,##0 GB"/>">${video.videoFileListPath}</span>
 				<li><span class="label" title="COVER">${video.coverFilePath}</span>
 				<li><span class="label" title="INFO">${video.infoFilePath}</span>
 				

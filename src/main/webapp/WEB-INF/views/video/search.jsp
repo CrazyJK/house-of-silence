@@ -143,11 +143,11 @@ function fnSearchTorrent() {
 		<s:message code="video.video"/> <s:message code="video.search"/>
 		<input type="search" id="query" style="width:200px;" class="searchInput" placeHolder="<s:message code="video.search"/>"/>
 	</label>
+	<a class="label-large" onclick="fnSearchOpus()"    title="<s:message code="video.find-info.opus"/>"   ><s:message code="video.opus"/></a>
+	<a class="label-large" onclick="fnSearchActress()" title="<s:message code="video.find-info.actress"/>"><s:message code="video.actress"/></a>
+	<a class="label-large" onclick="fnSearchTorrent()" title="<s:message code="video.find-info.torrent"/>"><s:message code="video.torrent"/></a>
 	<span id="url" class="label"></span>
 	<span id="debug" class="label"></span>
-	<a class="label" onclick="fnSearchOpus()"   >Opus</a>
-	<a class="label" onclick="fnSearchActress()">Actress</a>
-	<a class="label" onclick="fnSearchTorrent()">Torrent</a>
 </div>
 
 <div id="content_div">

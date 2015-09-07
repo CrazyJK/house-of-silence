@@ -270,5 +270,10 @@ public interface VideoService {
 	 * @param opus
 	 */
 	void resetVideoScore(String opus);
+
+	/**reset wrong video. move video file to outside. reset rank & playcount
+	 * @param opus
+	 */
+	void resetWrongVideo(String opus);
 	
 }
