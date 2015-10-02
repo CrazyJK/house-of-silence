@@ -90,12 +90,16 @@ public class VideoBatch extends CrazyProperties {
 
 		// 설정이 안됬거나
 		if (PATH_MOVE_FILE == null) {
-			logger.error("PATH is null");
+			logger.error("PATH_MOVE_FILE is not set");
 			return;
 		}
-		// 값이 없거나, 3배수가 아니거나
-		if (PATH_MOVE_FILE.length == 0 || PATH_MOVE_FILE.length % 3 != 0) {
-			logger.error("PATH length is zero or odd", ArrayUtils.toStringComma(PATH_MOVE_FILE));
+		// 값이 없으면 pass
+		if (PATH_MOVE_FILE.length == 0)
+			return;
+		
+		// 3배수가 아니면
+		if (PATH_MOVE_FILE.length % 3 != 0) {
+			logger.error("PATH length is not 3 multiple", ArrayUtils.toStringComma(PATH_MOVE_FILE));
 			return;
 		}
 		// 2,3번째가 폴더가 아니거나

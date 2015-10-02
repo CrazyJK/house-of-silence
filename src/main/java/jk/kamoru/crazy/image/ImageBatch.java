@@ -16,13 +16,13 @@ import org.springframework.stereotype.Component;
 public class ImageBatch extends CrazyProperties {
 
 	private final String[] extensions = new String[]{"gif", "jpg", "jpeg", "png"};
-
+	
 	@Scheduled(cron="*/10 * * * * *")
-	public void renameSoraPicture() {
+	public synchronized void renameSoraPicture() {
 		log.debug("Rename Sora picture Start");
 
 		if (PATH_SORA_PICTURES == null) {
-			log.warn("not set 'path.sora.pictures'");
+			log.warn("PATH_SORA_PICTURES is not set");
 			return;
 		}
 		
@@ -47,7 +47,7 @@ public class ImageBatch extends CrazyProperties {
 					File dest = new File(directory, folderName + "_" + file.lastModified() + "." + suffix);
 
 					file.renameTo(dest);
-					log.debug("rename {} to {}", file.getName(), dest.getName());
+					log.info("rename {} to {}", file.getName(), dest.getName());
 				}
 			}
 		}
