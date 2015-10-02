@@ -56,6 +56,7 @@ public class FileBaseVideoSource implements VideoSource {
 
 	// property setter
 	public void setPaths(String...paths) {
+		logger.info(ArrayUtils.toString(paths, "IS NULL"));
 		this.paths = paths;
 	}
 	
@@ -222,11 +223,8 @@ public class FileBaseVideoSource implements VideoSource {
 					video.addActress(actress);
 				}
 			}
-			catch (NullPointerException e) {
-				logger.error("{}", e);
-			}
 			catch (Exception e) {
-				logger.error("Error : {} - {}", file.getAbsolutePath(), e);
+				logger.error("Error", e);
 			}
 		}
 		logger.info("    total loaded video {}", videoMap.size());

@@ -9,6 +9,7 @@ import java.util.Date;
 import java.util.List;
 
 import jk.kamoru.crazy.CrazyException;
+import jk.kamoru.crazy.CrazyProperties;
 import jk.kamoru.crazy.video.VIDEO;
 import jk.kamoru.crazy.video.VideoNotFoundException;
 import jk.kamoru.crazy.video.domain.Action;
@@ -20,12 +21,11 @@ import lombok.extern.slf4j.Slf4j;
 
 import org.apache.commons.lang3.time.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 @Component
 @Slf4j
-public class HistoryDaoFile implements HistoryDao {
+public class HistoryDaoFile extends CrazyProperties implements HistoryDao {
 
 	/** history file */
 	private File historyFile;
@@ -34,9 +34,6 @@ public class HistoryDaoFile implements HistoryDao {
 	
 	/** whether or not history changed */
 	private static boolean isHistoryChanged = true;
-
-	/** base video path in properties */
-	@Value("#{local['path.video.storage']}") 		private String[] basePath;
 
 	@Autowired VideoDao videoDao;
 	
@@ -56,7 +53,7 @@ public class HistoryDaoFile implements HistoryDao {
 	 */
 	private File getHistoryFile() {
 		if(historyFile == null)
-			historyFile = new File(basePath[0], "history.log");
+			historyFile = new File(STORAGE_PATHS[0], "history.log");
 		log.debug("history file is {}", historyFile.getAbsolutePath());
 		return historyFile;
 	}

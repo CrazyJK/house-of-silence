@@ -15,6 +15,7 @@ import java.util.TreeMap;
 import java.util.regex.Pattern;
 
 import jk.kamoru.crazy.CRAZY;
+import jk.kamoru.crazy.CrazyProperties;
 import jk.kamoru.crazy.video.VIDEO;
 import jk.kamoru.crazy.video.VideoException;
 import jk.kamoru.crazy.video.dao.VideoDao;
@@ -37,7 +38,6 @@ import jk.kamoru.util.StringUtils;
 import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
@@ -47,32 +47,8 @@ import org.springframework.stereotype.Service;
  */
 @Service
 @Slf4j
-public class VideoServiceImpl implements VideoService {
+public class VideoServiceImpl extends CrazyProperties implements VideoService {
 
-	/** base video path in properties */
-	@Value("#{local['path.video.storage']}") 		private String[] basePaths;
-	/** torrent completed file directory in properties */
-	@Value("#{local['path.video.candidate']}") 		private String[] candidatePaths;
-	
-	/** extra video path in properties */
-	@Value("#{local['path.video.storage-extra']}") 	private String[] extraPaths;
-	
-	/** video player command path in properties */
-	@Value("#{local['app.video-player']}") 			private String   player;
-	/** subtitles editor command path in properties */
-	@Value("#{local['app.subtitles-editor']}") 		private String   editor;
-	
-	/** minimum rank in properties */
-	@Value("#{prop['rank.minimum']}") 			private Integer  minRank;
-	/** maximum rank in properties */
-	@Value("#{prop['rank.maximum']}") 			private Integer  maxRank;
-	/** baseline rank in properties */
-	@Value("#{prop['rank.baseline']}")  		private int 	 lowerRankVideoBaselineScore;
-	/** baseline score in properties */
-	@Value("#{prop['size.video.storage']}")  	private int 	 maximumGBSizeOfEntireVideo;
-
-	@Value("#{prop['parse.to.title.no_opus']}") private String 	 noParseOpusPrefix;
-	@Value("#{prop['parse.to.title.re_opus']}") private String[] replaceOpus;
 
 	/** minimum free space of disk */
 	private final long MIN_FREE_SPAC = 10 * FileUtils.ONE_GB;
@@ -107,11 +83,11 @@ public class VideoServiceImpl implements VideoService {
 		String[] argumentsArray = null;
 		switch(action) {
 			case PLAY:
-				command = player;
+				command = PLAYER;
 				argumentsArray = video.getVideoFileListPathArray();
 				break;
 			case SUBTITLES:
-				command = editor;
+				command = EDITOR;
 				argumentsArray = video.getSubtitlesFileListPathArray();
 				break;
 			default:
@@ -390,8 +366,8 @@ public class VideoServiceImpl implements VideoService {
 		Long[] total = new Long[]{0l, 0l};
 		for (Video video : videoDao.getVideoList()) {
 			String path = video.getDelegatePath();
-			if (path.contains(basePaths[0]))
-				path = basePaths[0];
+			if (path.contains(STORAGE_PATHS[0]))
+				path = STORAGE_PATHS[0];
 			long length = video.getLength();
 			Long[] data = pathMap.get(path);
 			if (data == null) {
@@ -543,18 +519,18 @@ public class VideoServiceImpl implements VideoService {
 
 	@Override
 	public Integer minRank() {
-		return minRank;
+		return MIN_RANK;
 	}
 
 	@Override
 	public Integer maxRank() {
-		return maxRank;
+		return MAX_RANK;
 	}
 
 	@Override
 	public List<Integer> getRankRange() {
 		List<Integer> rankList = new ArrayList<Integer>();
-		for (Integer i=minRank; i<=maxRank; i++)
+		for (Integer i=MIN_RANK; i<=MAX_RANK; i++)
 			rankList.add(i);
 		return rankList;
 	}
@@ -562,7 +538,7 @@ public class VideoServiceImpl implements VideoService {
 	@Override
 	public void removeLowerRankVideo() {
 		for (Video video : videoDao.getVideoList()) {
-			if (video.getRank() < lowerRankVideoBaselineScore) {
+			if (video.getRank() < BASE_RANK) {
 				log.info("remove lower rank video {} : {} : {}", video.getOpus(), video.getRank(), video.getTitle());
 				saveHistory(video, Action.REMOVE);
 				videoDao.removeVideo(video.getOpus());
@@ -581,7 +557,7 @@ public class VideoServiceImpl implements VideoService {
 	 */
 	@Override
 	public void removeLowerScoreVideo() {
-		long maximumSizeOfEntireVideo = maximumGBSizeOfEntireVideo * FileUtils.ONE_GB;
+		long maximumSizeOfEntireVideo = MAX_ENTIRE_VIDEO * FileUtils.ONE_GB;
 		long sumSizeOfTotalVideo  = 0l;
 		long sumSizeOfDeleteVideo = 0l;
 		int  countOfTotalVideo    = 0;
@@ -653,13 +629,13 @@ public class VideoServiceImpl implements VideoService {
 	
 	public void moveWatchedVideo() {
 		/// 폴더의 최대 크기
-		long maximumSizeOfEntireVideo = maximumGBSizeOfEntireVideo * FileUtils.ONE_GB;
+		long maximumSizeOfEntireVideo = MAX_ENTIRE_VIDEO * FileUtils.ONE_GB;
 		// 한번에 옮길 비디오 개수
 		int maximumCountOfMoveVideo = 5;
 		// 옮긴 비디오 개수
 		int countOfMoveVideo = 0;
 		// Watched 폴더
-		File mainBaseFile = new File(basePaths[0]);
+		File mainBaseFile = new File(STORAGE_PATHS[0]);
 		// Watched 폴더 크기
 		long usedSpace = FileUtils.sizeOfDirectory(mainBaseFile);
 		// 여유 공간
@@ -756,7 +732,7 @@ public class VideoServiceImpl implements VideoService {
 		
 		List<File> foundFiles = new ArrayList<File>();
 		
-		for (String candidatePath : candidatePaths) {
+		for (String candidatePath : CANDIDATE_PATHS) {
 		
 			// get downloaded torrent file
 			File torrentDirectory = new File(candidatePath);
@@ -801,7 +777,7 @@ public class VideoServiceImpl implements VideoService {
 		log.trace("confirmCandidate : {} - {}", opus, path);
 		
 		File destinationPath = null;
-		for (String extraPath : extraPaths) {
+		for (String extraPath : STAGE_PATHS) {
 			if (FileUtils.compareDrive(path, extraPath)) {
 				destinationPath = new File(extraPath);
 				break;
@@ -940,11 +916,11 @@ public class VideoServiceImpl implements VideoService {
 
 						// find Studio
 						String opusPrefix = StringUtils.substringBefore(titlePart.getOpus(), "-");
-						if (noParseOpusPrefix.contains(opusPrefix)) {
+						if (NO_PARSE_OPUS_PREFIX.contains(opusPrefix)) {
 							titlePart.setStudio("");
 						}
-						else if (StringUtils.contains(ArrayUtils.toStringComma(replaceOpus), opusPrefix)) {
-							for (String reOpus : replaceOpus) {
+						else if (StringUtils.contains(ArrayUtils.toStringComma(REPLACE_OPUS_INFO), opusPrefix)) {
+							for (String reOpus : REPLACE_OPUS_INFO) {
 								String[] opus = StringUtils.split(reOpus, "-");
 								if (StringUtils.equals(opus[0], opusPrefix)) {
 									titlePart.setStudio(opus[1]);
@@ -1084,7 +1060,7 @@ public class VideoServiceImpl implements VideoService {
 	}
 
 	private File getInfoDir() {
-		return new File(basePaths[0], "_info");
+		return new File(STORAGE_PATHS[0], "_info");
 	}
 
 	@Override

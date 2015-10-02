@@ -4,6 +4,7 @@ import java.util.regex.Pattern;
 
 import jk.kamoru.crazy.CrazyException;
 import jk.kamoru.crazy.video.util.VideoUtils;
+import jk.kamoru.util.FileUtils;
 import jk.kamoru.util.StringUtils;
 import lombok.Data;
 
@@ -90,7 +91,7 @@ public class TitlePart implements Comparable<TitlePart> {
 	 * @param title the title to set
 	 */
 	public void setTitle(String title) {
-		this.title = title;
+		this.title = FileUtils.removeInvalidFilename(title);
 		// 값이 없으면
 		if (StringUtils.isBlank(title)) {
 			this.check = true;

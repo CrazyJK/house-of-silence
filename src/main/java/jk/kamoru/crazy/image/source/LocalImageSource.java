@@ -6,6 +6,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import jk.kamoru.crazy.CrazyProperties;
 import jk.kamoru.crazy.image.IMAGE;
 import jk.kamoru.crazy.image.ImageNotFoundException;
 import jk.kamoru.crazy.image.domain.Image;
@@ -13,7 +14,6 @@ import jk.kamoru.util.FileUtils;
 import lombok.extern.slf4j.Slf4j;
 
 import org.apache.commons.lang.math.NumberUtils;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Repository;
 
@@ -24,13 +24,11 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 @Slf4j
-public class LocalImageSource implements ImageSource {
+public class LocalImageSource extends CrazyProperties implements ImageSource {
 
 	private List<Image> imageList;
 	
 	private boolean loading = false;
-
-	@Value("#{local['path.image.storage']}") private String[] imageStoragePath;
 
 	private synchronized void load() {
 		loading = true;
@@ -41,7 +39,7 @@ public class LocalImageSource implements ImageSource {
 			imageList = new ArrayList<Image>();
 		imageList.clear();
 
-		for (String path : this.imageStoragePath) {
+		for (String path : this.IMAGE_PATHS) {
 			File dir = new File(path);
 			if (dir.isDirectory()) {
 				log.info("image scanning : {}", dir);

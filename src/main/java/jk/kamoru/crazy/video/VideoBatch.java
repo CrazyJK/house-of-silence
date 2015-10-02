@@ -5,6 +5,7 @@ import java.io.IOException;
 
 import javax.annotation.PostConstruct;
 
+import jk.kamoru.crazy.CrazyProperties;
 import jk.kamoru.crazy.video.service.VideoService;
 import jk.kamoru.util.ArrayUtils;
 
@@ -12,22 +13,15 @@ import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 @Component
-public class VideoBatch {
+public class VideoBatch extends CrazyProperties {
 
 	private static final Logger logger = LoggerFactory.getLogger(VideoBatch.class);
 
 	@Autowired VideoService videoService;
-
-	@Value("#{prop['batch.watched.moveVideo']}")	private boolean MOVE_WATCHED_VIDEO;
-	@Value("#{prop['batch.rank.deleteVideo']}") 	private boolean DELETE_LOWER_RANK_VIDEO;
-	@Value("#{prop['batch.score.deleteVideo']}") 	private boolean DELETE_LOWER_SCORE_VIDEO;
-	
-	@Value("#{local['path.move.file']}")	private String[] PATH_MOVE_FILE;
 
 	public boolean isMOVE_WATCHED_VIDEO() {
 		return MOVE_WATCHED_VIDEO;
@@ -92,7 +86,7 @@ public class VideoBatch {
 	
 	@Scheduled(cron="0 */1 * * * *")
 	public synchronized void moveFile() {
-		logger.info("BATCH File move START");
+		logger.debug("BATCH File move START {}", ArrayUtils.toStringComma(PATH_MOVE_FILE));
 
 		// 설정이 안됬거나
 		if (PATH_MOVE_FILE == null) {
@@ -129,7 +123,7 @@ public class VideoBatch {
 			}
 		}
 		
-		logger.info("BATCH File move END");
+		logger.debug("BATCH File move END");
 	}
 	
 }

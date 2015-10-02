@@ -13,29 +13,29 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
+import jk.kamoru.crazy.CrazyProperties;
 import jk.kamoru.crazy.video.VIDEO;
 import jk.kamoru.util.FileUtils;
-import jk.kamoru.util.StringUtils;
 import jk.kamoru.util.JKUtilException;
+import jk.kamoru.util.StringUtils;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.extern.slf4j.Slf4j;
 
 import org.codehaus.jackson.annotate.JsonIgnore;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 @Component
 @Scope("prototype")
 @Data
+@EqualsAndHashCode(callSuper=false)
 @Slf4j
 @XmlRootElement(name = "studio", namespace = "http://www.w3.org/2001/XMLSchema-instance")
 @XmlAccessorType(XmlAccessType.FIELD)
-public class Studio implements Serializable, Comparable<Studio> {
+public class Studio extends CrazyProperties implements Serializable, Comparable<Studio> {
 
 	private static final long serialVersionUID = VIDEO.SERIAL_VERSION_UID;
-
-	@Value("#{local['path.video.storage']}") 		private String[] basePath;
 
 	private String name;
 	private URL    homepage;
@@ -114,7 +114,7 @@ public class Studio implements Serializable, Comparable<Studio> {
 
 	private void loadInfo() {
 		if (!loaded) {
-			File file = new File(new File(basePath[0], "_info"), name + FileUtils.EXTENSION_SEPARATOR + VIDEO.EXT_STUDIO);
+			File file = new File(new File(STORAGE_PATHS[0], "_info"), name + FileUtils.EXTENSION_SEPARATOR + VIDEO.EXT_STUDIO);
 			if (file.isFile())
 				try {
 					Map<String, String> info = FileUtils.readFileToMap(file);

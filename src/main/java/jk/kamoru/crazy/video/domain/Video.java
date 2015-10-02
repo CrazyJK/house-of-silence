@@ -13,6 +13,7 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
+import jk.kamoru.crazy.CrazyProperties;
 import jk.kamoru.crazy.video.VIDEO;
 import jk.kamoru.crazy.video.VideoException;
 import jk.kamoru.crazy.video.service.HistoryService;
@@ -28,7 +29,6 @@ import org.codehaus.jackson.annotate.JsonIgnore;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
@@ -43,7 +43,7 @@ import org.springframework.stereotype.Component;
 @Scope("prototype")
 @XmlRootElement(name = "video", namespace = "http://www.w3.org/2001/XMLSchema-instance")
 @XmlAccessorType(XmlAccessType.FIELD)
-public class Video implements Comparable<Video>, Serializable {
+public class Video extends CrazyProperties implements Comparable<Video>, Serializable {
 
 	private static final long serialVersionUID = VIDEO.SERIAL_VERSION_UID;
 
@@ -80,13 +80,6 @@ public class Video implements Comparable<Video>, Serializable {
 	private int rank;
 	
 	private boolean isArchive;
-
-	@Value("#{prop['score.ratio.play']}")		private int      playRatio;
-	@Value("#{prop['score.ratio.rank']}")		private int      rankRatio;
-	@Value("#{prop['score.ratio.actress']}")	private int   actressRatio;
-	@Value("#{prop['score.ratio.subtitles']}")	private int subtitlesRatio;
-	
-	@Value("#{local['path.video.archive']}")	private String archivePath;
 
 
 	public Video() {
@@ -621,7 +614,7 @@ public class Video implements Comparable<Video>, Serializable {
 				else
 					logger.error("delete fail : {}", file.getAbsolutePath());
 		// the others move
-		File archiveDir = new File(archivePath);
+		File archiveDir = new File(ARCHIVE_PATHS);
 		for (File file : getFileWithoutVideo())
 			if (file != null)
 				try {
@@ -895,28 +888,28 @@ public class Video implements Comparable<Video>, Serializable {
 	 */
 	public String getScoreDesc() {
 		return String.format("Rank[%s]*%s + Play[%s]*%s/10 + Actress[%s]*%s/10 + Subtitles[%s]*%s = %s", 
-				getRank(), rankRatio,
-				getPlayCount(), playRatio,
-				getActressScoreDesc(), actressRatio,
-				isExistSubtitlesFileList() ? 1 : 0, subtitlesRatio,
+				getRank(), RANK_RATIO,
+				getPlayCount(), PLAY_RATIO,
+				getActressScoreDesc(), ACTRESS_RATIO,
+				isExistSubtitlesFileList() ? 1 : 0, SUBTITLES_RATIO,
 				getScore());
 	}
 	
 	public String getScoreRatio() {
-		return String.format("Score ratio {Rank[%s] Play[%s] Actress[%s] Subtitles[%s]}", rankRatio, playRatio, actressRatio, subtitlesRatio);
+		return String.format("Score ratio {Rank[%s] Play[%s] Actress[%s] Subtitles[%s]}", RANK_RATIO, PLAY_RATIO, ACTRESS_RATIO, SUBTITLES_RATIO);
 	}
 	/**환산된 랭킹 점수
 	 * @return score of rank
 	 */
 	public int getRankScore() {
-		return getRank() * rankRatio;
+		return getRank() * RANK_RATIO;
 	}
 
 	/**환산된 플레이 점수
 	 * @return score of play count
 	 */
 	public int getPlayScore() {
-		return Math.round(getPlayCount() * playRatio / 10);
+		return Math.round(getPlayCount() * PLAY_RATIO / 10);
 	}
 
 	/**환산된 배우 점수
@@ -929,7 +922,7 @@ public class Video implements Comparable<Video>, Serializable {
 			return actressVideoScore;
 			
 		for (Actress actress : getActressList()) {
-			actressVideoScore += Math.round(actress.getVideoList().size() * actressRatio / 10);
+			actressVideoScore += Math.round(actress.getVideoList().size() * ACTRESS_RATIO / 10);
 		}
 		return actressVideoScore;
 	}
@@ -957,7 +950,7 @@ public class Video implements Comparable<Video>, Serializable {
 	 * @return score of subtitles
 	 */
 	public int getSubtitlesScore() {
-		return (isExistSubtitlesFileList() ? 1 : 0) * subtitlesRatio;
+		return (isExistSubtitlesFileList() ? 1 : 0) * SUBTITLES_RATIO;
 	}
 
 	/**비디오 파일 후보 추가

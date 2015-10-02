@@ -5,6 +5,7 @@ import java.io.Serializable;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -13,6 +14,7 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
+import jk.kamoru.crazy.CrazyProperties;
 import jk.kamoru.crazy.video.VIDEO;
 import jk.kamoru.crazy.video.util.VideoUtils;
 import jk.kamoru.util.FileUtils;
@@ -20,24 +22,23 @@ import jk.kamoru.util.GoogleImageProvider;
 import jk.kamoru.util.JKUtilException;
 import jk.kamoru.util.StringUtils;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.extern.slf4j.Slf4j;
 
 import org.codehaus.jackson.annotate.JsonIgnore;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 @Component
 @Scope("prototype")
+@EqualsAndHashCode(callSuper=false)
 @Data
 @Slf4j
 @XmlRootElement(name = "actress", namespace = "http://www.w3.org/2001/XMLSchema-instance")
 @XmlAccessorType(XmlAccessType.FIELD)
-public class Actress implements Serializable, Comparable<Actress> {
+public class Actress extends CrazyProperties implements Serializable, Comparable<Actress> {
 
 	private static final long serialVersionUID = VIDEO.SERIAL_VERSION_UID;
-
-	@Value("#{local['path.video.storage']}") 		private String[] basePath;
 
 	public static String NAME = "NAME";
 	public static String FAVORITE = "FAVORITE";
@@ -156,18 +157,13 @@ public class Actress implements Serializable, Comparable<Actress> {
 	}
 	@JsonIgnore
 	public Map<String, String> getInfoMap() {
-		File file = getInfoFile();
-		if (file.isFile()) {
-			try {
-				Map<String, String> info = FileUtils.readFileToMap(file);
-				return info;
-			} catch (JKUtilException e) {
-				log.warn("info load error : {} - {}", name, e.getMessage());
-				return null;
-			}
+		try {
+			return FileUtils.readFileToMap(getInfoFile());
+		} 
+		catch (JKUtilException e) {
+			log.debug("info load error : {} - {}", name, e.getMessage());
+			return new HashMap<String, String>();
 		}
-		else
-			return null;
 	}
 	private void loadInfo() {
 		if (!loaded) {
@@ -184,7 +180,7 @@ public class Actress implements Serializable, Comparable<Actress> {
 		}
 	}
 	private File getInfoFile() {
-		return new File(new File(basePath[0], "_info"), name + FileUtils.EXTENSION_SEPARATOR + VIDEO.EXT_ACTRESS);
+		return new File(new File(STORAGE_PATHS[0], "_info"), name + FileUtils.EXTENSION_SEPARATOR + VIDEO.EXT_ACTRESS);
 	}
 	public void reloadInfo() {
 		loaded = false;
