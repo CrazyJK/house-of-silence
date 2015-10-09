@@ -157,17 +157,17 @@ function fnViewBGImage() {
 		<table class="video-table">
 			<c:forEach items="${videoList}" var="video" varStatus="status">
 			<tr id="opus-${video.opus}">
-				<td style="max-width:100px;" class="oneline"><jk:video video="${video}" view="studio"/></td>
+				<td style="max-width:70px;" class="oneline"><jk:video video="${video}" view="studio"/></td>
 				<td style="width:15px;"><jk:video video="${video}" view="torrent"/></td>
 				<td style="width:35px;"><jk:video video="${video}" view="length"/></td>
 				<td style="max-width:100px;" class="oneline"><jk:video video="${video}" view="opus"/></td>
-				<td style="max-width:200px;" class="oneline"><jk:video video="${video}" view="title"/></td>
-				<td style="max-width:150px;" class="oneline"><jk:video video="${video}" view="actress"/></td>
-				<td style="width:90px;"><jk:video video="${video}" view="release"/></td>
-				<td style="width:65px;"><jk:video video="${video}" view="video" mode="s"/>
+				<td style="max-width:220px;" class="oneline"><jk:video video="${video}" view="title"/></td>
+				<td style="max-width:100px;" class="oneline"><jk:video video="${video}" view="actress"/></td>
+				<td style="width:80px;"><jk:video video="${video}" view="release"/></td>
+				<td style="width:70px;"><jk:video video="${video}" view="video" mode="s"/>
 					<jk:video video="${video}" view="cover" mode="s"/>
 					<jk:video video="${video}" view="subtitles" mode="s"/></td>
-				<td style="width:150px;"><jk:video video="${video}" view="rank"/>
+				<td style="width:180px;"><jk:video video="${video}" view="rank"/>
 					<jk:video video="${video}" view="score"/></td>
 			</tr>
 			</c:forEach>

@@ -68,7 +68,7 @@
 	} else if (view.equalsIgnoreCase("torrent")) {
 %>
 <img src="<c:url value="/res/img/magnify${status.count%2}.png"/>" width="12px" title="<s:message code="video.find-info.torrent"/>"
-	onclick="popup('<s:eval expression="@prop['url.search.torrent']"/>${video.opus}', 'torrent_${video.opus}', 800, 600)"/>
+	onclick="popup('<s:eval expression="@prop['url.search.torrent']"/>${video.opus}', 'torrentDownload', 800, 600); this.style.backgroundColor='red';"/>
 <%
 	} else if (view.equalsIgnoreCase("length")) {
 %>
