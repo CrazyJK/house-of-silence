@@ -159,7 +159,7 @@ function fnViewBGImage() {
 			<tr id="opus-${video.opus}">
 				<td style="max-width:70px;" class="oneline"><jk:video video="${video}" view="studio"/></td>
 				<td style="width:15px;"><jk:video video="${video}" view="torrent"/></td>
-				<td style="width:35px;"><jk:video video="${video}" view="length"/></td>
+				<td style="width:35px;" class="right"><jk:video video="${video}" view="length"/></td>
 				<td style="max-width:100px;" class="oneline"><jk:video video="${video}" view="opus"/></td>
 				<td style="max-width:220px;" class="oneline"><jk:video video="${video}" view="title"/></td>
 				<td style="max-width:100px;" class="oneline"><jk:video video="${video}" view="actress"/></td>

@@ -21,7 +21,7 @@
 			${mode eq 's' ? 'V' : 'Video'}
 <c:if test="${mode eq 'l'}">			
 			<em>${video.size}</em>
-			<em><fmt:formatNumber value="${video.length / ONE_GB}" pattern="#,##0GB"/></em>
+			<em><fmt:formatNumber value="${video.length / ONE_GB}" pattern="#,##0.#GB"/></em>
 </c:if>			
 </span>
 <%
@@ -72,7 +72,7 @@
 <%
 	} else if (view.equalsIgnoreCase("length")) {
 %>
-<fmt:formatNumber value="${video.length / ONE_GB}" pattern="#,##0GB"/>
+<fmt:formatNumber value="${video.length / ONE_GB}" pattern="#,##0.0GB"/>
 <%
 	} else if (view.equalsIgnoreCase("studio")) {
 %>
