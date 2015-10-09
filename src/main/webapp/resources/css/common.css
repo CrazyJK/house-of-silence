@@ -68,6 +68,10 @@ li.notExist {
 	color: blue;
 }
 
+.oneline {
+	overflow: hidden; text-overflow: ellipsis; white-space:nowrap;
+}
+
 #stack-trace,
 #request-attribute,
 #session-attribute {

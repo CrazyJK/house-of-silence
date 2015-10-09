@@ -65,6 +65,15 @@
 		onclick="popup('<s:eval expression="@prop['url.search.video']"/>${video.opus}', 'info_${video.opus}', 800, 600)"/>
 </c:if>
 <%
+	} else if (view.equalsIgnoreCase("torrent")) {
+%>
+<img src="<c:url value="/res/img/magnify${status.count%2}.png"/>" width="12px" title="<s:message code="video.find-info.torrent"/>"
+	onclick="popup('<s:eval expression="@prop['url.search.torrent']"/>${video.opus}', 'torrent_${video.opus}', 800, 600)"/>
+<%
+	} else if (view.equalsIgnoreCase("length")) {
+%>
+<fmt:formatNumber value="${video.length / ONE_GB}" pattern="#,##0GB"/>
+<%
 	} else if (view.equalsIgnoreCase("studio")) {
 %>
 <span class="${cssClass}" onclick="fnViewStudioDetail('${video.studio.name}')" title="${video.studio}">${video.studio.name}</span>
