@@ -54,10 +54,10 @@ function fnToggleFileinfo() {
 		</form>
 	</dd>
 	 --%>
-	<dd><span class="label-large" onclick="fnToggleFileinfo()">Files</span>
+	<dd><span class="label-large" onclick="fnToggleFileinfo()">Files <em><fmt:formatNumber value="${video.length / ONE_GB}" pattern="#,##0 GB"/></em></span>
 		<div id="fileinfoDiv" style="display:none; background-color:white; border-radius: 10px;" class="">
 			<ul>
-				<li><span class="label" onclick="opener.fnPlay('${video.opus}')" title="VIDEO <fmt:formatNumber value="${video.length / ONE_GB}" pattern="#,##0 GB"/>">${video.videoFileListPath}</span>
+				<li><span class="label" onclick="opener.fnPlay('${video.opus}')" title="VIDEO ">${video.videoFileListPath}</span>
 				<li><span class="label" title="COVER">${video.coverFilePath}</span>
 				<li><span class="label" title="INFO">${video.infoFilePath}</span>
 				
