@@ -80,7 +80,7 @@
 <%
 	} else if (view.equalsIgnoreCase("title")) {
 %>
-	<%	if (!mode.equals("s")) { %>		
+	<%	if (!"s".equals(mode)) { %>		
 	<span class="${cssClass}" onclick="fnVideoDetail('${video.opus}')">${video.title}</span>
 	<%	} else { %>
 	<span class="${cssClass}" onclick="fnVideoDetail('${video.opus}')" title="${video.title}">${fn:substring(video.title, 0, 22)}</span>	
