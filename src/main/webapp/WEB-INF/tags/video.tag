@@ -80,7 +80,11 @@
 <%
 	} else if (view.equalsIgnoreCase("title")) {
 %>
-<span class="${cssClass}" onclick="fnVideoDetail('${video.opus}')">${video.title}</span>
+	<%	if (!mode.equals("s")) { %>		
+	<span class="${cssClass}" onclick="fnVideoDetail('${video.opus}')">${video.title}</span>
+	<%	} else { %>
+	<span class="${cssClass}" onclick="fnVideoDetail('${video.opus}')" title="${video.title}">${fn:substring(video.title, 0, 22)}</span>	
+	<%	} %>	
 <%
 	} else if (view.equalsIgnoreCase("score")) {
 %>
@@ -92,9 +96,11 @@
 <%
 	} else if (view.equalsIgnoreCase("rank")) {
 %>
+	<%	if (!"s".equals(mode)) { %>
 <input type="range" id="Rank-${video.opus}" name="points" ${mode eq 's' ? 'style="width:70px;"' : ''} 
-	min="<s:eval expression="@prop['rank.minimum']"/>" max="<s:eval expression="@prop['rank.maximum']"/>" 
-	value="${video.rank}" onmouseup="fnRank('${video.opus}')" onchange="document.getElementById('Rank-${video.opus}-label').innerHTML = this.value;" />
+	min="${minRank}" max="${maxRank}" value="${video.rank}" 
+	onmouseup="fnRank('${video.opus}')" onchange="document.getElementById('Rank-${video.opus}-label').innerHTML = this.value;" />
+	<%	} %>	
 <em id="Rank-${video.opus}-label" class="${cssClass} rangeLabel">${video.rank}</em>
 <%
 	} else if (view.equalsIgnoreCase("label")) {

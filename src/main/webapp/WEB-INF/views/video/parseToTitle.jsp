@@ -31,16 +31,12 @@ function resizeSecondDiv() {
 }
 function toggleInputDiv() {
 	$("#inputTd").toggle();
-/*
-	$("#inputDiv").toggle("fast", function() {
-		if ($(this).css("display") == "none") {
-			$("#resultList").css("margin-left", "0px");
-		}
-		else {
-			$("#resultList").css("margin-left", "320px");
-		}
-	});
-*/
+	if ($("#inputTd").css("display") == 'none') {
+		$("#hideBtn").html("Show");
+	}
+	else {
+		$("#hideBtn").html("Hide");
+	}
 }
 function fnSearchOpus() {
 	popup('<s:eval expression="@prop['url.search.video']"/>' + $("#query").val(), 'videoSearch', 900, 950);
@@ -58,14 +54,26 @@ function fnSearchTorrent() {
 <form method="post" onsubmit="loading(true, 'Parsing...')">
 
 <div id="header_div" class="div-box">
-	<span class="label-large"><a onclick="toggleInputDiv()">hide</a></span>
-	<input class="label-large" type="submit" value="Parse(${fn:length(titleList)})"/>
-	<span class="label-large">
-		<input type="search" id="query" style="width:180px;" class="searchInput" placeholder="<s:message code="video.opus"/>, <s:message code="video.actress"/>, <s:message code="video.torrent"/>"/>
-	</span>
-	<a class="label-large" onclick="fnSearchOpus()"    title="<s:message code="video.find-info.opus"/>"   ><s:message code="video.opus"/></a>
-	<a class="label-large" onclick="fnSearchActress()" title="<s:message code="video.find-info.actress"/>"><s:message code="video.actress"/></a>
-	<a class="label-large" onclick="fnSearchTorrent()" title="<s:message code="video.find-info.torrent"/>"><s:message code="video.torrent"/></a>
+	<ul class="menu-item-ul">
+		<li class="label-large">
+			<a onclick="toggleInputDiv()" id="hideBtn">hide</a>
+		</li>
+		<li class="label-large">
+			<a onclick="document.forms[0].submit();">Parse(${fn:length(titleList)})</a>	
+		</li>
+		<li class="label-large">
+			<input type="search" id="query" style="width:180px;" class="searchInput" placeholder="<s:message code="video.opus"/>, <s:message code="video.actress"/>, <s:message code="video.torrent"/>"/>
+		</li>
+		<li class="label-large">
+			<a onclick="fnSearchOpus()"    title="<s:message code="video.find-info.opus"/>"   ><s:message code="video.opus"/></a>
+		</li>
+		<li class="label-large">
+			<a onclick="fnSearchActress()" title="<s:message code="video.find-info.actress"/>"><s:message code="video.actress"/></a>
+		</li>
+		<li class="label-large">
+			<a onclick="fnSearchTorrent()" title="<s:message code="video.find-info.torrent"/>"><s:message code="video.torrent"/></a>
+		</li>
+	</ul>
 	<%-- 
 		<textarea class="titleArea" placeholder="parsing result" readonly><c:forEach items="${titleList}" var="title" varStatus="status">${title}
 		</c:forEach></textarea> 
@@ -96,10 +104,25 @@ function fnSearchTorrent() {
 						</td>
 						<td width="80px">
 							<span class="label">
-							<a id="copyBtn_${title.opus}" data-clipboard-target="dataTitle_${title.opus}" onclick="fnFindVideo('${title.opus}')">Get Info </a>
+							<a id="copyBtn_${title.opus}" data-clipboard-target="dataTitle_${title.opus}" onclick="fnFindVideo('${title.opus}'); document.title='${title}'">Get Info </a>
 							<c:if test="${title.check}"><code>${title.checkDescShort}</code></c:if>
 							</span>
 						</td>
+						<%-- <td>
+							${title.studio}
+						</td>
+						<td>
+							${title.opus}
+						</td>
+						<td>
+							${title.title}
+						</td>
+						<td>
+							${title.actress}
+						</td>
+						<td>
+							${title.releaseDate}
+						</td> --%>
 						<td>
 							<input id="dataTitle_${title.opus}" class="text" style="width:100%;" value="${title}"/>
 						</td>

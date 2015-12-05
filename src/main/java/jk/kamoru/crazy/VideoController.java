@@ -405,10 +405,10 @@ public class VideoController extends AbstractController {
 		model.addAttribute("playRange", 	videoService.getPlayRange());
 		model.addAttribute("videoList", 	videoList);
 		model.addAttribute("opusArray", 	VideoUtils.getOpusArrayStyleStringWithVideofile(videoList));
-//		model.addAttribute("actressList", 	videoService.getActressListOfVideoes(videoList));
-//		model.addAttribute("studioList", 	videoService.getStudioListOfVideoes(videoList));
-		model.addAttribute("actressList", 	videoService.getActressList());
-		model.addAttribute("studioList", 	videoService.getStudioList());
+		model.addAttribute("actressList", 	videoService.getActressListInVideoList(videoList));
+		model.addAttribute("studioList", 	videoService.getStudioListInVideoList(videoList));
+//		model.addAttribute("actressList", 	videoService.getActressList());
+//		model.addAttribute("studioList", 	videoService.getStudioList());
 		model.addAttribute("bgImageCount", 	imageService.getImageSourceSize());
 		return "video/videoMain";
 	}

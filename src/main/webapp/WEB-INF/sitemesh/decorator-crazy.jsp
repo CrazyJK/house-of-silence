@@ -122,7 +122,7 @@ function showNav() {
 	<footer id="deco_footer">
 		<div>
 			&copy; <time datetime="<%=dateString %>" title="Today"><%=dateString %></time> 
-			<a href="<c:url value="/jkServlet"/>">kAmOrU.</a> All rights reserved.
+			<a href="<c:url value="/manager/jkServlet"/>">kAmOrU.</a> All rights reserved.
 			<a onclick="bgImageDELETE()">Image Del</a>
 			<a onclick="popup('<c:url value="/jsp/util/webAttribute4Popup.jsp"/>','webAttr',800,700)" title="Web attributes view">Attr</a>
 	

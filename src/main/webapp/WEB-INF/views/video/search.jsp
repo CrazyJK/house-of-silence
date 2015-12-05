@@ -139,15 +139,23 @@ function fnSearchTorrent() {
 <body>
 
 <div id="header_div" class="div-box">
-	<label class="label-large">
-		<s:message code="video.video"/> <s:message code="video.search"/>
-		<input type="search" id="query" style="width:200px;" class="searchInput" placeHolder="<s:message code="video.search"/>"/>
-	</label>
-	<a class="label-large" onclick="fnSearchOpus()"    title="<s:message code="video.find-info.opus"/>"   ><s:message code="video.opus"/></a>
-	<a class="label-large" onclick="fnSearchActress()" title="<s:message code="video.find-info.actress"/>"><s:message code="video.actress"/></a>
-	<a class="label-large" onclick="fnSearchTorrent()" title="<s:message code="video.find-info.torrent"/>"><s:message code="video.torrent"/></a>
-	<span id="url" class="label"></span>
-	<span id="debug" class="label"></span>
+	<ul class="menu-item-ul">
+		<li class="label-large">
+			<s:message code="video.video"/> <s:message code="video.search"/>
+			<input type="search" id="query" style="width:200px;" class="searchInput" placeHolder="<s:message code="video.search"/>"/>
+		</li>
+		<li class="label-large">
+			<a onclick="fnSearchOpus()"    title="<s:message code="video.find-info.opus"/>"   ><s:message code="video.opus"/></a>
+		</li>
+		<li class="label-large">
+			<a onclick="fnSearchActress()" title="<s:message code="video.find-info.actress"/>"><s:message code="video.actress"/></a>
+		</li>
+		<li class="label-large">
+			<a onclick="fnSearchTorrent()" title="<s:message code="video.find-info.torrent"/>"><s:message code="video.torrent"/></a>
+		</li>
+		<li class="label"><span id="url"></span></li>
+		<li class="label"><span id="debug"></span></li>
+	</ul>
 </div>
 
 <div id="content_div">

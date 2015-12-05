@@ -105,22 +105,26 @@ function setDELETE_LOWER_SCORE_VIDEO() {
 	<label class="item sort-item"><input type="radio" name="viewType" value="normal"/><span>Normal</span></label>
 	<label class="item sort-item"><input type="radio" name="viewType" value="simple"/><span>Simple</span></label>
 
+	<em>Max : <s:eval expression="@prop['size.video.storage']"/> GB</em>
+				
 	<div style="float:right">
-		<span class="label-large">
-			<a onclick="actionFrame('<c:url value="/video/manager/moveWatchedVideo"/>', 'POST', 'Moving Watched Video')"><s:message code="video.mng.move"/></a>
-			<span class="label"><a id="MOVE_WATCHED_VIDEO" onclick="setMOVE_WATCHED_VIDEO()">${MOVE_WATCHED_VIDEO}</a></span>
-		</span>
-		<span class="label-large">
-			<a onclick="actionFrame('<c:url value="/video/manager/removeLowerRankVideo"/>', 'POST', 'Deleting Lower Rank')"><s:message code="video.mng.rank"/></a>
-			<span class="label"><a id="DELETE_LOWER_RANK_VIDEO" onclick="setDELETE_LOWER_RANK_VIDEO()">${DELETE_LOWER_RANK_VIDEO}</a></span>
-		</span>
-		<span class="label-large">
-			<a onclick="actionFrame('<c:url value="/video/manager/removeLowerScoreVideo"/>', 'POST', 'Deleting Lower Score')"><s:message code="video.mng.score"/></a>
-			<span class="label"><a id="DELETE_LOWER_SCORE_VIDEO" onclick="setDELETE_LOWER_SCORE_VIDEO()">${DELETE_LOWER_SCORE_VIDEO}</a></span>
-		</span>
-		<span class="label-large">
-			<a onclick="actionFrame('<c:url value="/video/reload"/>', 'POST', 'Reloading')"><s:message code="video.reload.title"/></a>
-		</span>
+		<ul class="menu-item-ul">
+			<li class="label-large">
+				<a onclick="actionFrame('<c:url value="/video/manager/moveWatchedVideo"/>', 'POST', 'Moving Watched Video')"><s:message code="video.mng.move"/></a>
+				<span class="label"><a id="MOVE_WATCHED_VIDEO" onclick="setMOVE_WATCHED_VIDEO()">${MOVE_WATCHED_VIDEO}</a></span>
+			</li>
+			<li class="label-large">
+				<a onclick="actionFrame('<c:url value="/video/manager/removeLowerRankVideo"/>', 'POST', 'Deleting Lower Rank')"><s:message code="video.mng.rank"/></a>
+				<span class="label"><a id="DELETE_LOWER_RANK_VIDEO" onclick="setDELETE_LOWER_RANK_VIDEO()">${DELETE_LOWER_RANK_VIDEO}</a></span>
+			</li>
+			<li class="label-large">
+				<a onclick="actionFrame('<c:url value="/video/manager/removeLowerScoreVideo"/>', 'POST', 'Deleting Lower Score')"><s:message code="video.mng.score"/></a>
+				<span class="label"><a id="DELETE_LOWER_SCORE_VIDEO" onclick="setDELETE_LOWER_SCORE_VIDEO()">${DELETE_LOWER_SCORE_VIDEO}</a></span>
+			</li>
+			<li class="label-large">
+				<a onclick="actionFrame('<c:url value="/video/reload"/>', 'POST', 'Reloading')"><s:message code="video.reload.title"/></a>
+			</li>
+		</ul>
 	</div>
 </div>
 

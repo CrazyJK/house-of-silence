@@ -20,20 +20,22 @@ $(document).ready(function(){
 </head>
 <body>
 <div id="header_div" class="div-box">
-	<span class="label-large">
-		<s:message code="video.total"/> <s:message code="video.actress"/> : ${fn:length(actressList)}
-	</span>
-	<span class="label-large">
-		<input type="search" name="search" id="search" style="width:200px;" 
-			class="searchInput" placeHolder="<s:message code="video.search"/>" onkeyup="searchContent(this.value)"/>
-	</span>
-	<span class="label-large">
-		<c:forEach items="${sorts}" var="s">
-		<label class="item sort-item">
-			<input type="radio" name="sort" value="${s}" ${s eq sort ? 'checked' : ''}>
-			<span><s:message code="actress.sort.${s}"/></span></label>
-		</c:forEach>
-	</span>
+	<ul class="menu-item-ul">
+		<li class="label-large">
+			<s:message code="video.total"/> <s:message code="video.actress"/> : ${fn:length(actressList)}
+		</li>
+		<li class="label-large">
+			<input type="search" name="search" id="search" style="width:200px;" 
+				class="searchInput" placeHolder="<s:message code="video.search"/>" onkeyup="searchContent(this.value)"/>
+		</li>
+		<li class="label-large">
+			<c:forEach items="${sorts}" var="s">
+			<label class="item sort-item">
+				<input type="radio" name="sort" value="${s}" ${s eq sort ? 'checked' : ''}>
+				<span><s:message code="actress.sort.${s}"/></span></label>
+			</c:forEach>
+		</li>
+	</ul>
 </div>
 
 <div id="content_div" class="div-box">
@@ -41,15 +43,15 @@ $(document).ready(function(){
 		<c:forEach items="${actressList}" var="actress" varStatus="status">
 		<tr class="nowrap">
 			<td class="number">${status.count}</td>
-			<td class="${sort eq 'NAME' ? 'label' : ''}" onclick="fnViewActressDetail('${actress.name}')">${actress.name}</td>
-			<td>${actress.favorite ? '★' : ''}</td>
+			<td class="${sort eq 'NAME' ? 'sorted-column' : ''}" onclick="fnViewActressDetail('${actress.name}')">${actress.name}</td>
+			<td class="${sort eq 'FAVORITE' ? 'sorted-column' : ''}">${actress.favorite ? '★' : ''}</td>
 			<td>${actress.age}</td>
-			<td class="${sort eq 'BIRTH' ? 'label' : ''}">${actress.birth}</td>
-			<td class="${sort eq 'BODY' ? 'label' : ''}">${actress.bodySize}</td>
-			<td class="${sort eq 'HEIGHT' ? 'label' : ''}">${actress.height}</td>
-			<td class="${sort eq 'DEBUT' ? 'label' : ''}">${actress.debut}</td>
-			<td class="number ${sort eq 'VIDEO' ? 'label' : ''}">${fn:length(actress.videoList)}</td> 
-			<td class="number ${sort eq 'SCORE' ? 'label' : ''}">${actress.score}</td>
+			<td class="${sort eq 'BIRTH' ? 'sorted-column' : ''}">${actress.birth}</td>
+			<td class="${sort eq 'BODY' ? 'sorted-column' : ''}">${actress.bodySize}</td>
+			<td class="number ${sort eq 'HEIGHT' ? 'sorted-column' : ''}">${actress.height}</td>
+			<td class="number ${sort eq 'DEBUT' ? 'sorted-column' : ''}">${actress.debut}</td>
+			<td class="number ${sort eq 'VIDEO' ? 'sorted-column' : ''}">${fn:length(actress.videoList)}</td> 
+			<td class="number ${sort eq 'SCORE' ? 'sorted-column' : ''}">${actress.score}</td>
 			<td>
 				<c:forEach items="${actress.videoList}" var="video">
 				<span class="label" title="${video.title}" onclick="fnViewVideoDetail('${video.opus}')">${video.opus}</span>

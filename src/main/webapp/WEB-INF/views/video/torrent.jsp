@@ -15,6 +15,9 @@
 </style>
 <script type="text/javascript">
 var totalCandidatedVideo = 0;
+var MODE_TORRENT = 1;
+var MODE_CANDIDATED = 2;
+var isHideClickedTorrentButton = false;
 
 $(document).ready(function(){
 	$("#totalCandidatedVideo").html(totalCandidatedVideo);
@@ -31,8 +34,13 @@ $(document).ready(function(){
 });
 
 function fnGoSearch(opus) {
-	fnMarkChoice(opus);
 	popup('<c:url value="/video/torrent/search/"/>' + opus, 'torrentSearch', 900, 950);
+	if (isHideClickedTorrentButton) {
+		$("#check-" + opus).hide();
+	}
+	else {
+		fnMarkChoice(opus);
+	}
 }
 function fnSelectVideo(opus) {
 //	fnMarkChoice(opus);
@@ -46,18 +54,36 @@ function confirmAll() {
 		$(this).parent().parent().parent().hide();
 	}); 
 }
+function fnChangeMode(mode) {
+	if (mode == MODE_TORRENT) {
+		isHideClickedTorrentButton = true;
+		$(".torrentButton").css("height", "50px");
+	}
+	else if (mode == MODE_CANDIDATED) {
+		isHideClickedTorrentButton = false;
+		$(".torrentButton").css("height", "");
+	}
+}
 </script>
 </head>
 <body>
 
 <div id="header_div" class="div-box">
-	<span class="label-large">
-		<s:message code="video.torrent-summary" arguments="${fn:length(videoList)}"/><code id="totalCandidatedVideo"></code>
-	</span>
-	<label class="label-large">
-		<input type="search" id="searchInput" class="searchInput" placeHolder="<s:message code="video.search"/>" />
-	</label>
-	<span class="label-large" onclick="confirmAll()">Confirm all!!!</span>
+	<ul class="menu-item-ul">
+		<li class="label-large">
+			<s:message code="video.torrent-summary" arguments="${fn:length(videoList)}"/><code id="totalCandidatedVideo"></code>
+		</li>
+		<li class="label-large">Mode
+			<label><input type="radio" name="mode" onclick="fnChangeMode(MODE_CANDIDATED);" checked>File</label>
+			<label><input type="radio" name="mode" onclick="fnChangeMode(MODE_TORRENT);">Torrent</label>
+		</li>
+		<li class="label-large">
+			<input type="search" id="searchInput" class="searchInput" placeHolder="<s:message code="video.search"/>" />
+		</li>
+		<li class="label-large">
+			<a onclick="confirmAll()">Confirm all!!!</a>
+		</li>
+	</ul>
 </div>
 
 <div id="content_div" class="div-box" style="overflow:auto;">
@@ -74,10 +100,10 @@ function confirmAll() {
 			<td class="number">
 				${status.count}
 			</td>
-			<td class="label">
-				<span style="margin-right:10px;">
-					<a onclick="fnGoSearch('${video.opus}');">Torrent</a>
-				</span>
+			<td class="label torrentButton" onclick="fnGoSearch('${video.opus}');">
+				Torrent
+			</td>
+			<td>
 				<input value="${video.fullname}" class="text" style="width:600px;" onclick="fnViewVideoDetail('${video.opus}')" />
 			</td>
 			<td>

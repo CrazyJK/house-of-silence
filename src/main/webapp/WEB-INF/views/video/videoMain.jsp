@@ -137,16 +137,16 @@ function fnViewBGImage() {
 			<li id="opus-${video.opus}" class="li-box">
 				<div class="video-box">     <!-- ${status.count} -->             
 					<dl class="video-box-bg" style="background-image:url('<c:url value="/video/${video.opus}/cover" />');">
-						<dt><jk:video video="${video}" view="title"/></dt>
-						<dd><jk:video video="${video}" view="studio"/></dd>
-						<dd><jk:video video="${video}" view="opus"/></dd>
-						<dd><jk:video video="${video}" view="actress"/></dd>
-						<dd><jk:video video="${video}" view="video"/></dd>
-						<dd><jk:video video="${video}" view="cover"/></dd>
-						<dd><jk:video video="${video}" view="subtitles"/>
-							<jk:video video="${video}" view="overview"/>
-							<jk:video video="${video}" view="rank"/>
-							<jk:video video="${video}" view="score"/></dd>	
+						<dt><jk:video video="${video}" view="title" mode="s"/></dt>
+						<%-- <dd><jk:video video="${video}" view="studio" mode="s"/></dd> --%>
+						<%-- <dd><jk:video video="${video}" view="opus" mode="s"/></dd> --%>
+						<%-- <dd><jk:video video="${video}" view="actress" mode="s"/></dd> --%>
+						<dd><jk:video video="${video}" view="video" mode="s"/></dd>
+						<%-- <dd><jk:video video="${video}" view="cover"/></dd> --%>
+						<dd><jk:video video="${video}" view="subtitles" mode="s"/></dd>
+						<%-- <dd><jk:video video="${video}" view="overview"/></dd> --%>
+						<dd><jk:video video="${video}" view="rank" mode="s"/></dd>
+						<dd><jk:video video="${video}" view="score" mode="s"/></dd>
 					</dl>
 				</div>
 			</li>
