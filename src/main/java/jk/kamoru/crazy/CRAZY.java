@@ -12,6 +12,6 @@ public interface CRAZY extends JK {
 
 	public static final String SUFFIX_VIDEO = "avi,mpg,mkv,wmv,mp4,mov,rmvb";
 	public static final String SUFFIX_IMAGE = "jpg,jpeg,png";
-	public static final String SUFFIX_SUBTITLES = "smi,srt,ass";
+	public static final String SUFFIX_SUBTITLES = "smi,srt,ass,smil";
 	
 }

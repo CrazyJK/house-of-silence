@@ -58,7 +58,7 @@ function fnToggleFileinfo() {
 		<div id="fileinfoDiv" style="display:none; background-color:white; border-radius: 10px;" class="">
 			<ul>
 				<li><span class="label" onclick="opener.fnPlay('${video.opus}')" title="VIDEO ">${video.videoFileListPath}</span>
-				<li><span class="label" title="COVER">${video.coverFilePath}</span>
+				<li><span class="label" title="COVER" onclick="opener.fnImageView('${video.opus}')">${video.coverFilePath}</span>
 				<li><span class="label" title="INFO">${video.infoFilePath}</span>
 				
 				<c:if test="${video.subtitlesFileListPath ne ''}">
