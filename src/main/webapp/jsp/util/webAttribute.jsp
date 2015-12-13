@@ -6,16 +6,16 @@
 <title>Web Attribute</title>
 </head>
 <body>
-	<header>
+	<header class="page-header">
 		<h1>Web Attribute List</h1>
 	</header>
 
 	<article>
-		<section id="session-attribute">
-			<header>
-				<h3>Session attributes</h3>
+		<section id="session-attribute" class="panel">
+			<header class="panel-heading">
+				<h3 class="panel-title">Session attributes</h3>
 			</header>
-			<div>
+			<div class="panel-body">
 				<ol class="code-view">
 					<%
 						@SuppressWarnings("rawtypes")
@@ -38,11 +38,11 @@
 				</ol>
 			</div>
 		</section>
-		<section id="request-attribute">
-			<header>
-				<h3>Request attributes</h3>
+		<section id="request-attribute" class="panel">
+			<header class="panel-heading">
+				<h3 class="panel-title">Request attributes</h3>
 			</header>
-			<div>
+			<div class="panel-body">
 				<ol class="code-view">
 					<%
 						names = request.getAttributeNames();
