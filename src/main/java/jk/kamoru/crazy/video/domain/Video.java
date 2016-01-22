@@ -19,6 +19,7 @@ import jk.kamoru.crazy.video.VideoException;
 import jk.kamoru.crazy.video.service.HistoryService;
 import jk.kamoru.crazy.video.source.FileBaseVideoSource;
 import jk.kamoru.crazy.video.util.VideoUtils;
+import jk.kamoru.util.ArrayUtils;
 import jk.kamoru.util.FileUtils;
 import jk.kamoru.util.StringUtils;
 import net.sf.json.JSONObject;
@@ -298,7 +299,7 @@ public class Video extends CrazyProperties implements Comparable<Video>, Seriali
 	 */
 	public String getEtcFileListPath() {
 		if(isExistEtcFileList())
-			return VideoUtils.arrayToString(getEtcFileList());
+			return ArrayUtils.toStringComma(getEtcFileList());
 		return "";
 	}
 	
@@ -411,7 +412,7 @@ public class Video extends CrazyProperties implements Comparable<Video>, Seriali
 	 */
 	public String getSubtitlesFileListPath() {
 		if(isExistSubtitlesFileList())
-			return VideoUtils.arrayToString(getSubtitlesFileList());
+			return ArrayUtils.toStringComma(getSubtitlesFileList());
 		return "";
 	}
 
@@ -459,7 +460,7 @@ public class Video extends CrazyProperties implements Comparable<Video>, Seriali
 	 */
 	public String getVideoFileListPath() {
 		if(isExistVideoFileList()) 
-			return VideoUtils.arrayToString(getVideoFileList()); 
+			return ArrayUtils.toStringComma(getVideoFileList()); 
 		return "";
 	}
 	

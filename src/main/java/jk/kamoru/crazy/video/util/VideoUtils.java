@@ -11,7 +11,6 @@ import java.util.Comparator;
 import java.util.List;
 
 import jk.kamoru.crazy.video.domain.Video;
-import jk.kamoru.util.ArrayUtils;
 import jk.kamoru.util.FileUtils;
 import jk.kamoru.util.StringUtils;
 import net.sf.json.JSONArray;
@@ -24,17 +23,16 @@ import net.sf.json.JSONObject;
  */
 public class VideoUtils {
 
-	/**
-	 * 배열을 컴마(,)로 구분한 문자열로 반환. a, b<br>
-	 * ArrayUtils.toString() 이용
-	 * 
-	 * @param array
-	 * @return string of a, b style
-	 */
-	public static String arrayToString(Object array) {
-		String toString = ArrayUtils.toString(array, "");
-		return toString.substring(1, toString.length() - 1);
-	}
+//	/**
+//	 * 배열을 컴마(,)로 구분한 문자열로 반환. a, b<br>
+//	 * ArrayUtils.toString() 이용
+//	 * 
+//	 * @param array
+//	 * @return string of a, b style
+//	 */
+//	public static String arrayToString(Object array) {
+//		return StringUtils.replaceEach(ArrayUtils.toString(array, "{}"), new String[] {"{", "}"}, new String[] {"", ""});
+//	}
 
 	/**
 	 * 같은 배우 이름인지 확인
