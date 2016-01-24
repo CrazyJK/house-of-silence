@@ -9,36 +9,37 @@
 			<param name="ConversionPattern" value="%-20t> %d{HH:mm:ss} %-5p %21C{1}.%-21M - %m%n" />
 		</layout>
 	</appender>
+
+	<appender name="SPRING" class="org.apache.log4j.RollingFileAppender">
+		<param name="append" value="false" />
+		<param name="maxFileSize" value="10MB" />
+		<param name="maxBackupIndex" value="10" />
+		<param name="file" value="${catalina.home}/logs/spring.log" />
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="[%t] %d{yyyy-MM-dd HH:mm:ss} %-5p %c{1}:%L - %m%n" />
+		</layout>
+	</appender>
+
+	<appender name="KAMORU" class="org.apache.log4j.DailyRollingFileAppender">
+		<param name="file" value="${catalina.home}/logs/jk.kamoru.crazy.log" />
+		<param name="DatePattern" value="'.'yyyy-MM-dd" />
+		<param name="maxBackupIndex" value="7" />
+      	<param name="append" value="true" />		
+      	<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="[%t] %d{HH:mm:ss,SSS} %-5p %l - %m%n" />
+		</layout>
+	</appender>
 	
 	<!-- Application Loggers -->
-	<logger name="jk.kamoru.crazy">
+	<logger name="jk.kamoru">
 		<level value="info" />
-	</logger>
-	<logger name="jk.kamoru.spring">
-		<level value="info" />
-	</logger>
-	<logger name="jk.kamoru.web">
-		<level value="info" />
-	</logger>
-	<logger name="jk.kamoru.util">
-		<level value="info" />
+		<appender-ref ref="KAMORU" />
 	</logger>
 	
 	<!-- 3rdparty Loggers -->
-	<logger name="org.springframework.core">
+	<logger name="org.springframework">
 		<level value="warn" />
-	</logger>
-	
-	<logger name="org.springframework.beans">
-		<level value="warn" />
-	</logger>
-	
-	<logger name="org.springframework.context">
-		<level value="warn" />
-	</logger>
-
-	<logger name="org.springframework.web">
-		<level value="warn" />
+		<appender-ref ref="SPRING" />
 	</logger>
 
 	<!-- Root Logger -->
