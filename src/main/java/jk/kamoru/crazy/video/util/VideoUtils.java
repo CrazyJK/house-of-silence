@@ -326,6 +326,22 @@ public class VideoUtils {
 		}
 	}
 
+	/**
+	 * 비디오 현재 폴더에서 릴리즈 날자를 기준으로 yyyy-mm 형식의 하위 폴더를 만든다.
+	 * @param video
+	 * @return 생성된 폴더 위치
+	 */
+	public static String makeSubPathByReleaseDate(Video video) {
+		if (!StringUtils.isEmpty(video.getReleaseDate())) {
+			File subDir = new File(video.getDelegatePathFile(), StringUtils.substring(video.getReleaseDate(), 0, 7).replace(".", "-"));
+			if (!subDir.exists()) {
+				subDir.mkdir();
+			}
+			return subDir.getAbsolutePath();
+		}
+		return video.getDelegatePath();
+	}
+	
 	public static void main(String[] args) throws Exception {
 		// VideoUtils.changeOldNameStyle("E:\\AV_JAP",
 		// "E:\\AV_JAP\\unclassified");

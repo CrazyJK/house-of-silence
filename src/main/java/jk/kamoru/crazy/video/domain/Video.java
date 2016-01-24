@@ -7,12 +7,14 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Pattern;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
+import jk.kamoru.crazy.CRAZY;
 import jk.kamoru.crazy.CrazyProperties;
 import jk.kamoru.crazy.video.VIDEO;
 import jk.kamoru.crazy.video.VideoException;
@@ -44,7 +46,7 @@ import org.springframework.stereotype.Component;
 @Scope("prototype")
 @XmlRootElement(name = "video", namespace = "http://www.w3.org/2001/XMLSchema-instance")
 @XmlAccessorType(XmlAccessType.FIELD)
-public class Video extends CrazyProperties implements Comparable<Video>, Serializable {
+public class Video extends CrazyProperties implements Comparable<Video>, Serializable, CRAZY {
 
 	private static final long serialVersionUID = VIDEO.SERIAL_VERSION_UID;
 
@@ -97,12 +99,35 @@ public class Video extends CrazyProperties implements Comparable<Video>, Seriali
 		overview 	= "";
 	}
 	
-	/**
-	 * 비디오 파일이 있으면, 나머지 파일을 같은 위치에 모은다.
+	/** 파일 위치 정렬<br>
+	 *  비디오 파일이 있고, {@link #STAGE} 폴더에 위치해 있으면, 월별로 구분해 이동<br>
+	 *  커버 파일만 있고, {@link #COVER} 폴더에 위치해 있으면, 월별로 구분해 이동.
 	 */
 	public void arrange() {
 		logger.trace(opus);
+
+		if (StringUtils.isEmpty(studio.getName()) 
+				|| StringUtils.isEmpty(opus)
+				|| StringUtils.isEmpty(title)
+				|| StringUtils.isEmpty(releaseDate)
+				|| !Pattern.matches(REGEX_DATE, releaseDate)
+				) {
+			logger.warn("Check video : [{}] [{}] [{}] [{}]", studio.getName(), opus, title, releaseDate);
+		}
+		
 		if (this.isExistVideoFileList()) {
+			if (StringUtils.endsWith(this.getDelegatePath(), STAGE))
+				move(VideoUtils.makeSubPathByReleaseDate(this));
+			else
+				move(this.getDelegatePath());
+		}
+		else if (this.isExistCoverFile()) {
+			if (StringUtils.endsWith(this.getDelegatePath(), COVER))
+				move(VideoUtils.makeSubPathByReleaseDate(this));
+			else
+				move(this.getDelegatePath());
+		}
+		else {
 			move(this.getDelegatePath());
 		}
 	}
@@ -118,6 +143,8 @@ public class Video extends CrazyProperties implements Comparable<Video>, Seriali
 			return StringUtils.compareToIgnoreCase(this.getTitle(), comp.getTitle());
 		case A:
 			return StringUtils.compareToIgnoreCase(this.getActressName(), comp.getActressName());
+		case D:
+			return StringUtils.compareToIgnoreCase(this.getReleaseDate(), comp.getReleaseDate());
 		case M:
 			return this.getDelegateFile().lastModified() > comp.getDelegateFile().lastModified() ? 1 : -1;
 		case P:
@@ -443,7 +470,7 @@ public class Video extends CrazyProperties implements Comparable<Video>, Seriali
 	 * @return date of video
 	 */
 	public String getVideoDate() {
-		return DateFormatUtils.format(this.getDelegateFile().lastModified(), "yyyy-MM-dd");
+		return DateFormatUtils.format(this.getDelegateFile().lastModified(), VIDEO.DATE_PATTERN);
 	}
 
 	/**
@@ -573,8 +600,8 @@ public class Video extends CrazyProperties implements Comparable<Video>, Seriali
 					break;
 				}
 				try {
-					logger.debug("attempt to move file from {} to {}", file.getAbsolutePath(), destFile.getAbsolutePath());
 					FileUtils.moveFileToDirectory(file, destFile, false);
+					logger.info("move file from {} to {}", file.getAbsolutePath(), destFile.getAbsolutePath());
 				} catch (FileExistsException fe) {
 					logger.warn("File exist, then delete ", fe);
 					FileUtils.deleteQuietly(file);

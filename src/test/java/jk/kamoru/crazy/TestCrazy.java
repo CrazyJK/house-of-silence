@@ -1,6 +1,6 @@
 package jk.kamoru.crazy;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 
 import java.util.regex.Pattern;
 
@@ -33,5 +33,23 @@ public class TestCrazy {
 		String[] someArray = new String[]{};
 		assertEquals(ArrayUtils.toStringComma(someArray), "");
 		assertEquals(ArrayUtils.toStringComma(null), "");
+	}
+	
+	@Test
+	public void testSubstring() {
+		String releaseDate = "2015.11.11";
+		String subPath = releaseDate.substring(0, 7).replace(".", "-");
+		assertEquals(subPath, "2015-11");
+	}
+	
+	@Test
+	public void testDatePattern() {
+		String regex = CRAZY.REGEX_DATE;
+
+		assertFalse("Date: matched.", Pattern.matches(regex, "2011.1.1"));
+		assertFalse("Date: matched.", Pattern.matches(regex, "2011.01.1"));
+		assertFalse("Date: matched.", Pattern.matches(regex, "2011.1.01"));
+		assertTrue("Date: matched.", Pattern.matches(regex, "2011.01.01"));
+		assertFalse("Date (month): not matched.", Pattern.matches(regex, "2011.13.1"));
 	}
 }

@@ -13,6 +13,8 @@ public enum Sort {
 	T("Title"), 
 	/** actress name sort */
 	A("Actress"), 
+	/** Release date */
+	D("Release"),
 	/** file modified date sort */
 	M("Modified"), 
 	/** play count sort */
