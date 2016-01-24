@@ -1,3 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sitemesh>
 <sitemesh>
 
 	<!-- Map default decorator. This shall be applied to all paths if no other paths match. -->
