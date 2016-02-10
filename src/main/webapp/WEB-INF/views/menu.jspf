@@ -5,14 +5,15 @@
 <section>
 	<h4>Video</h4>
 	<ul>
-		<li><a href="<c:url value="/video"/>">Video Main</a>
+		<li><a href="<c:url value="/video"/>">Video main</a>
+		<li><a href="<c:url value="/video/archive"/>">Video archive</a>
 		<li><a href="<c:url value="/video/search"/>">Video search</a>
 		<li><a href="<c:url value="/video/list"/>">Video list</a>
 		<li><a href="<c:url value="/video/actress"/>">Actress list</a>
-		<li><a href="<c:url value="/video/studio"/>">Studio List</a>
+		<li><a href="<c:url value="/video/studio"/>">Studio list</a>
 		<li><a href="<c:url value="/video/briefing"/>">Video briefing</a>
-		<li><a href="<c:url value="/video/torrent"/>">Video Torrent</a>
-		<li><a href="<c:url value="/video/parseToTitle"/>">parse to title</a>
+		<li><a href="<c:url value="/video/torrent"/>">Video torrent</a>
+		<li><a href="<c:url value="/video/parseToTitle"/>">Parse to title</a>
 	</ul>
 </section>
 </security:authorize>

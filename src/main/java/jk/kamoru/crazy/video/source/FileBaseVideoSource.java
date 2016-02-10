@@ -53,13 +53,16 @@ public class FileBaseVideoSource implements VideoSource {
 	
 	// property
 	private String[] paths;
+	private boolean isArchive;
 
 	// property setter
 	public void setPaths(String...paths) {
 		logger.info(ArrayUtils.toString(paths, "IS NULL"));
 		this.paths = paths;
 	}
-	
+	public void setArchive(boolean isArchive) {
+		this.isArchive = isArchive;
+	}
 	/**
 	 * 기존에 만든적이 없으면, video source를 로드를 호출한다.
 	 */
@@ -179,6 +182,7 @@ public class FileBaseVideoSource implements VideoSource {
 					video.setTitle(title);
 					video.setReleaseDate(releaseDate);
 					video.setEtcInfo(etcInfo);
+					video.setArchive(isArchive);
 					videoMap.put(opus.toLowerCase(), video);
 					logger.trace("add video - {}", video);
 				}
@@ -257,7 +261,10 @@ public class FileBaseVideoSource implements VideoSource {
 		if (videoMap.containsKey(opus.toLowerCase()))
 			return videoMap.get(opus.toLowerCase());
 		else
-			throw new VideoNotFoundException(opus);
+			if (isArchive)
+				return new Video();
+			else
+				throw new VideoNotFoundException(opus);
 	}
 	@Override
 	public Studio getStudio(String name) {
@@ -265,7 +272,10 @@ public class FileBaseVideoSource implements VideoSource {
 		if (studioMap.containsKey(name.toLowerCase()))
 			return studioMap.get(name.toLowerCase());
 		else
-			throw new StudioNotFoundException(name);
+			if (isArchive)
+				return new Studio();
+			else
+				throw new StudioNotFoundException(name);
 	}
 	@Override
 	public Actress getActress(String name) {
@@ -273,7 +283,10 @@ public class FileBaseVideoSource implements VideoSource {
 		if (actressMap.containsKey(VideoUtils.sortForwardName(name)))
 			return actressMap.get(VideoUtils.sortForwardName(name));
 		else
-			throw new ActressNotFoundException(name);
+			if (isArchive)
+				return new Actress();
+			else
+				throw new ActressNotFoundException(name);
 	}
 	@Override
 	public List<Video> getVideoList() {

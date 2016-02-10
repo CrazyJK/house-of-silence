@@ -353,7 +353,8 @@ tr.nowrap td {
 	text-align:center;
 }
 .item-selectBox {
-	border:0;
+	border: 0;
+	max-width: 80px;
 }
 .rangeLabel {
 	background-color: rgba(255,255,0, 0.75); 

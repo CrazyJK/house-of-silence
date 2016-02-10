@@ -51,14 +51,14 @@ public class VideoDaoFile implements VideoDao {
 		try {
 			return instanceVideoSource.getVideo(opus);
 		} catch (VideoNotFoundException e) {
-			return archiveVideoSource.getVideo(opus).setArchive(true);
+			return archiveVideoSource.getVideo(opus);
 		}
 	}
 
 	@Override
 	public Video getArchiveVideo(String opus) {
 		logger.trace(opus);
-		return archiveVideoSource.getVideo(opus).setArchive(true);
+		return archiveVideoSource.getVideo(opus);
 	}
 	
 	@Override
@@ -117,6 +117,11 @@ public class VideoDaoFile implements VideoDao {
 		} catch (VideoException e) {
 			return false;
 		}
+	}
+
+	@Override
+	public List<Video> getArchiveVideoList() {
+		return archiveVideoSource.getVideoList();
 	}
 
 

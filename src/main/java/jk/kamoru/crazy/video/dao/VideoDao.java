@@ -86,4 +86,10 @@ public interface VideoDao {
 	 * @return
 	 */
 	Video getArchiveVideo(String opus);
+
+	/**
+	 * archive video list
+	 * @return video list
+	 */
+	List<Video> getArchiveVideoList();
 }

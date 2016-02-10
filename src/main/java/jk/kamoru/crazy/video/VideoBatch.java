@@ -84,7 +84,7 @@ public class VideoBatch extends CrazyProperties {
 		logger.info("BATCH Video END. Elapsed time : {} ms", elapsedTime);
 	}
 	
-	@Scheduled(cron="0 */1 * * * *")
+	@Scheduled(fixedDelay = 1000 * 60)
 	public synchronized void moveFile() {
 		logger.debug("BATCH File move START {}", ArrayUtils.toStringComma(PATH_MOVE_FILE));
 
@@ -128,6 +128,12 @@ public class VideoBatch extends CrazyProperties {
 		}
 		
 		logger.debug("BATCH File move END");
+	}
+	
+	@Scheduled(fixedRate = 1000 * 60 * 60)
+	public synchronized void arrangeArchive() {
+		logger.info("BATCH - arrange archive video");
+		videoService.arrangeArchiveVideo();
 	}
 	
 }

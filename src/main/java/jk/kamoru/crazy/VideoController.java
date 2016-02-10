@@ -413,6 +413,20 @@ public class VideoController extends AbstractController {
 		return "video/videoMain";
 	}
 
+	@RequestMapping("/archive")
+	public String videoArchive(Model model, @ModelAttribute VideoSearch videoSearch) {
+		logger.trace("{}", videoSearch);
+		List<Video> videoList =  videoService.searchVideoInArchive(videoSearch);
+
+		model.addAttribute("views", 		View.values());
+		model.addAttribute("sorts", 		Sort.values());
+		model.addAttribute("videoList", 	videoList);
+//		model.addAttribute("actressList", 	videoService.getActressListInVideoList(videoList));
+//		model.addAttribute("studioList", 	videoService.getStudioListInVideoList(videoList));
+		model.addAttribute("bgImageCount", 	imageService.getImageSourceSize());
+		return "video/videoArchive";
+	}
+	
 	/**reload video source
 	 * @param model
 	 */

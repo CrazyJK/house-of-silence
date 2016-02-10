@@ -136,6 +136,7 @@ loading(true, "Loading...");
 		<li><a href="<c:url value="/video/briefing"/>"><s:message code="video.briefing"/></a>
 		<li><a href="<c:url value="/video/torrent"/>"><s:message code="video.torrent"/></a>
 		<li><a href="<c:url value="/video/parseToTitle"/>"><s:message code="video.parseToTitle"/></a>
+		<li><a href="<c:url value="/video/archive"/>">Archive</a>
 		<li><a href="<c:url value="/home"/>"><s:message code="default.home"/></a>
 	</ul>
 </nav>

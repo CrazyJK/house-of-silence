@@ -12,6 +12,24 @@
 #searchInput {
 	width:200px;
 }
+#currentVideo {
+	margin: 5px;
+	font-size: 0.8em;
+	display: none; 
+	position: absolute; 
+	top: 60px; 
+	left: 0px; 
+	width: 100%; 
+	height: 50px; 
+	background-color: rgb(231, 231, 120); 
+	overflow: hidden; 
+	margin: 0; 
+	padding: 0; 
+	z-index: 99;
+}
+#currentVideo > p {
+	margin: 8px;
+}
 </style>
 <script type="text/javascript">
 var totalCandidatedVideo = 0;
@@ -37,6 +55,9 @@ function fnGoSearch(opus) {
 	popup('<c:url value="/video/torrent/search/"/>' + opus, 'torrentSearch', 900, 950);
 	if (isHideClickedTorrentButton) {
 		$("#check-" + opus).hide();
+		$("#currentVideo").hide();
+		$("#currentVideo > p").html($("#fullname-"+opus).val());
+		$("#currentVideo").fadeIn('slow');
 	}
 	else {
 		fnMarkChoice(opus);
@@ -86,6 +107,10 @@ function fnChangeMode(mode) {
 	</ul>
 </div>
 
+<div id="currentVideo" class="div-box" style="">
+	<p></p>
+</div>
+
 <div id="content_div" class="div-box" style="overflow:auto;">
 	<table class="video-table">
 		<c:if test="${empty videoList}">
@@ -104,7 +129,7 @@ function fnChangeMode(mode) {
 				Torrent
 			</td>
 			<td>
-				<input value="${video.fullname}" class="text" style="width:600px;" onclick="fnViewVideoDetail('${video.opus}')" />
+				<input id="fullname-${video.opus}" value="${video.fullname}" class="text" style="width:600px;" onclick="fnViewVideoDetail('${video.opus}')" />
 			</td>
 			<td>
 				<c:forEach items="${video.videoCandidates}" var="candidate">

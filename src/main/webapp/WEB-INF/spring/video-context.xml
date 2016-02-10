@@ -16,6 +16,7 @@
 	</bean>
 	<bean id="archiveVideoSource" class="jk.kamoru.crazy.video.source.FileBaseVideoSource">
 		<property name="paths" value="#{local['path.video.archive']}" />
+		<property name="archive" value="true"/>
 	</bean>
 	
 	<!-- AOP : VideoSource.load() -->	

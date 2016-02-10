@@ -1066,14 +1066,61 @@ public class VideoServiceImpl extends CrazyProperties implements VideoService {
 
 	@Override
 	public void resetVideoScore(String opus) {
+		log.trace("resetVideoScore - {}", opus);
 		videoDao.getVideo(opus).resetScore();
 		videoDao.reload();
 	}
 
 	@Override
 	public void resetWrongVideo(String opus) {
+		log.trace("resetWrongVideo - {}", opus);
 		videoDao.getVideo(opus).moveOutside();
 		videoDao.getVideo(opus).resetScore();
 		videoDao.reload();
 	}
+
+	@Override
+	public void arrangeArchiveVideo() {
+		log.trace("arrangeArchiveVideo");
+		for (Video video : videoDao.getArchiveVideoList()) {
+			video.arrange();
+		}
+	}
+
+	@Override
+	public List<Video> searchVideoInArchive(VideoSearch search) {
+		log.trace("{}", search);
+		if (search.getRankRange() == null)
+			search.setRankRange(getRankRange());
+		
+		List<Video> foundList = new ArrayList<Video>();
+		for (Video video : videoDao.getArchiveVideoList()) {
+			if ((VideoUtils.equals(video.getStudio().getName(), search.getSearchText()) 
+					|| VideoUtils.equals(video.getOpus(), search.getSearchText()) 
+					|| VideoUtils.containsName(video.getTitle(), search.getSearchText()) 
+					|| VideoUtils.containsActress(video, search.getSearchText())
+					|| VideoUtils.containsName(video.getReleaseDate(), search.getSearchText())) 
+				&& (search.isAddCond()   
+						? ((search.isExistVideo() ? video.isExistVideoFileList() : !video.isExistVideoFileList())
+							&& (search.isExistSubtitles() ? video.isExistSubtitlesFileList() : !video.isExistSubtitlesFileList())) 
+						: true)
+//				&& (search.getSelectedStudio() == null ? true : search.getSelectedStudio().contains(video.getStudio().getName()))
+//				&& (search.getSelectedActress() == null ? true : VideoUtils.containsActress(video, search.getSelectedActress()))
+//				&& (rankMatch(video.getRank(), search.getRankRange()))
+//				&& (playCountMatch(video.getPlayCount(), search.getPlayCount()))
+				) 
+			{
+				video.setSortMethod(search.getSortMethod());
+				foundList.add(video);
+			}
+		}
+		if (search.isSortReverse())
+			Collections.sort(foundList, Collections.reverseOrder());
+		else
+			Collections.sort(foundList);
+
+		log.debug("found video list size {}", foundList.size());
+		return foundList;
+	}
+
 }

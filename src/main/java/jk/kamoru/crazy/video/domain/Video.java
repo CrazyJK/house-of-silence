@@ -112,23 +112,30 @@ public class Video extends CrazyProperties implements Comparable<Video>, Seriali
 				|| StringUtils.isEmpty(releaseDate)
 				|| !Pattern.matches(REGEX_DATE, releaseDate)
 				) {
-			logger.warn("Check video : [{}] [{}] [{}] [{}]", studio.getName(), opus, title, releaseDate);
-		}
-		
-		if (this.isExistVideoFileList()) {
-			if (StringUtils.endsWith(this.getDelegatePath(), STAGE))
-				move(VideoUtils.makeSubPathByReleaseDate(this));
-			else
-				move(this.getDelegatePath());
-		}
-		else if (this.isExistCoverFile()) {
-			if (StringUtils.endsWith(this.getDelegatePath(), COVER))
-				move(VideoUtils.makeSubPathByReleaseDate(this));
-			else
-				move(this.getDelegatePath());
+			logger.warn("Check video : [{}] [{}] archive={} [{}]", opus, releaseDate, isArchive, getDelegatePath());
 		}
 		else {
-			move(this.getDelegatePath());
+			if (isArchive) {
+				if (StringUtils.endsWith(this.getDelegatePath(), ARCHIVE))
+					move(VideoUtils.makeSubPathByReleaseDate(this));
+			}
+			else {
+				if (this.isExistVideoFileList()) {
+					if (StringUtils.endsWith(this.getDelegatePath(), STAGE))
+						move(VideoUtils.makeSubPathByReleaseDate(this));
+					else
+						move(this.getDelegatePath());
+				}
+				else if (this.isExistCoverFile()) {
+					if (StringUtils.endsWith(this.getDelegatePath(), COVER))
+						move(VideoUtils.makeSubPathByReleaseDate(this));
+					else
+						move(this.getDelegatePath());
+				}
+				else {
+					move(this.getDelegatePath());
+				}
+			}
 		}
 	}
 
@@ -1085,9 +1092,8 @@ public class Video extends CrazyProperties implements Comparable<Video>, Seriali
 	 * @param isArchive the isArchive to set
 	 * @return this video
 	 */
-	public Video setArchive(boolean isArchive) {
+	public void setArchive(boolean isArchive) {
 		this.isArchive = isArchive;
-		return this;
 	}
 
 	public int getSize() {

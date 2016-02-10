@@ -275,5 +275,12 @@ public interface VideoService {
 	 * @param opus
 	 */
 	void resetWrongVideo(String opus);
+
+	/**
+	 * arrange archive video by yyyy-MM
+	 */
+	void arrangeArchiveVideo();
+
+	List<Video> searchVideoInArchive(VideoSearch videoSearch);
 	
 }
