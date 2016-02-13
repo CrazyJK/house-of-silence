@@ -8,6 +8,7 @@
  * @param spec if null, default is <code>toolbar=0,location=0,directories=0,titlebar=0,status=0,menubar=0,scrollbars=1,resizable=1</code>
  */
 function popup(url, name, width, height, positionMethod, spec) {
+//	alert("[common.js] Call popup : " + url + " , " + name);
 	var vUrl = url;
 	var vName = name.replace(/-/gi, '');
 	if (!width)
@@ -40,7 +41,10 @@ function popup(url, name, width, height, positionMethod, spec) {
 	specs = "width="+width+",height="+height+",top="+top+", left="+left + "," + specs;
 //	alert(vUrl + " - " + vName + " - " + specs);
 	var popupWindow = window.open(vUrl, vName, specs);
-	popupWindow.focus();
+//	alert("[common.js] Call window.open");
+	try {
+		popupWindow.focus();
+	} catch (ignore_chrome) {}
 }
 function popupImage(url, name) {
 	if (!name)

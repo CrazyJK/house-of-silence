@@ -20,6 +20,7 @@ import jk.kamoru.crazy.video.domain.VideoSearch;
 import jk.kamoru.crazy.video.domain.View;
 import jk.kamoru.crazy.video.service.HistoryService;
 import jk.kamoru.crazy.video.service.VideoService;
+import jk.kamoru.crazy.video.util.CoverUtils;
 import jk.kamoru.crazy.video.util.VideoUtils;
 import jk.kamoru.util.FileUtils;
 import jk.kamoru.util.StringUtils;
@@ -265,6 +266,16 @@ public class VideoController extends AbstractController {
 		return httpEntity(videoService.getVideoCoverByteArray(opus), FileUtils.getExtension(imageFile));
 	}
 	
+	@RequestMapping(value="/{opus}/cover/title", method=RequestMethod.GET)
+	public HttpEntity<byte[]> videoCoverWithTitle(@PathVariable String opus) throws IOException {
+		logger.trace("{}", opus);
+		Video video = videoService.getVideo(opus);
+		File imageFile = video.getCoverFile();
+		if(imageFile == null)
+			return null;
+		return httpEntity(CoverUtils.getCoverWithTitle(imageFile, video.getTitle()), FileUtils.getExtension(imageFile));
+	}
+	
 	/**display video overview view
 	 * @param model
 	 * @param opus
@@ -444,6 +455,9 @@ public class VideoController extends AbstractController {
 	 * @return image entity
 	 */
 	private HttpEntity<byte[]> httpEntity(byte[] imageBytes, String suffix) {
+		if (imageBytes == null)
+			return null;
+		
 		long today = new Date().getTime();
 		
 		HttpHeaders headers = new HttpHeaders();

@@ -30,13 +30,29 @@
 </style>
 <script type="text/javascript">
 bgContinue = false;
-$(document).ready(function(){
-	popup('<c:url value="/video/${video.opus}/cover"/>', 'SearchTorrentCover');
+//popup('<c:url value="/video/${video.opus}/cover/title"/>', 'SearchTorrentCover', 800, 600);
+//window.open('<c:url value="/video/${video.opus}/cover/title"/>', 'SearchTorrentCover')
+$(document).ready(function() {
 	location.href = '<s:eval expression="@prop['url.search.torrent']"/>${video.opus}';
 });
 </script>
 </head>
 <body>
+
+<div class="div-box">
+	<h3>Image Popup</h3>
+	<p>
+		<a href='<c:url value="/video/${video.opus}/cover/title"/>' target="_blank"><c:url value="/video/${video.opus}/cover/title"/></a>
+	</p>
+</div>
+
+<div class="div-box">
+	<h3>Search Torrent</h3>
+	<div>
+		<a href='<s:eval expression="@prop['url.search.torrent']"/>${video.opus}' target="_blank"><s:eval expression="@prop['url.search.torrent']"/>${video.opus}</a>
+	</div>
+</div>	
+	
 <%-- 
 <div id="header_div" class="div-box">
 	<span style="font-size:12px;">${video.fullname}</span>

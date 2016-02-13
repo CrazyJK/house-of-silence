@@ -52,7 +52,9 @@ $(document).ready(function(){
 });
 
 function fnGoSearch(opus) {
+	popup('<c:url value="/video/"/>' + opus + '/cover/title', 'SearchTorrentCover');
 	popup('<c:url value="/video/torrent/search/"/>' + opus, 'torrentSearch', 900, 950);
+
 	if (isHideClickedTorrentButton) {
 		$("#check-" + opus).hide();
 		$("#currentVideo").hide();

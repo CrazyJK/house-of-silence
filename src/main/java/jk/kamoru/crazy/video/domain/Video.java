@@ -224,7 +224,6 @@ public class Video extends CrazyProperties implements Comparable<Video>, Seriali
 			return FileUtils.readFileToByteArray(coverFile);
 		} catch (IOException e) {
 			logger.error("read cover file error", e);
-			e.printStackTrace();
 			return null;
 		}
 	}
