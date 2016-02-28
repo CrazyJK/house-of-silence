@@ -672,7 +672,7 @@ public class VideoServiceImpl extends CrazyProperties implements VideoService {
 
 			// 비디오를 옮긴다
 			countOfMoveVideo++;
-			log.info("    move {} to {}", video.getTitle(), destDir.getPath());
+			log.info("    {} move from [{}] to [{}]", video.getFullname(), video.getDelegatePathFile().getParent(), destDir.getPath());
 			videoDao.moveVideo(video.getOpus(), destDir.getAbsolutePath());
 			
 			// 다 옮겼으면 break

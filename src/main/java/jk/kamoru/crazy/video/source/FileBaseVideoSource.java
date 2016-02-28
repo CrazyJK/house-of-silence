@@ -262,7 +262,7 @@ public class FileBaseVideoSource implements VideoSource {
 			return videoMap.get(opus.toLowerCase());
 		else
 			if (isArchive)
-				return new Video();
+				return null;
 			else
 				throw new VideoNotFoundException(opus);
 	}
