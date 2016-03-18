@@ -1,6 +1,7 @@
 package jk.kamoru.crazy.video.service;
 
 import java.io.File;
+import java.io.FileFilter;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -1121,6 +1122,36 @@ public class VideoServiceImpl extends CrazyProperties implements VideoService {
 
 		log.debug("found video list size {}", foundList.size());
 		return foundList;
+	}
+
+	@Override
+	public void arrangeSubFolder() {
+		log.info("arrangeSubFolder START");
+		// ARCHIVE_PATHS, STORAGE_PATHS, STAGE_PATHS
+		List<File> folders = new ArrayList<File>();
+		folders.add(new File(ARCHIVE_PATHS));
+		for (String storage : STORAGE_PATHS)
+			folders.add(new File(storage));
+		for (String stage : STAGE_PATHS)
+			folders.add(new File(stage));
+			
+		for (File path : folders) {
+			File[] dirs = path.listFiles(new FileFilter() {
+
+				@Override
+				public boolean accept(File file) {
+					return file.isDirectory();
+				}});
+			log.info("  scan {} - {}", path, dirs);
+			for (File dir : dirs) {
+				log.info("    check {}", dir);
+				if (FileUtils.isEmptyDirectory(dir)) {
+					log.info("      attempt to delete {}", dir);
+					dir.delete();
+				}
+			}
+		}
+		log.info("arrangeSubFolder END");
 	}
 
 }

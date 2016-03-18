@@ -282,5 +282,7 @@ public interface VideoService {
 	void arrangeArchiveVideo();
 
 	List<Video> searchVideoInArchive(VideoSearch videoSearch);
+
+	void arrangeSubFolder();
 	
 }

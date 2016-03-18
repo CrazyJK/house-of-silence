@@ -135,5 +135,10 @@ public class VideoBatch extends CrazyProperties {
 		logger.info("BATCH - arrange archive video");
 		videoService.arrangeArchiveVideo();
 	}
-	
+
+	@Scheduled(fixedRate = 1000 * 60 * 13)
+	public synchronized void arrangeSubFolder() {
+		logger.info("BATCH - arrange sub-folder");
+		videoService.arrangeSubFolder();
+	}
 }
