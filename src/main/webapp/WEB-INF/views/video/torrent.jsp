@@ -30,6 +30,9 @@
 #currentVideo > p {
 	margin: 8px;
 }
+.clicked {
+	background-color: lightgreen;
+}
 </style>
 <script type="text/javascript">
 var totalCandidatedVideo = 0;
@@ -64,8 +67,9 @@ function fnGoSearch(opus) {
 	else {
 		fnMarkChoice(opus);
 	}
+	$("#check-" + opus).addClass("clicked");
 }
-function fnSelectVideo(opus) {
+function fnSelectCandidateVideo(opus) {
 //	fnMarkChoice(opus);
 	$("#check-" + opus).hide();
 	$("#totalCandidatedVideo").html(--totalCandidatedVideo);
@@ -137,7 +141,7 @@ function fnChangeMode(mode) {
 				<c:forEach items="${video.videoCandidates}" var="candidate">
 				<form method="post" target="ifrm" action="<c:url value="/video/${video.opus}/confirmCandidate"/>">
 					<input type="hidden" name="path" value="${candidate.absolutePath}"/>
-					<input type="submit" value="${candidate.name}" onclick="fnSelectVideo('${video.opus}');"/>
+					<input type="submit" value="${candidate.name}" onclick="fnSelectCandidateVideo('${video.opus}');"/>
 				</form>
 				<script type="text/javascript">
 					totalCandidatedVideo += 1;	
