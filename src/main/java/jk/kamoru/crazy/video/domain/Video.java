@@ -180,13 +180,14 @@ public class Video extends CrazyProperties implements Comparable<Video>, Seriali
 	}
 	
 	/**
-	 * actress 이름이 있는지 확인
+	 * actress 이름이 있는지 확인. 같거나 포함되어 있거나
 	 * @param actressName
-	 * @return 같은 이름이 있으면 {@code true}
+	 * @return 있으면 {@code true}
 	 */
 	public boolean containsActress(String actressName) {
 		for(Actress actress : actressList)
-			if (VideoUtils.equalsActress(actress.getName(), actressName))
+			if (VideoUtils.equalsActress(actress.getName(), actressName)
+					|| StringUtils.contains(actress.getName(), actressName))
 				return true;
 		return false;
 	}
