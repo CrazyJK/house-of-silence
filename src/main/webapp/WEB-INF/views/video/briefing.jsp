@@ -32,6 +32,9 @@ div#content_div.div-box article {
 	margin: 10px;
 	display: none;
 }
+#videoDiv, #studioDiv, #actressDiv {
+	background-color:rgba(255, 255, 255,.5);
+}
 .h3-toggle-on {
 	border: 1px solid blue;
 	border-radius:5px; 
@@ -130,273 +133,271 @@ function setDELETE_LOWER_SCORE_VIDEO() {
 
 <div id="content_div" class="div-box" style="overflow:auto; text-align:left;">
 
-<section>
-	<h3><s:message code="video.video-by-folder"/></h3>
-	<article>
-		<table class="video-table" style="background-color:lightgray">
-			<tr>
-				<th style="text-align:left;"><s:message code="video.folder"/></th>
-				<th style="text-align:right;"><s:message code="video.size"/></th>
-				<th style="text-align:right;"><s:message code="video.length"/></th>
-			</tr>
-			<c:set var="ONE_GB" value="${1024*1024*1024}"/>
-			<c:forEach items="${pathMap}" var="path" varStatus="status">
-				<c:choose>
-					<c:when test="${path.key ne 'Total'}">
-			<tr>
-				<td>${path.key}</td>
-				<td><span class="videoCount"><fmt:formatNumber value="${path.value[0]}" type="NUMBER"/></span></td>
-				<td><span class="videoSize"><fmt:formatNumber value="${path.value[1] / ONE_GB}" pattern="#,##0 GB"/></span></td>
-			</tr>
-					</c:when>
-					<c:otherwise>
-						<c:set var="totalSize"   value="${path.value[0]}"/>
-						<c:set var="totalLength" value="${path.value[1]}"/>
-					</c:otherwise>
-				</c:choose>
-			</c:forEach>
-			<tr>
-				<td style="border-top:1px double blue;"><s:message code="video.total"/></td>
-				<td style="border-top:1px double blue;"><span class="videoCount"><fmt:formatNumber value="${totalSize}" type="NUMBER"/></span></td>
-				<td style="border-top:1px double blue;"><span class="videoSize"><fmt:formatNumber value="${totalLength / ONE_GB}" pattern="#,##0 GB"/></span></td>
-			</tr>
-		</table>
-	</article>
-</section>
+	<section>
+		<h3><s:message code="video.video-by-folder"/></h3>
+		<article>
+			<table class="video-table" style="background-color:lightgray">
+				<tr>
+					<th style="text-align:left;"><s:message code="video.folder"/></th>
+					<th style="text-align:right;"><s:message code="video.size"/></th>
+					<th style="text-align:right;"><s:message code="video.length"/></th>
+				</tr>
+				<c:set var="ONE_GB" value="${1024*1024*1024}"/>
+				<c:forEach items="${pathMap}" var="path" varStatus="status">
+					<c:choose>
+						<c:when test="${path.key ne 'Total'}">
+				<tr>
+					<td>${path.key}</td>
+					<td><span class="videoCount"><fmt:formatNumber value="${path.value[0]}" type="NUMBER"/></span></td>
+					<td><span class="videoSize"><fmt:formatNumber value="${path.value[1] / ONE_GB}" pattern="#,##0 GB"/></span></td>
+				</tr>
+						</c:when>
+						<c:otherwise>
+							<c:set var="totalSize"   value="${path.value[0]}"/>
+							<c:set var="totalLength" value="${path.value[1]}"/>
+						</c:otherwise>
+					</c:choose>
+				</c:forEach>
+				<tr>
+					<td style="border-top:1px double blue;"><s:message code="video.total"/></td>
+					<td style="border-top:1px double blue;"><span class="videoCount"><fmt:formatNumber value="${totalSize}" type="NUMBER"/></span></td>
+					<td style="border-top:1px double blue;"><span class="videoSize"><fmt:formatNumber value="${totalLength / ONE_GB}" pattern="#,##0 GB"/></span></td>
+				</tr>
+			</table>
+		</article>
+	</section>
 
-<section>
-	<h3><s:message code="video.video-by-date"/></h3>
-	<article>
-		<table class="video-table" style="background-color:lightgray">
-			<tr>
-				<th class="nowrap width50"><s:message code="video.date"/></th>
-				<th class="nowrap width-rank">Rank 0</th>
-				<th class="nowrap width-rank">Rank 1</th>
-				<th class="nowrap width-rank">Rank 2</th>
-				<th class="nowrap width-rank">Rank 3</th>
-				<th class="nowrap width-rank">Rank 4</th>
-				<th class="nowrap width-rank">Rank 5</th>
-			</tr>
-			<c:forEach items="${dateMap}" var="date" varStatus="status">
-			<tr>
-				<td class="nowrap">${date.key} <span class="videoCount">${fn:length(date.value)}</span></td>
-				<td id="rank0-${date.key}" class="nowrap"></td>
-				<td id="rank1-${date.key}" class="nowrap"></td>
-				<td id="rank2-${date.key}" class="nowrap"></td>
-				<td id="rank3-${date.key}" class="nowrap"></td>
-				<td id="rank4-${date.key}" class="nowrap"></td>
-				<td id="rank5-${date.key}" class="nowrap"></td>
-			</tr>
-				<c:forEach items="${date.value}" var="video" varStatus="status">
+	<section>
+		<h3><s:message code="video.video-by-date"/></h3>
+		<article>
+			<table class="video-table" style="background-color:lightgray">
+				<tr>
+					<th class="nowrap width50"><s:message code="video.date"/></th>
+					<th class="nowrap width-rank">Rank 0</th>
+					<th class="nowrap width-rank">Rank 1</th>
+					<th class="nowrap width-rank">Rank 2</th>
+					<th class="nowrap width-rank">Rank 3</th>
+					<th class="nowrap width-rank">Rank 4</th>
+					<th class="nowrap width-rank">Rank 5</th>
+				</tr>
+				<c:forEach items="${dateMap}" var="date" varStatus="status">
+				<tr>
+					<td class="nowrap">${date.key} <span class="videoCount">${fn:length(date.value)}</span></td>
+					<td id="rank0-${date.key}" class="nowrap"></td>
+					<td id="rank1-${date.key}" class="nowrap"></td>
+					<td id="rank2-${date.key}" class="nowrap"></td>
+					<td id="rank3-${date.key}" class="nowrap"></td>
+					<td id="rank4-${date.key}" class="nowrap"></td>
+					<td id="rank5-${date.key}" class="nowrap"></td>
+				</tr>
+					<c:forEach items="${date.value}" var="video" varStatus="status">
+						<script type="text/javascript">
+							var vItem = $("<span>");
+							vItem.addClass("label");
+							vItem.attr("data-opus", "${video.opus}");
+							vItem.attr("onclick", "fnViewVideoDetail('${video.opus}')");
+							vItem.attr("title", "${video.fullname}");
+							$("#rank${video.rank}-${date.key}").append(vItem);
+						</script>
+					</c:forEach>
+				</c:forEach>		
+			</table>
+		</article>
+	</section>
+
+	<section>
+		<h3><s:message code="video.video-by-play"/></h3>
+		<article>
+			<table class="video-table" style="background-color:lightgray">
+				<tr>
+					<th class="nowrap width50">Play</th>
+					<th class="nowrap width-rank">Rank 0</th>
+					<th class="nowrap width-rank">Rank 1</th>
+					<th class="nowrap width-rank">Rank 2</th>
+					<th class="nowrap width-rank">Rank 3</th>
+					<th class="nowrap width-rank">Rank 4</th>
+					<th class="nowrap width-rank">Rank 5</th>
+				</tr>
+				<c:forEach items="${playMap}" var="play" varStatus="status">
+				<tr>
+					<td class="nowrap">${play.key} <span class="videoCount">${fn:length(play.value)}</span></td>
+					<td id="rank0-${play.key}" class="nowrap"></td>
+					<td id="rank1-${play.key}" class="nowrap"></td>
+					<td id="rank2-${play.key}" class="nowrap"></td>
+					<td id="rank3-${play.key}" class="nowrap"></td>
+					<td id="rank4-${play.key}" class="nowrap"></td>
+					<td id="rank5-${play.key}" class="nowrap"></td>
+				</tr>
+				<c:forEach items="${play.value}" var="video" varStatus="status">
 					<script type="text/javascript">
 						var vItem = $("<span>");
 						vItem.addClass("label");
 						vItem.attr("data-opus", "${video.opus}");
 						vItem.attr("onclick", "fnViewVideoDetail('${video.opus}')");
 						vItem.attr("title", "${video.fullname}");
-						$("#rank${video.rank}-${date.key}").append(vItem);
+						$("#rank${video.rank}-${play.key}").append(vItem);
 					</script>
 				</c:forEach>
-			</c:forEach>		
-		</table>
-	</article>
-</section>
+				</c:forEach>		
+			</table>
+		</article>
+	</section>
 
-<section>
-	<h3><s:message code="video.video-by-play"/></h3>
-	<article>
-		<table class="video-table" style="background-color:lightgray">
-			<tr>
-				<th class="nowrap width50">Play</th>
-				<th class="nowrap width-rank">Rank 0</th>
-				<th class="nowrap width-rank">Rank 1</th>
-				<th class="nowrap width-rank">Rank 2</th>
-				<th class="nowrap width-rank">Rank 3</th>
-				<th class="nowrap width-rank">Rank 4</th>
-				<th class="nowrap width-rank">Rank 5</th>
-			</tr>
-			<c:forEach items="${playMap}" var="play" varStatus="status">
-			<tr>
-				<td class="nowrap">${play.key} <span class="videoCount">${fn:length(play.value)}</span></td>
-				<td id="rank0-${play.key}" class="nowrap"></td>
-				<td id="rank1-${play.key}" class="nowrap"></td>
-				<td id="rank2-${play.key}" class="nowrap"></td>
-				<td id="rank3-${play.key}" class="nowrap"></td>
-				<td id="rank4-${play.key}" class="nowrap"></td>
-				<td id="rank5-${play.key}" class="nowrap"></td>
-			</tr>
-			<c:forEach items="${play.value}" var="video" varStatus="status">
-				<script type="text/javascript">
-					var vItem = $("<span>");
-					vItem.addClass("label");
-					vItem.attr("data-opus", "${video.opus}");
-					vItem.attr("onclick", "fnViewVideoDetail('${video.opus}')");
-					vItem.attr("title", "${video.fullname}");
-					$("#rank${video.rank}-${play.key}").append(vItem);
-				</script>
-			</c:forEach>
-			</c:forEach>		
-		</table>
-	</article>
-</section>
+	<section>
+		<h3><s:message code="video.video-by-rank"/></h3>
+		<article>
+			<table class="video-table" style="background-color:lightgray">
+				<tr>
+					<th class="nowrap width80"><s:message code="video.rank"/></th>
+					<th class="nowrap width60"><s:message code="video.length"/></th>
+					<th class="nowrap"><s:message code="video.video"/></th>
+				</tr>
+				<c:forEach items="${rankMap}" var="rank" varStatus="status">
+				<tr>
+					<td class="nowrap">${rank.key} <span class="videoCount">${fn:length(rank.value)}</span></td>
+					<td class="nowrap right">
+						<c:set var="totalLength" value="0"/>
+						<c:forEach items="${rank.value}" var="video" varStatus="status">
+							<c:set var="totalLength" value="${totalLength + video.length}"/>
+						</c:forEach>				
+						<span class="videoSize"><fmt:formatNumber value="${totalLength / ONE_GB}" pattern="#,##0 GB"/></span>
+					</td>
+					<td class="nowrap">
+						<c:forEach items="${rank.value}" var="video" varStatus="status">
+							<jk:video video="${video}" view="label"/>
+						</c:forEach>
+					</td>
+				</tr>
+				</c:forEach>		
+			</table>
+		</article>
+	</section>
 
-<section>
-	<h3><s:message code="video.video-by-rank"/></h3>
-	<article>
-		<table class="video-table" style="background-color:lightgray">
-			<tr>
-				<th class="nowrap width80"><s:message code="video.rank"/></th>
-				<th class="nowrap width60"><s:message code="video.length"/></th>
-				<th class="nowrap"><s:message code="video.video"/></th>
-			</tr>
-			<c:forEach items="${rankMap}" var="rank" varStatus="status">
-			<tr>
-				<td class="nowrap">${rank.key} <span class="videoCount">${fn:length(rank.value)}</span></td>
-				<td class="nowrap right">
-					<c:set var="totalLength" value="0"/>
-					<c:forEach items="${rank.value}" var="video" varStatus="status">
-						<c:set var="totalLength" value="${totalLength + video.length}"/>
-					</c:forEach>				
-					<span class="videoSize"><fmt:formatNumber value="${totalLength / ONE_GB}" pattern="#,##0 GB"/></span>
-				</td>
-				<td class="nowrap">
-					<c:forEach items="${rank.value}" var="video" varStatus="status">
-						<jk:video video="${video}" view="label"/>
-					</c:forEach>
-				</td>
-			</tr>
-			</c:forEach>		
-		</table>
-	</article>
-</section>
-
-<section>
-	<h3><s:message code="video.video-by-score"/></h3>
-	<article>
-		<table class="video-table" style="background-color:lightgray">
-			<tr>
-				<th class="nowrap width80"><s:message code="video.score"/></th>
-				<th class="nowrap width60"><s:message code="video.length"/></th>
-				<th class="nowrap width60"><s:message code="video.length.sum"/></th>
-				<th class="nowrap"><s:message code="video.video"/></th>
-			</tr>
-			<c:set var="totalLength" value="0"/>
-			<c:forEach items="${scoreMap}" var="score" varStatus="status">
-				<c:set var="stepLength" value="0"/>
-				<c:forEach items="${score.value}" var="video" varStatus="status">
-					<c:set var="stepLength"  value="${stepLength + video.length}"/>
-					<c:set var="totalLength" value="${totalLength + video.length}"/>
-				</c:forEach>
-			<tr>
-				<td class="nowrap">${score.key} <span class="videoCount">${fn:length(score.value)}</span></td>
-				<td class="nowrap right">
-					<span class="videoSize"><fmt:formatNumber value="${stepLength / ONE_GB}" pattern="#,##0 GB"/></span>
-				</td>
-				<td class="nowrap right">
-					<span class="videoSize"><fmt:formatNumber value="${totalLength / ONE_GB}" pattern="#,##0 GB"/></span>
-				</td>
-				<td class="nowrap">
+	<section>
+		<h3><s:message code="video.video-by-score"/></h3>
+		<article>
+			<table class="video-table" style="background-color:lightgray">
+				<tr>
+					<th class="nowrap width80"><s:message code="video.score"/></th>
+					<th class="nowrap width60"><s:message code="video.length"/></th>
+					<th class="nowrap width60"><s:message code="video.length.sum"/></th>
+					<th class="nowrap"><s:message code="video.video"/></th>
+				</tr>
+				<c:set var="totalLength" value="0"/>
+				<c:forEach items="${scoreMap}" var="score" varStatus="status">
+					<c:set var="stepLength" value="0"/>
 					<c:forEach items="${score.value}" var="video" varStatus="status">
-						<jk:video video="${video}" view="label" tooltip="
+						<c:set var="stepLength"  value="${stepLength + video.length}"/>
+						<c:set var="totalLength" value="${totalLength + video.length}"/>
+					</c:forEach>
+				<tr>
+					<td class="nowrap">${score.key} <span class="videoCount">${fn:length(score.value)}</span></td>
+					<td class="nowrap right">
+						<span class="videoSize"><fmt:formatNumber value="${stepLength / ONE_GB}" pattern="#,##0 GB"/></span>
+					</td>
+					<td class="nowrap right">
+						<span class="videoSize"><fmt:formatNumber value="${totalLength / ONE_GB}" pattern="#,##0 GB"/></span>
+					</td>
+					<td class="nowrap">
+						<c:forEach items="${score.value}" var="video" varStatus="status">
+							<jk:video video="${video}" view="label" tooltip="
 ${video.scoreDesc}"/>
-					</c:forEach>
-				</td>
-			</tr>
-			</c:forEach>		
-		</table>
-	</article>
-</section>
+						</c:forEach>
+					</td>
+				</tr>
+				</c:forEach>		
+			</table>
+		</article>
+	</section>
 
-<section>
-	<h3><s:message code="video.video-by-length"/></h3>
-	<article>
-		<table class="video-table" style="background-color:lightgray">
-			<tr>
-				<th class="nowrap width80"><s:message code="video.length"/></th>
-				<th class="nowrap width50"><s:message code="video.length"/></th>
-				<th class="nowrap"><s:message code="video.video"/></th>
-			</tr>
-			<c:set var="totalLength" value="0"/>
-			<c:forEach items="${lengthMap}" var="length" varStatus="status">
-			<tr>
-				<td class="nowrap">${length.key} GB↓ <span class="videoCount">${fn:length(length.value)}</span></td>
-				<td class="nowrap right">
-					<c:set var="totalLength" value="0"/>
-					<c:forEach items="${length.value}" var="video" varStatus="status">
-						<c:set var="totalLength" value="${totalLength + video.length}"/>
-					</c:forEach>
-					<span class="videoSize"><fmt:formatNumber value="${totalLength / ONE_GB}" pattern="#,##0 GB"/></span>
-				</td>
-				<td class="nowrap">
-					<c:forEach items="${length.value}" var="video" varStatus="status">
-						<jk:video video="${video}" view="label"/>
-					</c:forEach>
-				</td>
-			</tr>
-			</c:forEach>		
-		</table>
-	</article>
-</section>
+	<section>
+		<h3><s:message code="video.video-by-length"/></h3>
+		<article>
+			<table class="video-table" style="background-color:lightgray">
+				<tr>
+					<th class="nowrap width80"><s:message code="video.length"/></th>
+					<th class="nowrap width50"><s:message code="video.length"/></th>
+					<th class="nowrap"><s:message code="video.video"/></th>
+				</tr>
+				<c:set var="totalLength" value="0"/>
+				<c:forEach items="${lengthMap}" var="length" varStatus="status">
+				<tr>
+					<td class="nowrap">${length.key} GB↓ <span class="videoCount">${fn:length(length.value)}</span></td>
+					<td class="nowrap right">
+						<c:set var="totalLength" value="0"/>
+						<c:forEach items="${length.value}" var="video" varStatus="status">
+							<c:set var="totalLength" value="${totalLength + video.length}"/>
+						</c:forEach>
+						<span class="videoSize"><fmt:formatNumber value="${totalLength / ONE_GB}" pattern="#,##0 GB"/></span>
+					</td>
+					<td class="nowrap">
+						<c:forEach items="${length.value}" var="video" varStatus="status">
+							<jk:video video="${video}" view="label"/>
+						</c:forEach>
+					</td>
+				</tr>
+				</c:forEach>		
+			</table>
+		</article>
+	</section>
 
-<section>
-	<h3><s:message code="video.video-by-extension"/></h3>
-	<article>
-		<table class="video-table" style="background-color:lightgray">
-			<tr>
-				<th class="nowrap width80"><s:message code="video.extension"/></th>
-				<th class="nowrap width50"><s:message code="video.length"/></th>
-				<th class="nowrap"><s:message code="video.video"/></th>
-			</tr>
-			<c:set var="totalLength" value="0"/>
-			<c:forEach items="${extensionMap}" var="extension" varStatus="status">
-			<tr>
-				<td class="nowrap">${extension.key} <span class="videoCount">${fn:length(extension.value)}</span></td>
-				<td class="nowrap right">
-					<c:set var="totalLength" value="0"/>
-					<c:forEach items="${extension.value}" var="video" varStatus="status">
-						<c:set var="totalLength" value="${totalLength + video.length}"/>
-					</c:forEach>
-					<span class="videoSize"><fmt:formatNumber value="${totalLength / ONE_GB}" pattern="#,##0 GB"/></span>
-				</td>
-				<td class="nowrap">
-					<c:forEach items="${extension.value}" var="video" varStatus="status">
-						<jk:video video="${video}" view="label"/>
-					</c:forEach>
-				</td>
-			</tr>
-			</c:forEach>		
-		</table>
-	</article>
-</section>
+	<section>
+		<h3><s:message code="video.video-by-extension"/></h3>
+		<article>
+			<table class="video-table" style="background-color:lightgray">
+				<tr>
+					<th class="nowrap width80"><s:message code="video.extension"/></th>
+					<th class="nowrap width50"><s:message code="video.length"/></th>
+					<th class="nowrap"><s:message code="video.video"/></th>
+				</tr>
+				<c:set var="totalLength" value="0"/>
+				<c:forEach items="${extensionMap}" var="extension" varStatus="status">
+				<tr>
+					<td class="nowrap">${extension.key} <span class="videoCount">${fn:length(extension.value)}</span></td>
+					<td class="nowrap right">
+						<c:set var="totalLength" value="0"/>
+						<c:forEach items="${extension.value}" var="video" varStatus="status">
+							<c:set var="totalLength" value="${totalLength + video.length}"/>
+						</c:forEach>
+						<span class="videoSize"><fmt:formatNumber value="${totalLength / ONE_GB}" pattern="#,##0 GB"/></span>
+					</td>
+					<td class="nowrap">
+						<c:forEach items="${extension.value}" var="video" varStatus="status">
+							<jk:video video="${video}" view="label"/>
+						</c:forEach>
+					</td>
+				</tr>
+				</c:forEach>		
+			</table>
+		</article>
+	</section>
 
-<section>
-	<h3><s:message code="video.total"/> <s:message code="video.video"/> : ${fn:length(videoList)}</h3>
-	<article id="videoDiv" class="div-box">
-		<c:forEach items="${videoList}" var="video" varStatus="status">
-			<jk:video video="${video}" view="label"/>
+	<section>
+		<h3><s:message code="video.total"/> <s:message code="video.video"/> : ${fn:length(videoList)}</h3>
+		<article id="videoDiv" class="div-box">
+			<c:forEach items="${videoList}" var="video" varStatus="status">
+				<jk:video video="${video}" view="label"/>
+			</c:forEach>
+		</article>
+	</section>
+
+	<section>
+		<h3><s:message code="video.total"/> <s:message code="video.studio"/> : ${fn:length(studioList)}</h3>
+		<article id="studioDiv" class="div-box">
+		<c:forEach var="studio" items="${studioList}">
+			<jk:studio studio="${studio}" view="span"/>
 		</c:forEach>
-	</article>
-</section>
+		</article>
+	</section>
 
-<section>
-	<h3><s:message code="video.total"/> <s:message code="video.studio"/> : ${fn:length(studioList)}</h3>
-	<article id="studioDiv" class="div-box">
-	<c:forEach var="studio" items="${studioList}">
-		<jk:studio studio="${studio}" view="span"/>
-	</c:forEach>
-	</article>
-</section>
-
-<section>
-	<h3><s:message code="video.total"/> <s:message code="video.actress"/> : ${fn:length(actressList)}</h3>
-	<article id="actressDiv" class="div-box">
-	<c:forEach items="${actressList}" var="actress">
-		<jk:actress actress="${actress}" view="span"/>
-	</c:forEach>
-	</article>
-</section>
-
-
+	<section>
+		<h3><s:message code="video.total"/> <s:message code="video.actress"/> : ${fn:length(actressList)}</h3>
+		<article id="actressDiv" class="div-box">
+		<c:forEach items="${actressList}" var="actress">
+			<jk:actress actress="${actress}" view="span"/>
+		</c:forEach>
+		</article>
+	</section>
 </div>
 
 </body>
