@@ -602,15 +602,16 @@ public class Video extends CrazyProperties implements Comparable<Video>, Seriali
 	public synchronized void move(File destFile) {
 		for (File file : getFileAll()) {
 			if (file != null && file.exists() && !file.getParent().equals(destFile.getAbsolutePath())) {
-				if (destFile.getFreeSpace() < file.length()) {
-					logger.warn("destination is small. size=" + destFile.getFreeSpace());
+				if (!FileUtils.getRootDirectory(file).equals(FileUtils.getRootDirectory(destFile)) &&
+						destFile.getFreeSpace() < file.length()) {
+					logger.warn("{} -> {} is small. {}mb > {}mb",file, destFile, file.length() / FileUtils.ONE_MB, destFile.getFreeSpace() / FileUtils.ONE_MB);
 					break;
 				}
 				try {
 					FileUtils.moveFileToDirectory(file, destFile, false);
 					logger.debug("file moved from [{}] to [{}]", file.getAbsolutePath(), destFile.getAbsolutePath());
 				} catch (FileExistsException fe) {
-					logger.warn("File exist, then delete ", fe);
+					logger.warn("File exist, then delete", fe);
 					FileUtils.deleteQuietly(file);
 				} catch (IOException e) {
 					logger.error("Fail move file", e);
