@@ -5,6 +5,11 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.nio.file.CopyOption;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
@@ -1116,18 +1121,34 @@ public class Video extends CrazyProperties implements Comparable<Video>, Seriali
 	 */
 	public void moveOutside() {
 		if (this.isExistVideoFileList()) {
-			File root = FileUtils.getRootDirectory(this.getDelegateFile());
+			File root = getRootDirectory(this.getDelegateFile());
 			for (File file : this.getVideoFileList()) {
 				try {
-					FileUtils.moveFileToDirectory(file, root, false);
-				} catch (FileExistsException e) {
-					logger.warn("file exists in root dir[{}] : {}", root.getAbsolutePath(), e.getMessage());
-					FileUtils.deleteQuietly(file);
+					moveFileToDirectory(file, root, false);
+//				} catch (FileExistsException e) {
+//					logger.warn("file exists in root dir[{}] : {}", root.getAbsolutePath(), e.getMessage());
+//					FileUtils.deleteQuietly(file);
 				} catch (IOException e) {
-					logger.error("move fail", e);
+					logger.error(String.format("move fail! {} to {}", file, root), e);
 				}
 			}
 			this.setVideoFileList(null);
 		}
+	}
+
+	private File getRootDirectory(File file) {
+		return file.toPath().getRoot().toFile();
+	}
+
+	private void moveFileToDirectory(File file, File root, boolean creatDestDir) throws IOException {
+		
+		Path source = Paths.get(file.toURI());
+		Path destDir = Paths.get(root.toURI());
+		if (creatDestDir) {
+			Files.createDirectories(destDir);
+		}
+		Path target = destDir.resolve(file.getName());
+		
+		Files.move(source, target, StandardCopyOption.REPLACE_EXISTING);
 	}
 }
