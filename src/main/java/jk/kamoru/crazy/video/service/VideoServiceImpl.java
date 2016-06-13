@@ -397,7 +397,7 @@ public class VideoServiceImpl extends CrazyProperties implements VideoService {
 		log.trace("groupByDate");
 		Map<String, List<Video>> map = new TreeMap<String, List<Video>>();
 		for (Video video : videoDao.getVideoList()) {
-			String yyyyMM = StringUtils.substringBeforeLast(video.getVideoDate(), "-");
+			String yyyyMM = StringUtils.substringBeforeLast(video.getReleaseDate(), ".").replace(".", "-");
 			if (map.containsKey(yyyyMM)) {
 				map.get(yyyyMM).add(video);
 			}
