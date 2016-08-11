@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.nio.file.CopyOption;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -19,6 +18,15 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
+import org.apache.commons.io.FileExistsException;
+import org.apache.commons.lang3.time.DateFormatUtils;
+import org.codehaus.jackson.annotate.JsonIgnore;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
+
 import jk.kamoru.crazy.CRAZY;
 import jk.kamoru.crazy.CrazyProperties;
 import jk.kamoru.crazy.video.VIDEO;
@@ -30,15 +38,6 @@ import jk.kamoru.util.ArrayUtils;
 import jk.kamoru.util.FileUtils;
 import jk.kamoru.util.StringUtils;
 import net.sf.json.JSONObject;
-
-import org.apache.commons.io.FileExistsException;
-import org.apache.commons.lang3.time.DateFormatUtils;
-import org.codehaus.jackson.annotate.JsonIgnore;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Scope;
-import org.springframework.stereotype.Component;
 
 /**
  * AV Bean class<br>
